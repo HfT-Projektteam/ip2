@@ -30,3 +30,7 @@ Extra:
 - As a user I want to be able to build custom playlists with the playlists of other users for reference
 - As a user I want to be able to sync playlists to my Spotify account
 - As a user I want to be able to import/view playlists from Spotify to my profile
+
+## Tooling & Setup
+
+[OpenAPI Design](https://stoplight.io/studio) 
