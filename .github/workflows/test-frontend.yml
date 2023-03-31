@@ -4,12 +4,17 @@ on:
 #  push:
 #    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    types: ["opened","reopened","edited"]
+    branches: [ "main", "devops/**" ]
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./app
 
     strategy:
       matrix:
