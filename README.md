@@ -1,7 +1,5 @@
 # Internet Programmierung SS23 (Spotify Social-Media)
 
-For Documentation see [wiki](https://github.com/HfT-Projektteam/ip2/wiki), the [user stories](https://github.com/HfT-Projektteam/ip2/wiki#user-stories) can also be found there.
-
 ## User stories
 1. As a user I want to be able to login with spotify oauth
 2. As a user I want to be able to **log out** from the website
