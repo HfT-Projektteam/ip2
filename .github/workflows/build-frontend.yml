@@ -1,5 +1,6 @@
 name: Build and package frontend
 
+
 on:
   workflow_dispatch:
   pull_request:
