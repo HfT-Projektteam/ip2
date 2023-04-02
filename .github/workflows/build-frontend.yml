@@ -8,9 +8,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  if_merged:
-    if: github.event.pull_request.merged == true
     build:
+      if: github.event.pull_request.merged == true
+
       runs-on: ubuntu-latest
 
       defaults:
@@ -38,4 +38,5 @@ jobs:
           path: frontend/build
 
 #    package:
-#      runs-on: ubuntu-latest
+      #if: github.event.pull_request.merged == true
+#     runs-on: ubuntu-latest
