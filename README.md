@@ -11,9 +11,9 @@
 8. As a user I want to be able to dislike a shared song (in a friendly way)
 9. As a user I want to be able to filter my feed by different criteria (i.e. songs of friends/groups, most hated/liked, ...)
 10. As a user I want to be able to post songs to the feed by searching their name, artist name
-11. As a user I want to be able to post songs to the feed by song link
+11. As a user I want to be able to view my own user profile
 12. As a user I want to be able to get my 10 last played song (while in search)
-13. As a user I want to be able to 
+13. As a user I want to be able to view user profiles from other users
 14. As a user I want to be able to be able to view the app in light and dark mode
 15. As a user I want to be able to find other users on the platform
 16. As a user I want to be able to edit the details of my profile
