@@ -31,5 +31,5 @@ Extra:
 
 ## Tooling & Setup
 
-[OpenAPI Design](https://stoplight.io/studio) 
+[OpenAPI Design](https://stoplight.io/studio)<br>
 [Generate typescript types rom openAPI3.*](https://github.com/drwpow/openapi-typescript)
