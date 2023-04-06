@@ -30,6 +30,6 @@
     "rules": {
         // enable additional rules
         //"quotes": ["error", "double"],
-        "max-len": ["info", { "code": 80 }]
+        "max-len": ["warn", { "code": 90 }]
     }
 }
