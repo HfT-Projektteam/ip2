@@ -73,21 +73,9 @@ should contain one folder for each page in your application. Inside of those pag
 contains all utility functions like formatters, validators, helpers and code for interfacing with any external API
 
 ### Aliases
-Set up the system to use aliases, so anything within the components folder could be imported as @components, assets as @assets, etc. If you have a custom Webpack, this is done through the  [resolve](https://webpack.js.org/configuration/resolve/) configuration.
+[Resolve Path Alias in React Typescript](https://plusreturn.com/blog/how-to-configure-a-path-alias-in-a-react-typescript-app-for-cleaner-imports/#Configuring_an_Alias)
 
-```
-module.exports = {
-  resolve: {
-    extensions: ['js', 'ts'],
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@assets': path.resolve(__dirname, 'src/assets'),
-      '@components': path.resolve(__dirname, 'src/components'),
-      // ...etc
-    },
-  },
-}
-```
+Set up the system to use aliases, so anything within the components folder could be imported as @components, assets as @assets, etc. If you have a custom Webpack, this is done through the  [resolve](https://webpack.js.org/configuration/resolve/) configuration. We are using [craco](https://github.com/dilanx/craco) (Create React App Configuration Override).
 
 ## Tips on building large react app
 

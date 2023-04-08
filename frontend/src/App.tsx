@@ -1,6 +1,7 @@
 
 import logo from './logo.svg'
 import './App.css'
+import { helloWorld } from '@pages/Feed'
 
 function App (): JSX.Element {
   return (
@@ -8,6 +9,7 @@ function App (): JSX.Element {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
+          {helloWorld}
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <a

@@ -1,0 +1,2 @@
+
+export { helloWorld } from './component'
