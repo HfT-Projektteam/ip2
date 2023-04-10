@@ -5,4 +5,9 @@ We will be Using:
 - [nestJS](https://docs.nestjs.com)
 
 # Code generation
-We could maybe use [this](https://github.com/Ryan-Sin/swagger-nestjs-codegen) openapi.yaml to nestJS code generator.
+We could mabe use [this](https://github.com/Ryan-Sin/swagger-nestjs-codegen) openapi.yaml to nestJS code generator.
+
+# Database
+We are using TypeORM with Postgres.
+
+Use `docker-compose up` to spin up the database. The data.sql file will be executed on startup. 
