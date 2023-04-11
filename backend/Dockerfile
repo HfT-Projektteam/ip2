@@ -1,43 +1,33 @@
 # Building layer
 FROM node:18.15.0-alpine as development
 
-# Optional NPM automation (auth) token build argument
-# ARG NPM_TOKEN
-
-# Optionally authenticate NPM registry
-# RUN npm set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-
 WORKDIR /app
 
 # Copy configuration files
-COPY tsconfig.json ./
-COPY package*.json ./
+COPY tsconfig*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
-# Install dependencies from package-lock.json, see https://docs.npmjs.com/cli/v7/commands/npm-ci
-RUN npm ci
+# Install dependencies
+RUN yarn install
 
 # Copy application sources (.ts, .tsx, js)
 COPY src/ src/
 
 # Build application (produces dist/ folder)
-RUN npm run build
+RUN yarn build
 
 # Runtime (production) layer
 FROM node:18.15.0-alpine as production
 
-# Optional NPM automation (auth) token build argument
-# ARG NPM_TOKEN
-
-# Optionally authenticate NPM registry
-# RUN npm set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-
 WORKDIR /app
 
 # Copy dependencies files
-COPY package*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
 # Install runtime dependecies (without dev/test dependecies)
-RUN npm ci --omit=dev
+RUN yarn install --dev
 
 # Copy production build
 COPY --from=development /app/dist/ ./dist/
