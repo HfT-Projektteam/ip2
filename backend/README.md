@@ -11,3 +11,6 @@ We could mabe use [this](https://github.com/Ryan-Sin/swagger-nestjs-codegen) ope
 We are using TypeORM with Postgres.
 
 Use `docker-compose up` to spin up the database. The data.sql file will be executed on startup. 
+
+## Migrating
+TypeORM and their CLI do support it, [see here](https://typeorm.io/migrations#creating-a-new-migration)

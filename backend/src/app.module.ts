@@ -11,13 +11,13 @@ import {User} from "./users/entities/user.entity";
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: '0.0.0.0',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
       database: 'test',
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     UsersModule,
   ],
