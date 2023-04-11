@@ -7,7 +7,7 @@ on:
     branches: [ "main", "devops/**", "backend/setup" ]
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: ghcr.io/hft-projektteam
   IMAGE_NAME: friendify_backend
 
 jobs:
