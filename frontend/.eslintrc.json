@@ -1,12 +1,15 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
         "standard-with-typescript",
-        "react-app/jest"
+        "plugin:react/jsx-runtime",
+        "react-app/jest",
+        "prettier"
     ],
     "overrides": [
     ],
@@ -30,6 +33,8 @@
     "rules": {
         // enable additional rules
         //"quotes": ["error", "double"],
-        "max-len": ["warn", { "code": 80 }]
+        "max-len": ["warn", { "code": 80 }],
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
     }
 }

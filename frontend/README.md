@@ -1,46 +1,80 @@
-# Getting Started with Create React App
+# React Project/Folder Structure and tips for large react projects
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overwiev of Folder Structure `src/`
 
-## Available Scripts
+Links:<br>
+- [Structure React Projects](https://blog.webdevsimplified.com/2022-07/react-folder-structure/)
+- [React Folder Structure 5 Steps](https://www.robinwieruch.de/react-folder-structure/)
 
-In the project directory, you can run:
+### One folde for each react component
 
-### `yarn start`
+```
+- src
+--- App/
+----- index.js
+----- component.js
+----- test.js
+----- style.css
+--- List/
+----- index.js
+----- component.js
+----- test.js
+----- style.css
+----- hooks.js
+----- types.js
+...
+```
 
-Runs the app in the development mode.\
-Open <http://localhost:3000> to view it in the browser.
+- component.js holds actual implementation logic of the component
+- index.js represents the public interface of the folder where everything gets exported that's relevant to the outside world.
+- React Hooks and Types which are still only used by one component should remain in the component's file
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+In JavaScript, we can omit the /index.js for the imports, because it's the default:
 
-### `yarn test`
+`import { List } from '../List'`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Folder Structure
+```
+.
+└── /src
+    ├── /assets
+    ├── /components
+    ├───── /ui
+    ├───── /form
+    ├───── /layout
+    ├── /context
+    ├── /data
+    ├── /hooks
+    ├── /pages
+    ├── /services
+    ├── index.tsx
+    └── App.tsx
+```
 
-### `yarn build`
+- `assets`
+contains all images, css files, font files, etc. for your project. Pretty much anything that isn't code related will be stored in this folder
+- `components`
+contains general components that are reusable. Components is broken down into subfolders:
+  - `ui`
+  contains all our UI components like buttons, modals, cards, etc.
+  - `form`
+  form specific controls like checkboxes, inputs, date pickers, etc.
+  - `layout`
+  layout based components like sidebar, navbar, container, etc.
+- `context`
+stores all your React context files that are used across multiple pages
+- `data`
+data folder is similar to the assets folder, but this is for storing our data assets such as JSON files that contain information used in our code. Also contains global constant variables/environment variables.
+- `hooks`
+stores global hooks that are used across multiple pages
+- `pages`
+should contain one folder for each page in your application. Inside of those page specific folders should be a single root file that is your page (generally index.js) alongside all the files that are only applicable to that page
+- `services`
+contains all utility functions like formatters, validators, helpers and code for interfacing with any external API
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Aliases
+[Resolve Path Alias in React Typescript](https://plusreturn.com/blog/how-to-configure-a-path-alias-in-a-react-typescript-app-for-cleaner-imports/#Configuring_an_Alias)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Set up the system to use aliases, so anything within the components folder could be imported as @components, assets as @assets, etc. If you have a custom Webpack, this is done through the  [resolve](https://webpack.js.org/configuration/resolve/) configuration. We are using [craco](https://github.com/dilanx/craco) (Create React App Configuration Override).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you** `eject`, you can’t go back!
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Tips on building large react app
