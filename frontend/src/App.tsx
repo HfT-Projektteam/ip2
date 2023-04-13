@@ -1,7 +1,11 @@
-import { helloWorld } from '@pages/Feed'
+import Feed from '@pages/Feed'
 
-function App(): JSX.Element {
-  return <>{helloWorld}</>
+function App (): JSX.Element {
+  return (
+    <>
+      <Feed></Feed>
+    </>
+  )
 }
 
 export default App
