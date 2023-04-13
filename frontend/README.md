@@ -78,5 +78,3 @@ contains all utility functions like formatters, validators, helpers and code for
 Set up the system to use aliases, so anything within the components folder could be imported as @components, assets as @assets, etc. If you have a custom Webpack, this is done through the  [resolve](https://webpack.js.org/configuration/resolve/) configuration. We are using [craco](https://github.com/dilanx/craco) (Create React App Configuration Override).
 
 ## Tips on building large react app
-
-- 
