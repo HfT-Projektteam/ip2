@@ -1,0 +1,10 @@
+**/node_modules
+**/build
+**/package.json
+**/yarn.lock
+**/package-lock.json
+**/.eslintrc.json
+**/craco.config.js
+**/tsconfig.json
+**/tsconfig.paths.json
+**/README.md
