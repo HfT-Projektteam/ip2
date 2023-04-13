@@ -1,6 +1,6 @@
 // import { useEffect, useState } from 'react'
 
-import Post from '@pages/Feed/Post'
+import { Post } from '@pages/Feed/Post'
 import { type postInterface } from '@pages/Feed/Post/interface'
 
 // ToDo: Fetch Database
