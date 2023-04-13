@@ -24,7 +24,7 @@ const posts: postInterface[] = [
     artist: 'Hoodie Allen',
     album: 'Games we play',
     imgUrl:
-      'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80'
+      'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80',
   },
   {
     id: crypto.randomUUID(),
@@ -32,7 +32,7 @@ const posts: postInterface[] = [
     artist: 'Cro',
     album: 'test',
     imgUrl:
-      'https://images.unsplash.com/photo-1620939123578-bb16277cfd54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80'
+      'https://images.unsplash.com/photo-1620939123578-bb16277cfd54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80',
   },
   {
     id: crypto.randomUUID(),
@@ -40,11 +40,11 @@ const posts: postInterface[] = [
     artist: 'Cro',
     album: 'test',
     imgUrl:
-      'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80'
-  }
+      'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80',
+  },
 ]
 
-export function Feed (): JSX.Element {
+export function Feed(): JSX.Element {
   return (
     <>
       {posts.map((post) => (
