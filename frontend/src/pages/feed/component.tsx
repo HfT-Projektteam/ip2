@@ -1,7 +1,7 @@
 // import { useEffect, useState } from 'react'
 
-import { Post } from '@pages/Feed/Post'
-import type { postInterface } from '@pages/Feed/Post/interface'
+import Post from '@pages/Feed/Post'
+import { type postInterface } from '@pages/Feed/Post/interface'
 
 // ToDo: Fetch Database
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,7 +44,7 @@ const posts: postInterface[] = [
   }
 ]
 
-export default function Feed (): JSX.Element {
+export function Feed (): JSX.Element {
   return (
     <>
       {posts.map((post) => (

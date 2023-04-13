@@ -1,4 +1,4 @@
-import Feed from '@pages/Feed/component'
+import Feed from '@pages/Feed'
 
 function App (): JSX.Element {
   return (

@@ -1,7 +1,7 @@
-import type { postInterface } from '@pages/Feed/Post/interface'
+import { type postInterface } from '@pages/Feed/Post/interface'
 import Card from 'react-bootstrap/Card'
 
-export default function Post (props: postInterface): JSX.Element {
+export function Post (props: postInterface): JSX.Element {
   return (
     <>
     <Card style={{ width: '18rem' }}>

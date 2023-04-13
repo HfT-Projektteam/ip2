@@ -1,2 +1,3 @@
+import { Feed } from './component'
 
-export * from './component'
+export default Feed
