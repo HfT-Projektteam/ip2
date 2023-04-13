@@ -6,6 +6,7 @@
     "extends": [
         "plugin:react/recommended",
         "standard-with-typescript",
+        "plugin:react/jsx-runtime",
         "react-app/jest"
     ],
     "overrides": [
@@ -30,6 +31,8 @@
     "rules": {
         // enable additional rules
         //"quotes": ["error", "double"],
-        "max-len": ["warn", { "code": 80 }]
+        "max-len": ["warn", { "code": 80 }],
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
     }
 }
