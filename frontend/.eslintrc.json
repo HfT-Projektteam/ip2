@@ -9,6 +9,8 @@
         "standard-with-typescript",
         "plugin:react/jsx-runtime",
         "react-app/jest",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
         "prettier"
     ],
     "overrides": [
@@ -28,7 +30,8 @@
     },
     "plugins": [
         "react",
-        "react-hooks"
+        "react-hooks",
+        "jest"
     ],
     "rules": {
         // enable additional rules
