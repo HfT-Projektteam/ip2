@@ -24,7 +24,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "craco test --passWithNoTests",
     "eject": "craco eject",
     "lint": "eslint --quiet **/src/**/*.ts*",
     "lint:fix": "eslint . --fix **/src/**/*.ts*"
