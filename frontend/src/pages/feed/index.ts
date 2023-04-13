@@ -1,1 +1,3 @@
-    	export { helloWorld } from './component'
+import { Feed } from './component'
+
+export default Feed
