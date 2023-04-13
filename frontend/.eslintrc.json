@@ -1,13 +1,15 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
         "standard-with-typescript",
         "plugin:react/jsx-runtime",
-        "react-app/jest"
+        "react-app/jest",
+        "prettier"
     ],
     "overrides": [
     ],
