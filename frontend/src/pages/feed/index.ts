@@ -1,2 +1,1 @@
-
-export { helloWorld } from './component'
+    	export { helloWorld } from './component'
