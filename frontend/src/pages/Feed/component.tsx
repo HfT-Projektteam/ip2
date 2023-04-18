@@ -19,7 +19,7 @@ useEffect(() => {
 
 const posts: postInterface[] = [
   {
-    id: crypto.randomUUID(),
+    key: crypto.randomUUID(),
     title: 'Hey Ben',
     artist: 'Hoodie Allen',
     album: 'Games we play',
@@ -27,7 +27,7 @@ const posts: postInterface[] = [
       'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80',
   },
   {
-    id: crypto.randomUUID(),
+    key: crypto.randomUUID(),
     title: 'Happy',
     artist: 'Cro',
     album: 'test',
@@ -35,7 +35,7 @@ const posts: postInterface[] = [
       'https://images.unsplash.com/photo-1620939123578-bb16277cfd54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80',
   },
   {
-    id: crypto.randomUUID(),
+    key: crypto.randomUUID(),
     title: 'Happy',
     artist: 'Cro',
     album: 'test',
@@ -48,9 +48,7 @@ export function Feed(): JSX.Element {
   return (
     <>
       {posts.map((post) => (
-        <>
-          <Post {...post}> </Post>
-        </>
+          <Post {...post}></Post>
       ))}
     </>
   )

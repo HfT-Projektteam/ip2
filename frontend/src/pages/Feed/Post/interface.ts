@@ -1,7 +1,7 @@
 import { type UUID } from 'crypto'
 
 export interface postInterface {
-  id: UUID
+  key: UUID
   title: string
   artist: string
   album: string
