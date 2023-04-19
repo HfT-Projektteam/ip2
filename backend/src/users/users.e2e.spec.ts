@@ -7,6 +7,7 @@ import { UsersModule } from './users.module';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as request from 'supertest';
+import describe from 'node:test';
 
 let app: INestApplication;
 let repository: Repository<User>;
@@ -38,8 +39,8 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Create Users', () => {
-  it('should create and save two users', async () => {
+describe('CRUD', () => {
+  it('should create and save a user', async () => {
     await request(app.getHttpServer())
       .post('/users')
       .send({ spotify_uri: 'test1' })
@@ -49,4 +50,11 @@ describe('Create Users', () => {
       await repository.exist({ where: { spotify_uri: 'test1' } }),
     ).toBeTruthy();
   });
+
+  it.todo('should delete a user');
+  it.todo('should find a user by id');
+});
+
+describe('Follower stuff', () => {
+  it.todo('should add other user to following ', async () => {});
 });
