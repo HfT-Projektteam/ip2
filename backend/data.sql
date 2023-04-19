@@ -1,1 +1,2 @@
-Create DATABASE Test;
+Create DATABASE local;
+Create DATABASE e2e_test;
