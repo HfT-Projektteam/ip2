@@ -3,11 +3,3 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
-import crypto from 'crypto'
-
-Object.defineProperty(global, 'crypto', {
-    value: {
-      // getRandomValues: (arr:any) => crypto.randomBytes(arr.length)
-      randomUUID: () => crypto.randomUUID()
-    }
-});

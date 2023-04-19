@@ -5,7 +5,7 @@ import crypto from 'crypto'
 
 describe('Register component, ich habe keine Ahnung was ich hier mache', () => {
   const post: postInterface = {
-    id: crypto.randomUUID(),
+    key: crypto.randomUUID(),
     title: 'Happy',
     artist: 'Cro',
     album: 'test',
