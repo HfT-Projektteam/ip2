@@ -22,5 +22,3 @@ FROM nginx:1.21.5-alpine as release
 
 COPY --from=build /app/build /usr/share/nginx/html
 COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
-
-RUN ls -alh /usr/share/nginx/html/

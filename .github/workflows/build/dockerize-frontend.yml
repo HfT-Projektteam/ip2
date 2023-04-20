@@ -1,10 +1,10 @@
-name: Build and Publish Backend
+name: Build and Publish Frontend
 
 on:
   workflow_dispatch:
   pull_request:
     types: ["closed"]
-    branches: [ "main", "devops"]
+    branches: [ "main", "devops/**"]
 
 env:
   REGISTRY: ghcr.io/hft-projektteam
