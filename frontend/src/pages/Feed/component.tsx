@@ -2,7 +2,6 @@
 
 import { Post } from '@pages/Feed/Post'
 import { type postInterface } from '@pages/Feed/Post/interface'
-import crypto from 'crypto'
 
 // ToDo: Fetch Database
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
