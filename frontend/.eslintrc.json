@@ -8,6 +8,7 @@
         "plugin:react/recommended",
         "standard-with-typescript",
         "plugin:react/jsx-runtime",
+        "plugin:react-hooks/recommended",
         "plugin:jest/recommended",
         "plugin:jest/style",
         "prettier"
@@ -37,6 +38,8 @@
         //"quotes": ["error", "double"],
         "max-len": ["warn", { "code": 80 }],
         "react/jsx-uses-react": "off",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "no-dupe-keys":"error",
+        "react/jsx-key": "off"
     }
 }
