@@ -49,7 +49,8 @@ export function Feed(): JSX.Element {
   return (
     <>
       {posts.map((post) => (
-          <Post {...post}></Post>
+        // eslint-disable-next-line react/jsx-key
+        <Post {...post}></Post>
       ))}
     </>
   )
