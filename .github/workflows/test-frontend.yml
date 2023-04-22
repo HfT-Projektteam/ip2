@@ -5,6 +5,12 @@ on:
   pull_request:
     types: ['opened', 'reopened', 'edited']
     branches: ['main', 'devops/**']
+  issue_comment:
+    types: ['created', 'deleted', 'edited']
+    branches: ['main', 'devops/**']
+  pull_request_review:
+    types: ['submitted', 'dismissed', 'edited']
+    branches: ['main', 'devops/**']
 
 jobs:
   test:
