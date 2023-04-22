@@ -1,0 +1,16 @@
+version: "3"
+
+networks:
+  proxy_friendify:
+    external: true
+
+services:
+  frontend:
+    image: ghcr.io/hft-projektteam/friendify_frontend:sha-5eeab6f
+    networks:
+      - proxy_friendify
+
+  backend:
+    image: ghcr.io/hft-projektteam/friendify_backend:sha-5eeab6f
+    networks:
+      - proxy_friendify

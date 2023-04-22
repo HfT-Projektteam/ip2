@@ -1,0 +1,18 @@
+version: "3"
+
+networks:
+  connector:
+  
+services:
+  frontend:
+    image: ip2-fe:dev
+    ports:
+      - "80:80"
+    networks:
+      - connector
+    
+
+  backend:
+    image: ip2-be:dev
+    networks:
+      - connector
