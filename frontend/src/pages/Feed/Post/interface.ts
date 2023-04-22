@@ -1,7 +1,7 @@
 import { type randomUID } from '@services/IdGenertor'
 
 export interface postInterface {
-  key: randomUID
+  id: randomUID
   title: string
   artist: string
   album: string
