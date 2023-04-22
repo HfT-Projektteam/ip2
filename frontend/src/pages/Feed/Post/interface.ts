@@ -1,7 +1,7 @@
-import { type UUID } from 'crypto'
+import { type randomUID } from '@services/IdGenertor'
 
 export interface postInterface {
-  key: UUID
+  key: randomUID
   title: string
   artist: string
   album: string
