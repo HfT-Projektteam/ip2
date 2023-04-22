@@ -1,7 +1,8 @@
 // import { useEffect, useState } from 'react'
 
 import { Post } from '@pages/Feed/Post'
-import postMock from '@data/mockdata/posts.json'
+import { type feedInterface } from './interface'
+
 
 // ToDo: Fetch Database
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,12 +18,12 @@ useEffect(() => {
 }, [feedItems])
 */
 
-const posts = postMock;
+// const posts = postMock;
 
-export function Feed(): JSX.Element {
+export function Feed(props: feedInterface): JSX.Element {
   return (
     <>
-      {posts.map((post) => (
+      {props.posts.map((post) => (
         <Post key={post.id}{...post}></Post>
       ))}
     </>
