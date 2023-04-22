@@ -3,7 +3,6 @@
 import { Post } from '@pages/Feed/Post'
 import { type feedInterface } from './interface'
 
-
 // ToDo: Fetch Database
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* const [feedItems, setFeedItems] = useState(() => {
@@ -24,7 +23,7 @@ export function Feed(props: feedInterface): JSX.Element {
   return (
     <>
       {props.posts.map((post) => (
-        <Post key={post.id}{...post}></Post>
+        <Post key={post.id} {...post}></Post>
       ))}
     </>
   )

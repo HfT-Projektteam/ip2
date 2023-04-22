@@ -3,7 +3,7 @@ import { Post } from '@pages/Feed/Post'
 import postMock from '@data/mockdata/posts.json'
 
 describe('Post', () => {
-  const post = postMock[0];
+  const post = postMock.posts[0]
 
   it('should render Post component correctly', () => {
     render(<Post {...post} />)
