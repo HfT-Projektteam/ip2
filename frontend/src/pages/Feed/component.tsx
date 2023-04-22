@@ -1,7 +1,7 @@
 // import { useEffect, useState } from 'react'
 
-import Post from '@pages/Feed/Post'
-import { type postInterface } from '@pages/Feed/Post/interface'
+import { Post } from '@pages/Feed/Post'
+import { type feedInterface } from './interface'
 
 // ToDo: Fetch Database
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,40 +17,13 @@ useEffect(() => {
 }, [feedItems])
 */
 
-const posts: postInterface[] = [
-  {
-    id: crypto.randomUUID(),
-    title: 'Hey Ben',
-    artist: 'Hoodie Allen',
-    album: 'Games we play',
-    imgUrl:
-      'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80',
-  },
-  {
-    id: crypto.randomUUID(),
-    title: 'Happy',
-    artist: 'Cro',
-    album: 'test',
-    imgUrl:
-      'https://images.unsplash.com/photo-1620939123578-bb16277cfd54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80',
-  },
-  {
-    id: crypto.randomUUID(),
-    title: 'Happy',
-    artist: 'Cro',
-    album: 'test',
-    imgUrl:
-      'https://images.unsplash.com/photo-1612999754243-3745bba6c302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=734&q=80',
-  },
-]
+// const posts = postMock;
 
-export function Feed(): JSX.Element {
+export function Feed(props: feedInterface): JSX.Element {
   return (
     <>
-      {posts.map((post) => (
-        <>
-          <Post {...post}> </Post>
-        </>
+      {props.posts.map((post) => (
+        <Post key={post.id} {...post}></Post>
       ))}
     </>
   )

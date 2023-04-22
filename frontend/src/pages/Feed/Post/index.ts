@@ -1,3 +1,2 @@
-import { Post } from './component'
-
-export default Post
+export { Post } from './component'
+export * from './interface'
