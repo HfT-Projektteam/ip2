@@ -180,7 +180,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['Entry'][]
+          'application/json': Array<components['schemas']['Entry']>
         }
       }
     }
