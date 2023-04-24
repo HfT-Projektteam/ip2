@@ -9,6 +9,8 @@ on:
 env:
   REGISTRY: ghcr.io/hft-projektteam
   IMAGE_NAME: friendify_frontend
+  PR: ${{ github.event.pull_request.title }}
+
 
 jobs:
   build-and-push:
@@ -33,4 +35,4 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.pull_request.title }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.PR }}
