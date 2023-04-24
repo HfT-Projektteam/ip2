@@ -40,6 +40,7 @@ jobs:
           fi
 
           docker build -t $IMAGE_NAME:$IMAGE_TAG -f backend/Dockerfile backend
+          docker build -t $IMAGE_NAME:latest -f backend/Dockerfile backend
       
 
       - name: Push Docker image
