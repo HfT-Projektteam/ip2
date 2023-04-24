@@ -9,8 +9,6 @@ on:
 env:
   REGISTRY: ghcr.io/hft-projektteam
   IMAGE_NAME: friendify_frontend
-  PR: ${{ github.event.pull_request.title }}
-
 
 jobs:
   build-and-push:
