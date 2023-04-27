@@ -7,9 +7,7 @@ describe('Random Id Generator', () => {
     expect(id1).not.toEqual(id2)
   })
 
-  it('generated ID should have a length of 0', () => {
-    expect(generateRandomUID().length).toBeGreaterThanOrEqual(0)
+  it('generated ID should have a length of 18', () => {
+    expect(generateRandomUID().length).toBe(18)
   })
-
-  it.todo('Random Id should always be the same length')
 })
