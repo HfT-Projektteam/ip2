@@ -1,7 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import describe from 'node:test';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+
+const oneUser = {
+  spotify_uri: 'firstName #1',
+};
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -9,7 +14,19 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService],
+      providers: [
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: {
+            find: getUserArrayOfLen(35),
+            findOneBy: jest.fn().mockResolvedValue(oneUser),
+            save: jest.fn().mockResolvedValue(oneUser),
+            remove: jest.fn(),
+            delete: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
@@ -18,11 +35,15 @@ describe('UsersController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-
-  describe('Pagination', () => {
-    it.todo('should return all users with pagination');
-    it.todo(
-      'should return all user with pagination that start with search param',
-    );
-  });
 });
+
+// Helper
+function getUserArrayOfLen(amount: number): Array<User> {
+  let users = Array(amount);
+  for (let i = 0; i < amount; i++) {
+    users.push({
+      spotify_uri: 'firstName #' + i,
+    });
+  }
+  return users;
+}

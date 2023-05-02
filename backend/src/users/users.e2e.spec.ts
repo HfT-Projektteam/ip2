@@ -1,5 +1,3 @@
-// Maybe move this in users.controller.spec.ts or should that be stateless too?
-
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Test } from '@nestjs/testing';
@@ -7,7 +5,7 @@ import { UsersModule } from './users.module';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as request from 'supertest';
-import describe from 'node:test';
+import { v4 as uuid } from 'uuid';
 
 let app: INestApplication;
 let repository: Repository<User>;
@@ -35,26 +33,72 @@ beforeAll(async () => {
   repository = module.get('UserRepository');
 });
 
-afterAll(async () => {
-  await app.close();
-});
-
-describe('CRUD', () => {
-  it('should create and save a user', async () => {
+describe('Test basic DB connectivity', () => {
+  beforeEach(async () => {
     await request(app.getHttpServer())
       .post('/users')
       .send({ spotify_uri: 'test1' })
       .expect(201);
-
+  });
+  it('should create and save a user', async () => {
     expect(
       await repository.exist({ where: { spotify_uri: 'test1' } }),
     ).toBeTruthy();
   });
 
-  it.todo('should delete a user');
-  it.todo('should find a user by id');
+  it('should delete a user', async () => {
+    await request(app.getHttpServer())
+      .delete('/users/test1')
+      .send()
+      .expect(200);
+    expect(
+      await repository.exist({ where: { spotify_uri: 'test1' } }),
+    ).toBeFalsy();
+  });
+
+  it('should return a user by id', async () => {
+    await request(app.getHttpServer())
+      .get('/users/test1')
+      .send()
+      .expect(200)
+      .expect('{"spotify_uri":"test1"}  ');
+  });
+  afterEach(async () => {
+    await repository.delete({ spotify_uri: 'test1' });
+  });
 });
 
-describe('Follower stuff', () => {
-  it.todo('should add other user to following ', async () => {});
+describe('Pagination', () => {
+  beforeAll(async () => {
+    let users = [];
+    for (let i = 0; i < 20; i++) {
+      users.push({ spotify_uri: uuid() });
+    }
+    await repository.save(users);
+  });
+  it('should return all users with pagination limit 10', async () => {
+    await request(app.getHttpServer())
+      .get('/users')
+      .query({ limit: 10 })
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.data).toHaveLength(10);
+      });
+  });
+
+  it('should provide hateoas like links for the next page', async () => {
+    await request(app.getHttpServer())
+      .get('/users')
+      .query({ limit: 10 })
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.links.next).toBeDefined();
+      });
+  });
+});
+
+afterAll(async () => {
+  await app.close();
 });
