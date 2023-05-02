@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import describe from 'node:test';
 
 const userArray = [
   {
@@ -48,6 +47,6 @@ describe('UsersService', () => {
   });
 
   describe('Follower stuff', () => {
-    it.todo('should add other user to following ', async () => {});
+    //it.todo('should add other user to following ', async () => {});
   });
 });

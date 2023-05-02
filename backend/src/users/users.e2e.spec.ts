@@ -61,7 +61,11 @@ describe('Test basic DB connectivity', () => {
       .get('/users/test1')
       .send()
       .expect(200)
-      .expect('{"spotify_uri":"test1"}  ');
+      .expect('{"spotify_uri":"test1"}');
+  });
+
+  it('should only return a user, if id matches exactly', async () => {
+    await request(app.getHttpServer()).get('/users/test2').send().expect(500);
   });
   afterEach(async () => {
     await repository.delete({ spotify_uri: 'test1' });

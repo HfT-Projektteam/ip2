@@ -35,6 +35,10 @@ describe('UsersController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('should find one user by spotify_uri', async () => {
+    controller.findOne('firstName #1');
+  });
 });
 
 // Helper

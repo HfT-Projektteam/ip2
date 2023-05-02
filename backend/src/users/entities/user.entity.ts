@@ -1,14 +1,20 @@
-import {Entity, JoinTable, ManyToMany, PrimaryColumn} from "typeorm";
-
+import {
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
+  @PrimaryColumn()
+  spotify_uri: string;
 
-    @PrimaryColumn()
-    spotify_uri: string
+  @OneToMany(() => User, (user) => user.followers)
+  following: User[];
 
-    @ManyToMany(() => User)
-    @JoinTable()
-    following: User[]
-
+  @ManyToOne(() => User, (user) => user.following)
+  followers: User[];
 }

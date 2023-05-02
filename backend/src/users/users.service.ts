@@ -16,7 +16,7 @@ export class UsersService {
     const user = new User();
     user.spotify_uri = createUserDto.spotify_uri;
 
-    return await this.userRepo.save(user);
+    return this.userRepo.save(user);
   }
 
   async findAll(query: PaginateQuery): Promise<Paginated<User>> {
@@ -28,10 +28,18 @@ export class UsersService {
   }
 
   async findOne(spotify_uri: string): Promise<User> {
-    return await this.userRepo.findOneBy({ spotify_uri: spotify_uri });
+    return await this.userRepo.findOneByOrFail({ spotify_uri: spotify_uri });
   }
 
   async remove(spotify_uri: string) {
-    return await this.userRepo.delete({ spotify_uri: spotify_uri });
+    return this.userRepo.delete({ spotify_uri: spotify_uri });
+  }
+
+  async followUser(follower_uri: string, following_uri: string) {
+    const follower = await this.findOne(follower_uri);
+    const following = await this.findOne(following_uri);
+    follower.following = [following];
+    following.followers = [follower];
+    return this.userRepo.save([follower, following]);
   }
 }
