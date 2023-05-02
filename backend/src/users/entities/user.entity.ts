@@ -12,9 +12,10 @@ export class User {
   @PrimaryColumn()
   spotify_uri: string;
 
-  @OneToMany(() => User, (user) => user.followers)
+  @ManyToMany(() => User)
+  @JoinTable({
+    joinColumn: { name: 'follower' },
+    inverseJoinColumn: { name: 'following' },
+  })
   following: User[];
-
-  @ManyToOne(() => User, (user) => user.following)
-  followers: User[];
 }

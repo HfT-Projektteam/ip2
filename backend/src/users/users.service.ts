@@ -35,11 +35,18 @@ export class UsersService {
     return this.userRepo.delete({ spotify_uri: spotify_uri });
   }
 
-  async followUser(follower_uri: string, following_uri: string) {
-    const follower = await this.findOne(follower_uri);
-    const following = await this.findOne(following_uri);
-    follower.following = [following];
-    following.followers = [follower];
-    return this.userRepo.save([follower, following]);
+  async followUser(
+    follower_uri: string,
+    to_be_followed_uri: string,
+  ): Promise<User> {
+    if (follower_uri === to_be_followed_uri) throw Error;
+    let follower = await this.userRepo.findOneOrFail({
+      where: { spotify_uri: follower_uri },
+      relations: ['following'],
+    });
+    const to_be_followed = await this.findOne(to_be_followed_uri);
+    follower.following.push(to_be_followed);
+
+    return this.userRepo.save(follower);
   }
 }
