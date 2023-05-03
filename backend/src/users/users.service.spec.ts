@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { rejects } from 'assert';
 
 const userArray = [
   {
@@ -47,6 +48,10 @@ describe('UsersService', () => {
   });
 
   describe('Follower stuff', () => {
-    //it.todo('should add other user to following ', async () => {});
+    it('should not be possible to follow the own profile', async () => {
+      expect(service.followUser('user1', 'user1')).rejects.toThrow(
+        'User can not follow itself.',
+      );
+    });
   });
 });

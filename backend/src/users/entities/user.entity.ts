@@ -14,6 +14,7 @@ export class User {
 
   @ManyToMany(() => User)
   @JoinTable({
+    name: 'user_following_user',
     joinColumn: { name: 'follower' },
     inverseJoinColumn: { name: 'following' },
   })

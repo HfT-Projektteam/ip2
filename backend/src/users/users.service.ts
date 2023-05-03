@@ -39,7 +39,9 @@ export class UsersService {
     follower_uri: string,
     to_be_followed_uri: string,
   ): Promise<User> {
-    if (follower_uri === to_be_followed_uri) throw Error;
+    if (follower_uri === to_be_followed_uri)
+      throw Error('User can not follow itself.');
+
     let follower = await this.userRepo.findOneOrFail({
       where: { spotify_uri: follower_uri },
       relations: ['following'],
@@ -49,4 +51,27 @@ export class UsersService {
 
     return this.userRepo.save(follower);
   }
+
+  //Who the user is following
+  async getFollowings(
+    spotify_uri: string,
+    query: PaginateQuery,
+  ): Promise<Paginated<User>> {
+    return paginate(query, this.userRepo, {
+      sortableColumns: ['spotify_uri'],
+      relativePath: true,
+      relations: ['following'],
+      where: { spotify_uri: spotify_uri },
+    });
+  }
+
+  //Who is following the user
+  // async getFollowers(
+  //   spotify_uri: string,
+  //   query: PaginateQuery,
+  // ): Promise<Paginated<User>> {
+  //   const queryBuilder = this.userRepo
+  //     .createQueryBuilder()
+  //     .from(User, 'user_following_user');
+  // }
 }

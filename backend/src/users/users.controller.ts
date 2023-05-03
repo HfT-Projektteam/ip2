@@ -37,4 +37,12 @@ export class UsersController {
   follow(@Param('id') id: string, @Param('following_id') following_id: string) {
     return this.usersService.followUser(id, following_id);
   }
+
+  @Get('/:id/following/')
+  getFollowings(
+    @Param('id') id: string,
+    @Paginate() query: PaginateQuery,
+  ): Promise<Paginated<User>> {
+    return this.usersService.getFollowings(id, query);
+  }
 }
