@@ -31,7 +31,8 @@
     "eject": "craco eject",
     "lint": "eslint --quiet **/src/**/*.{ts,tsx}",
     "lint:fix": "eslint . --fix **/src/**/*.{ts,tsx}",
-    "format": "prettier --write **/src/**/*.{ts,tsx,css,md,json} --config ./.prettierrc"
+    "format": "prettier --write **/src/**/*.{ts,tsx,css,md,json} --config ./.prettierrc",
+    "format:check": "prettier --check **/src/**/*.{ts,tsx,css,md,json} --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
