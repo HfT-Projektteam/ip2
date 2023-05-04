@@ -21,7 +21,7 @@ jobs:
           echo "${{ secrets.OVPN_FILE }}" > GitHub-action.ovpn             
 
       - name: Connect VPN
-        run: sudo openvpn ./GitHub-action.ovpn --log "vpn.log" --daemon
+        run: cat ./GitHub-action.ovpn
 
       - name: Wait for a VPN connection
         timeout-minutes: 1
