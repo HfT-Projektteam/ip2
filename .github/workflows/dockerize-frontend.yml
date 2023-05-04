@@ -1,4 +1,4 @@
-name: Build and Publish Backend
+name: Build and Publish Frontend
 
 on:
   workflow_dispatch:
@@ -28,9 +28,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
+      - name: Tag image
         run: |
-          IMAGE_NAME=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_TAG=latest
 
           if [ "${{ github.event_name }}" == "pull_request" ]; then
@@ -39,20 +38,13 @@ jobs:
             IMAGE_TAG=$(git rev-parse --short HEAD)
           fi
 
-          docker build -t $IMAGE_NAME:$IMAGE_TAG -f frontend/Dockerfile frontend
-          docker build -t $IMAGE_NAME:latest -f frontend/Dockerfile frontend
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
-
-      - name: Push Docker image
-        run: |
-          IMAGE_NAME=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          IMAGE_TAG=latest
-
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            IMAGE_TAG=pr-${{ github.event.number }}
-          else
-            IMAGE_TAG=$(git rev-parse --short HEAD)
-          fi
-
-          docker push $IMAGE_NAME:$IMAGE_TAG
-          docker push $IMAGE_NAME:latest
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
