@@ -31,6 +31,9 @@ module.exports = {
       moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
         prefix: 'frontend/src/',
       }),
+      transform: {
+        '^.+\\.(ts|tsx|js|jsx)?$': 'ts-jest',
+      },
     },
   },
 }
