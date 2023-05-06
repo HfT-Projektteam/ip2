@@ -15,7 +15,7 @@ export const mutedKhakiColorPalette = {
   red: '#d88d71',
 }
 
-export const defaultTheme = {
+const defaultTheme = {
   colors: {
     primary100: '#fffff',
     primary200: '#fff00',
@@ -23,3 +23,4 @@ export const defaultTheme = {
   },
   button: { buttonTheme },
 }
+export default defaultTheme

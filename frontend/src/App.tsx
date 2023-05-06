@@ -2,9 +2,10 @@ import Feed from '@pages/Feed'
 import mockData from '@data/mockdata/posts.json'
 import { ConfigProvider, theme as antdTheme, Button } from 'antd'
 import { useState } from 'react'
-import { configThemeDefault, configThemeDark } from '@data/Style'
+import themesConfig from '@data/ThemesConfig'
 
 const { useToken } = antdTheme
+const { configThemeDefault, configThemeDark } = themesConfig
 const feed = mockData
 
 function App(): JSX.Element {

@@ -3,7 +3,7 @@ import defaultTheme from '@data/Style'
 
 const { colors } = defaultTheme
 
-export const configThemeDefault = {
+const configThemeDefault = {
   token: {
     colorPrimary: colors.mutedKhakiColorPalette.khakiDark,
   },
@@ -15,7 +15,7 @@ export const configThemeDefault = {
   },
 }
 
-export const configThemeDark = {
+const configThemeDark = {
   token: {
     colorPrimary: colors.mutedKhakiColorPalette.khakiDark,
   },
@@ -26,3 +26,7 @@ export const configThemeDark = {
     },
   },
 }
+
+const themesConfig = { configThemeDefault, configThemeDark }
+
+export default themesConfig

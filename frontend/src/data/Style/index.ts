@@ -1,6 +1,3 @@
-import { defaultTheme } from './theme'
-import { configThemeDark, configThemeDefault } from './themeConfig'
+import defaultTheme from './theme'
 
 export default defaultTheme
-
-export { configThemeDefault, configThemeDark }
