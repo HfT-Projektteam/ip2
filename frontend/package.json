@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "circular-dependency-plugin": "^5.2.2",
     "craco-alias": "^3.0.1",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^34.0.1",
