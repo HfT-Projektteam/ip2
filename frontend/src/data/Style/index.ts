@@ -1,5 +1,6 @@
-import { defaultTheme, buttonTheme } from './theme'
+import { defaultTheme } from './theme'
+import { configThemeDark, configThemeDefault } from './themeConfig'
 
 export default defaultTheme
 
-export { buttonTheme }
+export { configThemeDefault, configThemeDark }

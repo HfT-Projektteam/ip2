@@ -1,6 +1,7 @@
 # Internet Programmierung SS23 (Spotify Social-Media)
 
 ## User stories
+
 1. As a user I want to be able to login with spotify oauth
 2. As a user I want to be able to **log out** from the website
 3. As a user I want to be able to view a global feed of shared songs
@@ -23,6 +24,7 @@
 20. As a user I want to be able to change the visibility of my profile (private, friends, public, ...)
 
 Extra:
+
 - As a user I want to be able to be able to specify a custom color scheme (maybe even custom CSS/layout)
 - As a user I want to be able to generate a graphical visualization of my Spotify account
 - As a user I want to be able to build custom playlists with the playlists of other users for reference
@@ -32,5 +34,6 @@ Extra:
 ## Tooling & Setup
 
 [OpenAPI Design](https://stoplight.io/studio) \
-[Generate typescript types rom openAPI3.*](https://github.com/drwpow/openapi-typescript) \
-[OpenAPI Spotify](https://github.com/sonallux/spotify-web-api) 
+[Generate typescript types rom openAPI3.\*](https://github.com/drwpow/openapi-typescript) \
+[OpenAPI Spotify](https://github.com/sonallux/spotify-web-api)
+[UI Design with Ant Design](https://ant.design/)
