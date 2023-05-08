@@ -18,8 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Tag image
-        shell: bash
+      - name: Find Env
         run: |
           pwd
           ls -alh
