@@ -16,6 +16,6 @@ jobs:
 
     steps:
       - name: Build and push using template
-        uses: ./.github/workflows/templates/deploy-template.yml
+        uses: ./.github/workflows/templates/build
         with:
           buildpath: ./frontend
