@@ -23,9 +23,9 @@ jobs:
           pwd
           ls -alh
           
-          ls -alh /home/runner/work/ip2/ip2/.github/workflows/templates/deploy
+          ls -alh /home/runner/work/ip2/ip2/.github/workflows/templates/build
 
       - name: Deploy template
-        uses: ./.github/workflows/templates/deploy
+        uses: ./.github/workflows/templates/build
         with:
           buildpath: ./frontend
