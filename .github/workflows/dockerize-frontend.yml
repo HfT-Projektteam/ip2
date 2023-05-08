@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Build and push using template
-        uses: ./.github/workflows/templates/build
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy template
+        uses: ./.github/workflows/templates/deploy
         with:
           buildpath: ./frontend

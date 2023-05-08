@@ -1,19 +1,16 @@
-name: deploy
+name: Deploy template
+
+description: "Template for building and deploying Docker imaged to GHCR"
 
 inputs:
   buildpath:
+    description: "Path to dockerfile"
     required: true
-
-env:
-  REGISTRY: ghcr.io/hft-projektteam
-  IMAGE_NAME: friendify_frontend
 
 runs:
   using: "composite"
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
 
+  steps:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -25,6 +22,7 @@ runs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Tag image
+      shell: /bin/bash
       run: |
         IMAGE_TAG=latest
 
