@@ -14,16 +14,6 @@ runs:
   using: "composite"
 
   steps:
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v1
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: $${{ inputs.ghcr-token }}
-
     - name: Tag image
       shell: bash
       run: |
@@ -36,6 +26,17 @@ runs:
         fi
 
         echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+        echo ${{ github.event.number }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: $${{ inputs.ghcr-token }}
 
     - name: Build and push
       uses: docker/build-push-action@v4
