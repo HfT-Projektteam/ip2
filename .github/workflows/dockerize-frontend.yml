@@ -22,4 +22,3 @@ jobs:
         uses: .github/workflows/templates/build
         with:
           buildpath: ./frontend
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
