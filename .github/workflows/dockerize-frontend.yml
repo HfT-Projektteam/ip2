@@ -8,6 +8,6 @@ on:
 
 jobs:
   - name: deploy
-    uses: "./.github/templates"
+    uses: ".github/templates"
     with:
       buildpath: "frontend"
