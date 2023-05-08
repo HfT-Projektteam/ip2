@@ -6,6 +6,9 @@ inputs:
   buildpath:
     description: "Path to dockerfile"
     required: true
+  ghcr-token:
+    description: "Token for ghcr access"
+    required: true
 
 runs:
   using: "composite"
@@ -19,7 +22,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: $${{ inputs.ghcr-token }}
 
     - name: Tag image
       shell: bash

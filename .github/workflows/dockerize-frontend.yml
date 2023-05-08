@@ -18,14 +18,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Find Env
-        run: |
-          pwd
-          ls -alh
-          
-          ls -alh /home/runner/work/ip2/ip2/.github/workflows/templates/build
-
       - name: Deploy template
-        uses: ./.github/workflows/templates/build
+        uses: .github/workflows/templates/build
         with:
           buildpath: ./frontend
+          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
