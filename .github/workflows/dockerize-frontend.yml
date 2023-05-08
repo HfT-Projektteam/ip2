@@ -21,4 +21,5 @@ jobs:
       - name: Deploy template
         uses: ./.github/workflows/templates/build
         with:
-          buildpath: ./frontend
+          build-path: ./frontend
+          ghcr-token: ${{ secrets.GITHUB_TOKEN }}

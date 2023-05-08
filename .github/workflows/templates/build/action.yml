@@ -3,8 +3,11 @@ name: Deploy template
 description: "Template for building and deploying Docker imaged to GHCR"
 
 inputs:
-  buildpath:
+  build-path:
     description: "Path to dockerfile"
+    required: true
+  ghcr-token:
+    description: "Secret for ghcr.io container registry"
     required: true
 
 runs:
