@@ -18,6 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Tag image
+        shell: /bin/bash
+        run: |
+          pwd
+          ls -alh
+
       - name: Deploy template
         uses: ./.github/workflows/templates/deploy
         with:
