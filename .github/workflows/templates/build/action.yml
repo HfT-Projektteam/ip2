@@ -6,9 +6,6 @@ inputs:
   buildpath:
     description: "Path to dockerfile"
     required: true
-  ghcr-token:
-    description: "Token for ghcr access"
-    required: true
 
 runs:
   using: "composite"
