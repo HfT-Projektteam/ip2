@@ -22,6 +22,8 @@ jobs:
         run: |
           pwd
           ls -alh
+          
+          ls -alh /home/runner/work/ip2/ip2/.github/workflows/templates/deploy
 
       - name: Deploy template
         uses: ./.github/workflows/templates/deploy
