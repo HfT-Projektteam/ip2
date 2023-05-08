@@ -1,4 +1,4 @@
-name: Build and Publish Frontend
+name: Build and Publish Backend
 
 on:
   workflow_dispatch:
@@ -6,8 +6,16 @@ on:
     types: ["closed"]
     branches: [ "main", "devops/**"]
 
+env:
+  REGISTRY: ghcr.io/hft-projektteam
+  IMAGE_NAME: friendify_frontend
+
 jobs:
-  - name: deploy
-    uses: ".github/templates"
-    with:
-      buildpath: "frontend"
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build and push using template
+        uses: ./.github/workflows/templates/deploy-template.yml
+        with:
+          buildpath: ./frontend

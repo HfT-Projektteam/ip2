@@ -4,6 +4,10 @@ inputs:
   buildpath:
     required: true
 
+env:
+  REGISTRY: ghcr.io/hft-projektteam
+  IMAGE_NAME: friendify_frontend
+
 runs:
   using: "composite"
   steps:
@@ -23,13 +27,13 @@ runs:
     - name: Tag image
       run: |
         IMAGE_TAG=latest
-  
+
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           IMAGE_TAG=pr-${{ github.event.number }}
         else
           IMAGE_TAG=$(git rev-parse --short HEAD)
         fi
-  
+
         echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
     - name: Build and push
@@ -38,5 +42,5 @@ runs:
         context: ${{ inputs.buildpath }}
         push: true
         tags: |
-          ghcr.io/hft-projektteam/friendify_${{ inputs.buildpath }}:latest
-          ghcr.io/hft-projektteam/friendify_${{ inputs.buildpath }}:${{ env.IMAGE_TAG }}
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
