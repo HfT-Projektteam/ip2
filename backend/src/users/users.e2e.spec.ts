@@ -101,6 +101,31 @@ describe('Pagination', () => {
         expect(res.body.links.next).toBeDefined();
       });
   });
+
+  afterAll(async () => {
+    await repository.clear();
+  });
+});
+
+describe('Exception stuff', () => {
+  beforeAll(async () => {
+    await repository.save({ spotify_uri: 'test1' });
+  });
+  it('should throw a 400 error if users tries to follow himself', async () => {
+    await request(app.getHttpServer())
+      .post('/users/test1/following/test1')
+      .send()
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toMatchObject({
+          message: {
+            statusCode: 400,
+            error: 'Circular Follower Exception',
+            message: "A user can't follow himself, that just makes no sense",
+          },
+        });
+      });
+  });
 });
 
 afterAll(async () => {

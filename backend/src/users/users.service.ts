@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { CircularDependencyException } from '@nestjs/core/errors/exceptions';
 
 @Injectable()
 export class UsersService {
@@ -40,7 +41,8 @@ export class UsersService {
     to_be_followed_uri: string,
   ): Promise<User> {
     if (follower_uri === to_be_followed_uri)
-      throw Error('User can not follow itself.');
+      throw new CircularDependencyException('User can not follow itself.');
+    //throw new Error('User can not follow itself.');
 
     let follower = await this.userRepo.findOneOrFail({
       where: { spotify_uri: follower_uri },
