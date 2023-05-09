@@ -1,12 +1,5 @@
-import {
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-} from 'typeorm';
-import {ApiProperty} from "@nestjs/swagger";
+import { Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class User {
@@ -16,7 +9,7 @@ export class User {
   @PrimaryColumn()
   spotify_uri: string;
 
-  @ApiProperty({type: () => [User]})
+  @ApiProperty({ type: () => [User] })
   @ManyToMany(() => User)
   @JoinTable({
     name: 'user_following_user',
