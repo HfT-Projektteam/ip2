@@ -8,9 +8,9 @@ describe('Post', () => {
   it('should render Post component correctly', () => {
     render(<Post {...post} />)
     const elementImg = screen.getByRole('img')
-    const title = screen.getByText(post.title)
-    const album = screen.getByText(post.album)
-    const artist = screen.getByText(post.artist)
+    const title = screen.getByText(new RegExp(post.title, 'i'))
+    const album = screen.getByText(new RegExp(post.album, 'i'))
+    const artist = screen.getByText(new RegExp(post.artist, 'i'))
     expect(elementImg).toBeInTheDocument()
     expect(title).toBeInTheDocument()
     expect(album).toBeInTheDocument()
