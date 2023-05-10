@@ -3,50 +3,33 @@ import { generateRandomUID } from '@services/IdGenertor'
 import { type components } from '@data/spotify-types'
 type trackObject = components['schemas']['TrackObject']
 
-export async function generateTrack(
-  trackId: string,
-  clientId: string,
-  clientSecret: string,
-): Promise<trackInterface> {
-  const optionsBearer = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body:
-      `grant_type=client_credentials` +
-      `&client_id=${clientId}` +
-      `&client_secret=${clientSecret}`,
+export async function getTrack(trackId: string): Promise<trackInterface> {
+  const bearer = window.localStorage.getItem('token') ?? ''
+
+  if (bearer === '') {
+    console.error('Token was empty string')
   }
 
-  return await request<{
-    access_token: string
-    token_type: string
-    expires_in: number
-  }>(`https://accounts.spotify.com/api/token`, optionsBearer)
-    .then(async (res) => {
-      const bearer = res.access_token
+  const optionsTrack = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${bearer}`,
+    },
+  }
 
-      const optionsTrack = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${bearer}`,
-        },
+  return await request<trackObject>(
+    `https://api.spotify.com/v1/tracks/${trackId}`,
+    optionsTrack,
+  )
+    .then((res) => {
+      const post: trackInterface = {
+        id: generateRandomUID(),
+        title: res.name ?? 't',
+        artist: res.artists?.at(0)?.name ?? 't',
+        album: res.album?.name ?? 't',
+        imgUrl: res.album?.images.at(0)?.url ?? 't',
       }
-
-      return await request<trackObject>(
-        `https://api.spotify.com/v1/tracks/${trackId}`,
-        optionsTrack,
-      ).then((res) => {
-        const post: trackInterface = {
-          id: generateRandomUID(),
-          title: res.name ?? 't',
-          artist: res.artists?.at(0)?.name ?? 't',
-          album: res.album?.name ?? 't',
-          imgUrl: res.album?.images.at(0)?.url ?? 't',
-        }
-        return post
-      })
+      return post
     })
     .catch((err) => {
       console.error('Error while generating track:')
@@ -63,11 +46,8 @@ export async function generateTrack(
     })
 }
 
-export async function getRandomTrack(
-  clientId: string,
-  clientSecret: string,
-): Promise<trackInterface> {
-  return await generateTrack('11dFghVXANMlKmJXsNCbNl', clientId, clientSecret)
+export async function getRandomTrack(): Promise<trackInterface> {
+  return await getTrack('11dFghVXANMlKmJXsNCbNl')
 }
 
 async function request<T>(url: string, options: RequestInit): Promise<T> {

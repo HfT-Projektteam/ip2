@@ -2,7 +2,7 @@ import {
   type trackInterface,
   type postInterface,
 } from '@pages/Feed/Post/interface'
-import { generateTrack } from '@services/SpotifyAPI'
+import { getTrack } from '@services/SpotifyAPI/component'
 import { Card } from 'antd'
 import { useEffect, useState } from 'react'
 
@@ -12,11 +12,7 @@ export function Post(props: postInterface): JSX.Element {
   const [post, setPost] = useState<trackInterface>()
 
   useEffect(() => {
-    generateTrack(
-      `${props.spotifyId}`,
-      'todo: client_id',
-      'todo: client_secret',
-    )
+    getTrack(`${props.spotifyId}`)
       .then((res) => {
         setPost(res)
       })
