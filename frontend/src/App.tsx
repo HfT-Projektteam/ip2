@@ -1,5 +1,5 @@
 import Feed from '@pages/Feed'
-import mockData from '@data/mockdata/posts.json'
+import mockData from '@data/mockdata/feed.json'
 import { ConfigProvider, theme as antdTheme, Button, Layout } from 'antd'
 import { useState } from 'react'
 import themesConfig from '@data/ThemesConfig'

@@ -1,19 +1,21 @@
 import { render, screen } from '@testing-library/react'
 import { Post } from '@pages/Feed/Post'
-import postMock from '@data/mockdata/posts.json'
+import feedMock from '@data/mockdata/feed.json'
 
 describe('Post', () => {
-  const post = postMock.posts[0]
+  const post = feedMock.posts[0]
 
   it('should render Post component correctly', () => {
     render(<Post {...post} />)
     const elementImg = screen.getByRole('img')
-    const title = screen.getByText(new RegExp(post.title, 'i'))
-    const album = screen.getByText(new RegExp(post.album, 'i'))
-    const artist = screen.getByText(new RegExp(post.artist, 'i'))
+    const title = screen.getByText(/We Will Rock You/i)
+    const album = screen.getByText(/I Love Dad/i)
+    const artist = screen.getByText(/Queen/i)
     expect(elementImg).toBeInTheDocument()
     expect(title).toBeInTheDocument()
     expect(album).toBeInTheDocument()
     expect(artist).toBeInTheDocument()
   })
+
+  it.todo('how to test the post if the post is doing an api call?')
 })
