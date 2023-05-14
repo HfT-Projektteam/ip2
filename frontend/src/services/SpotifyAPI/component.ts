@@ -2,9 +2,10 @@ import { type trackInterface } from '@pages/Feed/Post'
 import { generateRandomUID } from '@services/IdGenertor'
 import { type components } from '@data/spotify-types'
 type trackObject = components['schemas']['TrackObject']
+type PrivateUserObject = components['schemas']['PrivateUserObject']
 
 export async function getTrack(trackId: string): Promise<trackInterface> {
-  const bearer = window.localStorage.getItem('token') ?? ''
+  const bearer = window.localStorage.getItem('access_token') ?? ''
 
   if (bearer === '') {
     console.error('Token was empty string')
@@ -48,6 +49,32 @@ export async function getTrack(trackId: string): Promise<trackInterface> {
 
 export async function getRandomTrack(): Promise<trackInterface> {
   return await getTrack('11dFghVXANMlKmJXsNCbNl')
+}
+
+export async function getProfile(): Promise<PrivateUserObject | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<PrivateUserObject>(
+    'https://api.spotify.com/v1/me',
+    options,
+  )
+    .then((user) => {
+      return user
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+      return null
+    })
 }
 
 async function request<T>(url: string, options: RequestInit): Promise<T> {
