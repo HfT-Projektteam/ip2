@@ -37,21 +37,42 @@ export class UsersService {
   }
 
   async followUser(
-    follower_uri: string,
     to_be_followed_uri: string,
+    follower_uri: string,
   ): Promise<User> {
     if (follower_uri === to_be_followed_uri)
       throw new CircularDependencyException('User can not follow itself.');
     //throw new Error('User can not follow itself.');
 
-    let follower = await this.userRepo.findOneOrFail({
-      where: { spotify_uri: follower_uri },
+    let to_be_followed = await this.userRepo.findOneOrFail({
+      where: { spotify_uri: to_be_followed_uri },
       relations: ['following'],
     });
-    const to_be_followed = await this.findOne(to_be_followed_uri);
-    follower.following.push(to_be_followed);
 
-    return this.userRepo.save(follower);
+    if (await this.doesUser1FollowUser2(to_be_followed_uri, follower_uri))
+      return to_be_followed;
+
+    const follower = await this.findOne(follower_uri);
+    to_be_followed.following.push(follower);
+
+    return this.userRepo.save(to_be_followed);
+  }
+
+  async doesUser1FollowUser2(
+    follower_uri1: string,
+    follower_uri2: string,
+  ): Promise<boolean> {
+    return this.userRepo
+      .exist({
+        where: {
+          spotify_uri: follower_uri1,
+          following: { spotify_uri: follower_uri2 },
+        },
+        relations: ['following'],
+      })
+      .then((isFollowing) => {
+        return isFollowing;
+      });
   }
 
   //Who the user is following

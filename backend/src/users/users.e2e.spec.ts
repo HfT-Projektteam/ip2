@@ -165,12 +165,21 @@ describe('Exception stuff', () => {
 });
 
 describe('Follower Stuff', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await repository.save({ spotify_uri: 'test1' });
     await repository.save({ spotify_uri: 'test2' });
   });
 
-  it('should make one user follow another', async () => {
+  it('should make one user follow another (only once)', async () => {
+    await request(app.getHttpServer())
+      .post('/users/test1/follower/test2')
+      .expect((res) => {
+        expect(res.body).toMatchObject({
+          spotify_uri: 'test1',
+          following: [{ spotify_uri: 'test2' }],
+        });
+      });
+
     await request(app.getHttpServer())
       .post('/users/test1/follower/test2')
       .expect((res) => {
@@ -181,8 +190,38 @@ describe('Follower Stuff', () => {
       });
   });
 
-  afterAll(async () => {
-    // TODO await repository.delete(['test1', 'test2']);
+  it('should check if one user is following another', async () => {
+    const follwedUser = new User('test2');
+    follwedUser.following = [new User('test1')];
+    await repository.save(follwedUser);
+
+    await request(app.getHttpServer())
+      .get('/users/test2/follower/test1')
+      .expect((res) => {
+        expect(res.body.doesUserFollowUser).toBeTruthy();
+      });
+
+    await request(app.getHttpServer())
+      .get('/users/test2/follower/test2')
+      .expect((res) => {
+        expect(res.body.doesUserFollowUser).toBeFalsy();
+      });
+  });
+
+  it('should return all users a given user follows', async () => {
+    const follwedUser = new User('test2');
+    follwedUser.following = [new User('test1')];
+    await repository.save(follwedUser);
+
+    await request(app.getHttpServer())
+      .get('/users/test2/followings')
+      .expect((res) => {
+        console.log(res.body);
+      });
+  });
+
+  afterEach(async () => {
+    await repository.delete(['test1', 'test2']);
   });
 });
 
