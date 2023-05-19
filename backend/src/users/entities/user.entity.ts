@@ -10,7 +10,7 @@ export class User {
   spotify_uri: string;
 
   @ApiProperty({ type: () => [User] })
-  @ManyToMany(() => User)
+  @ManyToMany((type) => User, (user: User) => user.spotify_uri)
   @JoinTable({
     name: 'user_following_user',
     joinColumn: { name: 'follower' },

@@ -221,7 +221,7 @@ describe('Follower Stuff', () => {
   });
 
   afterEach(async () => {
-    await repository.delete(['test1', 'test2']);
+    //TODO await repository.delete(['test1', 'test2']);
   });
 });
 

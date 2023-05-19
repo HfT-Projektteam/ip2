@@ -20,12 +20,8 @@ export class UsersService {
     return this.userRepo.save(user);
   }
 
-  async findAll(query: PaginateQuery): Promise<Paginated<User>> {
-    return paginate(query, this.userRepo, {
-      sortableColumns: ['spotify_uri'],
-      relativePath: true,
-      select: ['spotify_uri'],
-    });
+  async findAll(page: number): Promise<User> {
+    return {data: this.userRepo.}
   }
 
   async findOne(spotify_uri: string): Promise<User> {
@@ -80,6 +76,15 @@ export class UsersService {
     spotify_uri: string,
     query: PaginateQuery,
   ): Promise<Paginated<User>> {
+    // Somehow this query is not accepted by paginate (Crashes the service)
+    // const queryBuilder = await this.userRepo
+    //   .createQueryBuilder('users')
+    //   .select('following.spotify_uri', 'spotify_uri')
+    //   .where('users.spotify_uri = :uri', { uri: spotify_uri })
+    //   .innerJoin('users.following', 'following');
+    //.getRawMany();
+    //return paginate(query, queryBuilder, { sortableColumns: [] });
+
     return paginate(query, this.userRepo, {
       sortableColumns: ['spotify_uri'],
       relativePath: true,

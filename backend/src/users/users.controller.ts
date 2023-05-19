@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
@@ -16,8 +25,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@Paginate() query: PaginateQuery): Promise<Paginated<User>> {
-    return this.usersService.findAll(query);
+  findAll(@Query('page', ParseIntPipe) page: number): Promise<Paginated<User>> {
+    return this.usersService.findAll(page);
   }
 
   @Get(':id')
