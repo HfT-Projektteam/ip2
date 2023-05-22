@@ -2,7 +2,7 @@ import {
   type trackInterface,
   type postInterface,
 } from '@pages/Feed/Post/interface'
-import { getTrack } from '@services/SpotifyAPI/component'
+import { getTrack } from '@services/SpotifyAPI'
 import { Card } from 'antd'
 import { useEffect, useState } from 'react'
 
@@ -31,16 +31,5 @@ export function Post(props: postInterface): JSX.Element {
         description={`${post?.album ?? ''} \n ${post?.artist ?? ''}`}
       />
     </Card>
-
-    /* old bootstrap example
-    <Card key={props.id}>
-      <Card.Img variant='top' src={props.imgUrl} />
-      <Card.Body>
-        <Card.Title>{props.title}</Card.Title>
-        <Card.Text>{props.album}</Card.Text>
-        <Card.Text>{props.artist}</Card.Text>
-      </Card.Body>
-    </Card>
-    */
   )
 }
