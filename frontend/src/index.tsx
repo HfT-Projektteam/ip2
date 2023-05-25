@@ -3,12 +3,29 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import GlobalStyle from 'assets/global'
+import styled from 'styled-components'
+
+const MobileWrapper = styled.div`
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: center;
+  }
+`
+const MobileContainer = styled.div`
+  @media (min-width: 768px) {
+    max-width: 500px;
+  }
+`
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <GlobalStyle />
-    <App />
+    <MobileWrapper>
+      <MobileContainer>
+        <App />
+      </MobileContainer>
+    </MobileWrapper>
   </React.StrictMode>,
 )
 
