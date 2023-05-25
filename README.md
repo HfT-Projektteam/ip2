@@ -36,5 +36,5 @@ Extra:
 
 [OpenAPI Design](https://stoplight.io/studio) \
 [Generate typescript types rom openAPI3.\*](https://github.com/drwpow/openapi-typescript) \
-[OpenAPI Spotify](https://github.com/sonallux/spotify-web-api)
+[OpenAPI Spotify](https://github.com/sonallux/spotify-web-api) \
 [UI Design with Ant Design](https://ant.design/)
