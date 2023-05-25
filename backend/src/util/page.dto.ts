@@ -18,7 +18,7 @@ export class Page<T> {
 
 export class PageLinks {
   constructor(totalEntries, baseRoute, page) {
-    this.self = baseRoute + "?page=" = page
+    this.self = baseRoute + '?page=' + page;
   }
 
   @ApiProperty()

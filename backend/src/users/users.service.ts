@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { CircularDependencyException } from '@nestjs/core/errors/exceptions';
+import { Page } from '../util/page.dto';
+import { Pagination } from '../util/pagination';
 
 @Injectable()
 export class UsersService {
@@ -20,8 +22,13 @@ export class UsersService {
     return this.userRepo.save(user);
   }
 
-  async findAll(page: number): Promise<User> {
-    return {data: this.userRepo.}
+  async findAll(page: number): Promise<Page<User>> {
+    const users = await Pagination.pageQuery(
+      this.userRepo.createQueryBuilder(),
+      page,
+    ).getMany();
+
+    return { data: users, links: {} };
   }
 
   async findOne(spotify_uri: string): Promise<User> {
