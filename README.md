@@ -22,6 +22,7 @@
 18. As a user I want to be able to see who follows me and whom I´m following
 19. As a user I want to be able to see my posting history
 20. As a user I want to be able to change the visibility of my profile (private, friends, public, ...)
+21. As a user I want to be able to paginate queries with commonly more than 30 queries
 
 Extra:
 
