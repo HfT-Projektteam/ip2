@@ -6,6 +6,9 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as request from 'supertest';
 import { v4 as uuid } from 'uuid';
+import { APP_FILTER } from '@nestjs/core';
+import { EntityNotFoundExceptionFilter } from '../filters/entity-not-found-exception/entity-not-found-exception.filter';
+import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter';
 
 let app: INestApplication;
 let repository: Repository<User>;
@@ -25,6 +28,16 @@ beforeAll(async () => {
         entities: ['./**/*.entity.ts'],
         synchronize: true,
       }),
+    ],
+    providers: [
+      {
+        provide: APP_FILTER,
+        useClass: EntityNotFoundExceptionFilter,
+      },
+      {
+        provide: APP_FILTER,
+        useClass: CircularFollowerExceptionFilter,
+      },
     ],
   }).compile();
   app = module.createNestApplication();
@@ -99,6 +112,50 @@ describe('Pagination', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.links.next).toBeDefined();
+      });
+  });
+
+  afterAll(async () => {
+    await repository.clear();
+  });
+});
+
+describe('Exception stuff', () => {
+  beforeAll(async () => {
+    await repository.save({ spotify_uri: 'test1' });
+  });
+  it('should throw a 400 error if users tries to follow himself', async () => {
+    await request(app.getHttpServer())
+      .post('/users/test1/following/test1')
+      .send()
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toMatchObject({
+          message: {
+            statusCode: 400,
+            error: 'Circular Follower Exception',
+            message: "A user can't follow himself, that just makes no sense",
+          },
+        });
+      });
+  });
+
+  it('should throw a 404 entity not found if spotify_uri is not know', async () => {
+    await request(app.getHttpServer())
+      .get('/users/thisUserDoesNotExist')
+      .send()
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toMatchObject({
+          message: {
+            statusCode: 404,
+            error: 'Not Found',
+            message:
+              'Could not find any entity of type "User" matching: {\n' +
+              '    "spotify_uri": "thisUserDoesNotExist"\n' +
+              '}',
+          },
+        });
       });
   });
 });
