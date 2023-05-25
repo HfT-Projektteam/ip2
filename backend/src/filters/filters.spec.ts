@@ -25,8 +25,9 @@ beforeAll(async () => {
 });
 
 describe('Exception stuff', () => {
+  it.todo('should catch a EntityNotFoundError and make at 404 HTTP Error');
   // Könnte man auch hier das Ergebnis abfangen und so ohne e2e testen?
-  throw new EntityNotFoundError(User, 'Test');
+  // throw new EntityNotFoundError(User, 'Test');
 });
 
 afterAll(async () => {

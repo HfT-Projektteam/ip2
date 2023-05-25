@@ -17,4 +17,8 @@ export class User {
     inverseJoinColumn: { name: 'following' },
   })
   following: User[];
+
+  constructor(spotify_uri?: string) {
+    this.spotify_uri = spotify_uri;
+  }
 }

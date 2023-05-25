@@ -35,12 +35,26 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  @Post('/:id/following/:following_id')
+  @Post('/:id/follower/:following_id')
   follow(@Param('id') id: string, @Param('following_id') following_id: string) {
     return this.usersService.followUser(id, following_id);
   }
 
-  @Get('/:id/following/')
+  @Get('/:id/follower/:following_id')
+  getIfFollow(
+    @Param('id') id: string,
+    @Param('following_id') following_id: string,
+  ) {
+    return this.usersService
+      .doesUser1FollowUser2(id, following_id)
+      .then((bool) => {
+        return {
+          doesUserFollowUser: bool,
+        };
+      });
+  }
+
+  @Get('/:id/followings/')
   getFollowings(
     @Param('id') id: string,
     @Paginate() query: PaginateQuery,
