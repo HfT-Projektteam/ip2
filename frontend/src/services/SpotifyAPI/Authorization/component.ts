@@ -1,5 +1,7 @@
-const clientId: string = process.env.REACT_APP_CLIENT_ID ?? ''
-const redirectUri: string = process.env.REACT_APP_SPOTIFY_REDIRECT_URI ?? ''
+import env from '@data/environment.config'
+
+const clientId: string = env.spotifyClientId
+const redirectUri: string = env.spotifyRedirectUri
 
 export function redirectToSpotifyAuthorizeEndpoint(): void {
   const codeVerifier = generateRandomString(128)
