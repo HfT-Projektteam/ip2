@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
+export class UserDto {
   @ApiProperty({
     description: 'The URI of a spotify user, which used this service',
   })

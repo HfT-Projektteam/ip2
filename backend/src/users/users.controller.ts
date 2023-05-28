@@ -7,31 +7,37 @@ import {
   Delete,
   Query,
   ParseIntPipe,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { User } from './entities/user.entity';
-import { ApiTags } from '@nestjs/swagger';
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common'
+import { UsersService } from './users.service'
+import { UserDto } from './dto/user.dto'
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate'
+import { User } from './entities/user.entity'
+import { ApiTags } from '@nestjs/swagger'
+import { PageOptionsDto } from '../util/pagination/page.dto'
+import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
 
 @ApiTags('user')
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  create(@Body() createUserDto: UserDto) {
+    return this.usersService.create(createUserDto)
   }
 
   @Get()
-  findAll(@Query('page', ParseIntPipe) page: number): Promise<Paginated<User>> {
-    return this.usersService.findAll(page);
+  @UseInterceptors(PageMetaInterceptor)
+  findAll(@Query() pageOptionsDto: PageOptionsDto) {
+    return this.usersService.findAll(pageOptionsDto)
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.usersService.findOne(id);
+    return await this.usersService.findOne(id)
   }
 
   // @Patch(':id')
@@ -41,12 +47,12 @@ export class UsersController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+    return this.usersService.remove(id)
   }
 
   @Post('/:id/follower/:following_id')
   follow(@Param('id') id: string, @Param('following_id') following_id: string) {
-    return this.usersService.followUser(id, following_id);
+    return this.usersService.followUser(id, following_id)
   }
 
   @Get('/:id/follower/:following_id')
@@ -59,15 +65,15 @@ export class UsersController {
       .then((bool) => {
         return {
           doesUserFollowUser: bool,
-        };
-      });
+        }
+      })
   }
 
   @Get('/:id/followings/')
   getFollowings(
     @Param('id') id: string,
     @Paginate() query: PaginateQuery,
-  ): Promise<Paginated<User>> {
-    return this.usersService.getFollowings(id, query);
+  ): Promise<[User]> {
+    return this.usersService.getFollowings(id, query)
   }
 }

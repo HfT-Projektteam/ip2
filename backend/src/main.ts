@@ -3,10 +3,12 @@ import { AppModule } from './app.module';
 import { EntityNotFoundExceptionFilter } from './filters/entity-not-found-exception/entity-not-found-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const config = new DocumentBuilder()
     .setTitle('Friendify Backend Service')

@@ -21,7 +21,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
+                "$ref": "#/components/schemas/UserDto"
               }
             }
           }
@@ -37,7 +37,29 @@
       },
       "get": {
         "operationId": "UsersController_findAll",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -92,7 +114,7 @@
         ]
       }
     },
-    "/users/{id}/following/{following_id}": {
+    "/users/{id}/follower/{following_id}": {
       "post": {
         "operationId": "UsersController_follow",
         "parameters": [
@@ -121,9 +143,38 @@
         "tags": [
           "user"
         ]
+      },
+      "get": {
+        "operationId": "UsersController_getIfFollow",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "following_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ]
       }
     },
-    "/users/{id}/following": {
+    "/users/{id}/followings": {
       "get": {
         "operationId": "UsersController_getFollowings",
         "parameters": [
@@ -162,7 +213,7 @@
   "servers": [],
   "components": {
     "schemas": {
-      "CreateUserDto": {
+      "UserDto": {
         "type": "object",
         "properties": {
           "spotify_uri": {
