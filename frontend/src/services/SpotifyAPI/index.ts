@@ -1,3 +1,3 @@
-import { getRandomTrack, getTrack, getProfile } from './component'
+import { getRandomTrack, getTrack, getSpotifyUser } from './component'
 
-export { getRandomTrack, getProfile, getTrack }
+export { getRandomTrack, getSpotifyUser, getTrack }

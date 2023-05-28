@@ -16,6 +16,7 @@ import {
   getRefreshToken,
   redirectToSpotifyAuthorizeEndpoint,
 } from '@services/SpotifyAPI/Authorization'
+import { postUsers } from '@services/backend'
 
 const { Content, Footer } = Layout
 
@@ -43,6 +44,9 @@ function App(): JSX.Element {
         .then(() => {
           setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
           setRefreshToken(window.localStorage.getItem('refresh_token') ?? '')
+        })
+        .then(() => {
+          postUsers()
         })
         .catch((err) => {
           console.error(err)

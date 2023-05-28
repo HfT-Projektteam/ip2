@@ -51,7 +51,7 @@ export async function getRandomTrack(): Promise<trackInterface> {
   return await getTrack('11dFghVXANMlKmJXsNCbNl')
 }
 
-export async function getProfile(): Promise<PrivateUserObject | null> {
+export async function getSpotifyUser(): Promise<PrivateUserObject | null> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
   if (accessToken === '') {
