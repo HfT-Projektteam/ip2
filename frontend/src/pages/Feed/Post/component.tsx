@@ -22,7 +22,7 @@ export function Post(props: postInterface): JSX.Element {
   }, [])
 
   return (
-    <Card cover={<img alt='example' src={props.imgUrl} />}>
+    <Card cover={<img alt='example' src={post?.imgUrl} />}>
       <Meta
         title={post?.title}
         description={`${post?.album ?? ''} \n ${post?.artist ?? ''}`}
