@@ -1,19 +1,80 @@
 import Feed from '@pages/Feed'
-import mockData from '@data/mockdata/posts.json'
-import { ConfigProvider, theme as antdTheme, Button, Layout } from 'antd'
-import { useState } from 'react'
+import mockData from '@data/mockdata/feed.json'
+import {
+  ConfigProvider,
+  theme as antdTheme,
+  Button,
+  Layout,
+  Typography,
+} from 'antd'
+import { useEffect, useState } from 'react'
 import themesConfig from '@data/ThemesConfig'
 import Header from '@Components/layout/Header'
+import { type feedInterface } from '@pages/Feed/interface'
+import {
+  getAccessToken,
+  getRefreshToken,
+  redirectToSpotifyAuthorizeEndpoint,
+} from '@services/SpotifyAPI/Authorization'
 
 const { Content, Footer } = Layout
 
 const { useToken } = antdTheme
 const { configThemeDefault, configThemeDark } = themesConfig
-const feed = mockData
+const { Title } = Typography
 
 function App(): JSX.Element {
   const [theme, setTheme] = useState(configThemeDefault)
   const { token } = useToken()
+
+  const [feed, setFeed] = useState<feedInterface>({ posts: [] })
+  const [spotifyToken, setSpotifyToken] = useState('')
+  const [, setRefreshToken] = useState('')
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const code = urlParams.get('code') ?? ''
+    const accessToken = window.localStorage.getItem('access_token') ?? ''
+    const refreshToken = window.localStorage.getItem('refresh_token') ?? ''
+
+    if (code !== '') {
+      // received the code from spotify and exchange it for a access_token
+      getAccessToken(code)
+        .then(() => {
+          setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
+          setRefreshToken(window.localStorage.getItem('refresh_token') ?? '')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    } else if (accessToken !== '' && refreshToken !== '') {
+      // we are already authorized and refresh our token
+      console.log('get access_token by refresh_token')
+      getRefreshToken(refreshToken)
+        .then(() => {
+          setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    } else {
+      logout()
+    }
+  }, [])
+
+  useEffect(() => {
+    setFeed(mockData)
+  }, [spotifyToken])
+
+  const logout = (): void => {
+    window.localStorage.removeItem('access_token')
+    window.localStorage.removeItem('refresh_token')
+    window.localStorage.removeItem('expires_in')
+    window.localStorage.removeItem('code_verifier')
+    setSpotifyToken('')
+    setFeed({ posts: [] })
+    // todo: code param aus url entfernen
+  }
 
   const themeChange = (): void => {
     theme === configThemeDefault
@@ -26,6 +87,15 @@ function App(): JSX.Element {
       <ConfigProvider theme={theme}>
         <Layout>
           <Header></Header>
+          {spotifyToken === '' ? (
+            <Button type='primary' onClick={redirectToSpotifyAuthorizeEndpoint}>
+              Login
+            </Button>
+          ) : (
+            <Button type='primary' onClick={logout}>
+              Logout
+            </Button>
+          )}
           <Button
             type='primary'
             size='large'
@@ -40,7 +110,11 @@ function App(): JSX.Element {
             Switch Theme
           </Button>
           <Content>
-            <Feed {...feed}></Feed>
+            {spotifyToken !== '' ? (
+              <Feed {...feed}></Feed>
+            ) : (
+              <Title level={2}>Please login</Title>
+            )}
           </Content>
           <Footer></Footer>
         </Layout>
