@@ -1,5 +1,5 @@
-const clientId = '13faaa3d764b4601b62f0eb10866b1c7'
-const redirectUri = 'http://localhost:3000'
+const clientId: string = process.env.REACT_APP_CLIENT_ID ?? ''
+const redirectUri: string = process.env.REACT_APP_SPOTIFY_REDIRECT_URI ?? ''
 
 export function redirectToSpotifyAuthorizeEndpoint(): void {
   const codeVerifier = generateRandomString(128)
