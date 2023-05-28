@@ -27,7 +27,9 @@ export async function getTrack(trackId: string): Promise<trackInterface> {
         id: generateRandomUID(),
         title: res.name ?? 't',
         artist: res.artists?.at(0)?.name ?? 't',
+        artistId: res.artists?.at(0)?.id ?? 't',
         album: res.album?.name ?? 't',
+        albumId: res.album?.id ?? 't',
         imgUrl: res.album?.images.at(0)?.url ?? 't',
       }
       return post
@@ -40,7 +42,9 @@ export async function getTrack(trackId: string): Promise<trackInterface> {
         id: generateRandomUID(),
         title: 'no data',
         artist: 'no data',
+        artistId: 'no data',
         album: 'no data',
+        albumId: 'no data',
         imgUrl: 'no data',
       }
       return post

@@ -9,6 +9,8 @@ export interface trackInterface {
   id: randomUID
   title: string
   artist: string
+  artistId: string
   album: string
+  albumId: string
   imgUrl: string
 }
