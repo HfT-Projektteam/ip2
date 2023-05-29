@@ -4,6 +4,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import GlobalStyle from 'assets/global'
 import styled from 'styled-components'
+import { BrowserRouter } from 'react-router-dom'
 
 const MobileWrapper = styled.div`
   @media (min-width: 768px) {
@@ -23,7 +24,9 @@ root.render(
     <GlobalStyle />
     <MobileWrapper>
       <MobileContainer>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </MobileContainer>
     </MobileWrapper>
   </React.StrictMode>,

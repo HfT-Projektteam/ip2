@@ -16,6 +16,8 @@ import {
   getRefreshToken,
   redirectToSpotifyAuthorizeEndpoint,
 } from '@services/SpotifyAPI/Authorization'
+import { Link, Route, Routes } from 'react-router-dom'
+import Profile from '@pages/Profile'
 
 const { Content, Footer } = Layout
 
@@ -109,12 +111,26 @@ function App(): JSX.Element {
           >
             Switch Theme
           </Button>
+          <Link to='/'>Home</Link>
+          <Link to='/feed'>Feed</Link>
+          <Link to='/profile'>Profile</Link>
           <Content>
-            {spotifyToken !== '' ? (
-              <Feed {...feed}></Feed>
-            ) : (
-              <Title level={2}>Please login</Title>
-            )}
+            <Routes>
+              <Route path='/' element={<Title level={2}>Home</Title>} />
+              <Route
+                path='/feed'
+                element={
+                  spotifyToken !== '' ? (
+                    <Feed {...feed}></Feed>
+                  ) : (
+                    <Title level={2}>Please login</Title>
+                  )
+                }
+              />
+              <Route path='/profile' element={<Profile />} />
+            </Routes>
+
+            {/* ToDo: Routing with Login workflow ? */}
           </Content>
           <Footer></Footer>
         </Layout>
