@@ -1,5 +1,7 @@
-const clientId = '13faaa3d764b4601b62f0eb10866b1c7'
-const redirectUri = 'http://localhost:3000'
+import env from '@data/environment.config'
+
+const clientId: string = env.spotifyClientId
+const redirectUri: string = env.spotifyRedirectUri
 
 export function redirectToSpotifyAuthorizeEndpoint(): void {
   const codeVerifier = generateRandomString(128)
