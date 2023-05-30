@@ -23,10 +23,11 @@ export class UsersService {
   }
 
   async findAll(pageOpt: PageOptionsDto) {
-    const query = Pagination.pageQuery(
+    const query = Pagination.pageQueryBuilder(
       this.userRepo.createQueryBuilder(),
       pageOpt,
     )
+    console.log('Query:' + query.getQuery())
 
     return query.getManyAndCount().then((res) => {
       return new Page(res[0], res[1], 'temp', pageOpt)
@@ -83,7 +84,7 @@ export class UsersService {
   //Who the user is following
   async getFollowings(
     spotify_uri: string,
-    query: PaginateQuery,
+    pageOpt: PageOptionsDto,
   ): Promise<[User]> {
     // Somehow this query is not accepted by paginate (Crashes the service)
     const queryBuilder = this.userRepo
@@ -91,15 +92,6 @@ export class UsersService {
       .select(['following.spotify_uri', 'users.spotify_uri'])
       .where('users.spotify_uri = :uri', { uri: spotify_uri })
       .leftJoinAndSelect('users.following', 'following')
-    const queryBuilder1 = this.userRepo.query(
-      'SELECT following FROM user_following_user',
-    )
-
-    return queryBuilder1.then((result) => {
-      return result.map((user) => {
-        return new User(user.following)
-      })
-    })
     // console.log(await queryBuilder1);
     // console.log(await queryBuilder.getMany());
     // .getRawMany();
@@ -110,6 +102,19 @@ export class UsersService {
     //   relations: ['following'],
     //   where: { spotify_uri: spotify_uri },
     // });
+
+    const queryBuilder1 = this.userRepo.query(
+      Pagination.pageQuery(
+        'SELECT following FROM user_following_user',
+        pageOpt,
+      ),
+    )
+
+    return queryBuilder1.then((result) => {
+      return result.map((user) => {
+        return new User(user.following)
+      })
+    })
   }
 
   //Who is following the user

@@ -70,10 +70,11 @@ export class UsersController {
   }
 
   @Get('/:id/followings/')
+  @UseInterceptors(PageMetaInterceptor)
   getFollowings(
     @Param('id') id: string,
-    @Paginate() query: PaginateQuery,
+    @Query() pageOptionsDto: PageOptionsDto,
   ): Promise<[User]> {
-    return this.usersService.getFollowings(id, query)
+    return this.usersService.getFollowings(id, pageOptionsDto)
   }
 }
