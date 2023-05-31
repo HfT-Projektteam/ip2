@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common'
 import { UserDto } from './dto/user.dto'
 import { User } from './entities/user.entity'
 import { Repository } from 'typeorm'
@@ -6,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { CircularDependencyException } from '@nestjs/core/errors/exceptions'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { Pagination } from '../util/pagination/pagination'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class UsersService {
@@ -29,7 +29,7 @@ export class UsersService {
     console.log('Query:' + query.getQuery())
 
     return query.getManyAndCount().then((res) => {
-      return new Page(res[0], res[1], 'temp', pageOpt)
+      return new Page(res[0], res[1], pageOpt)
     })
   }
 
@@ -84,13 +84,13 @@ export class UsersService {
   async getFollowings(
     spotify_uri: string,
     pageOpt: PageOptionsDto,
-  ): Promise<[User]> {
+  ): Promise<Page<User>> {
     // Somehow this query is not accepted by paginate (Crashes the service)
-    const queryBuilder = this.userRepo
-      .createQueryBuilder('users')
-      .select(['following.spotify_uri', 'users.spotify_uri'])
-      .where('users.spotify_uri = :uri', { uri: spotify_uri })
-      .leftJoinAndSelect('users.following', 'following')
+    // const queryBuilder = this.userRepo
+    //   .createQueryBuilder('users')
+    //   .select(['following.spotify_uri', 'users.spotify_uri'])
+    //   .where('users.spotify_uri = :uri', { uri: spotify_uri })
+    //   .leftJoinAndSelect('users.following', 'following')
     // console.log(await queryBuilder1);
     // console.log(await queryBuilder.getMany());
     // .getRawMany();
@@ -101,28 +101,54 @@ export class UsersService {
     //   relations: ['following'],
     //   where: { spotify_uri: spotify_uri },
     // });
-
-    const query = this.userRepo.query(
-      Pagination.pageQuery(
-        'SELECT following FROM user_following_user',
-        pageOpt,
-      ),
-    )
-
-    return query.then((result) => {
-      return result.map((user) => {
-        return new User(user.following)
+    const users = this.userRepo
+      .query(
+        Pagination.pageQuery(
+          'SELECT following FROM user_following_user WHERE follower = $1',
+          pageOpt,
+        ),
+        [spotify_uri],
+      )
+      .then((result) => {
+        return result.map((user) => {
+          return new User(user.following)
+        })
       })
+
+    const totalUsers = this.userRepo.query(
+      'SELECT Count(following) FROM user_following_user WHERE follower = $1',
+      [spotify_uri],
+    )
+    return Promise.all([users, totalUsers]).then((results) => {
+      return new Page(results[0], results[1][0].count, pageOpt)
     })
   }
 
-  //Who is following the user
-  // async getFollowers(
-  //   spotify_uri: string,
-  //   query: PaginateQuery,
-  // ): Promise<Paginated<User>> {
-  //   const queryBuilder = this.userRepo
-  //     .createQueryBuilder()
-  //     .from(User, 'user_following_user');
-  // }
+  // Who is following the user
+  async getFollowers(
+    spotify_uri: string,
+    pageOpt: PageOptionsDto,
+  ): Promise<Page<User>> {
+    const users = this.userRepo
+      .query(
+        Pagination.pageQuery(
+          'SELECT follower FROM user_following_user WHERE following = $1',
+          pageOpt,
+        ),
+        [spotify_uri],
+      )
+      .then((result) => {
+        return result.map((user) => {
+          return new User(user.follower)
+        })
+      })
+
+    const totalUsers = this.userRepo.query(
+      'SELECT Count(follower) FROM user_following_user WHERE following = $1',
+      [spotify_uri],
+    )
+    return Promise.all([users, totalUsers]).then((results) => {
+      return new Page(results[0], results[1][0].count, pageOpt)
+    })
+  }
 }

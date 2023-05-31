@@ -5,7 +5,6 @@ import { UsersModule } from './users.module'
 import { Repository } from 'typeorm'
 import { User } from './entities/user.entity'
 import * as request from 'supertest'
-import { v4 as uuid } from 'uuid'
 import { APP_FILTER } from '@nestjs/core'
 import { EntityNotFoundExceptionFilter } from '../filters/entity-not-found-exception/entity-not-found-exception.filter'
 import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter'
@@ -224,6 +223,7 @@ describe('Follower Stuff', () => {
 
     await request(app.getHttpServer())
       .get('/users/test2/followings')
+      .query({ page: 0, take: 10 })
       .expect((res) => {
         console.log(res.body)
         // expect(res.body[])

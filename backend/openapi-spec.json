@@ -114,7 +114,7 @@
         ]
       }
     },
-    "/users/{id}/follower/{following_id}": {
+    "/users/{id}/followings/{following_id}": {
       "post": {
         "operationId": "UsersController_follow",
         "parameters": [
@@ -174,6 +174,50 @@
         ]
       }
     },
+    "/users/{id}/follower": {
+      "get": {
+        "operationId": "UsersController_getFollower",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
     "/users/{id}/followings": {
       "get": {
         "operationId": "UsersController_getFollowings",
@@ -184,6 +228,27 @@
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
             }
           }
         ],

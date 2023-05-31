@@ -6,16 +6,14 @@ import {
   Param,
   Delete,
   Query,
-  ParseIntPipe,
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { UserDto } from './dto/user.dto'
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate'
 import { User } from './entities/user.entity'
 import { ApiTags } from '@nestjs/swagger'
-import { PageOptionsDto } from '../util/pagination/page.dto'
+import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
 
 @ApiTags('user')
@@ -50,12 +48,12 @@ export class UsersController {
     return this.usersService.remove(id)
   }
 
-  @Post('/:id/follower/:following_id')
+  @Post('/:id/followings/:following_id')
   follow(@Param('id') id: string, @Param('following_id') following_id: string) {
     return this.usersService.followUser(id, following_id)
   }
 
-  @Get('/:id/follower/:following_id')
+  @Get('/:id/followings/:following_id')
   getIfFollow(
     @Param('id') id: string,
     @Param('following_id') following_id: string,
@@ -69,12 +67,21 @@ export class UsersController {
       })
   }
 
+  @Get('/:id/follower/')
+  @UseInterceptors(PageMetaInterceptor)
+  getFollower(
+    @Param('id') id: string,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ): Promise<Page<User>> {
+    return this.usersService.getFollowers(id, pageOptionsDto)
+  }
+
   @Get('/:id/followings/')
   @UseInterceptors(PageMetaInterceptor)
   getFollowings(
     @Param('id') id: string,
     @Query() pageOptionsDto: PageOptionsDto,
-  ): Promise<[User]> {
+  ): Promise<Page<User>> {
     return this.usersService.getFollowings(id, pageOptionsDto)
   }
 }

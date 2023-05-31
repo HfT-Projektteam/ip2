@@ -30,7 +30,7 @@ export class PageOptionsDto {
   @IsInt()
   @Min(0)
   @IsOptional()
-  readonly page?: number = 1
+  readonly page?: number = 0
 
   @ApiPropertyOptional({
     minimum: 1,
@@ -50,13 +50,7 @@ export class PageOptionsDto {
 }
 
 export class Page<T> {
-  constructor(
-    data: T[],
-    totalEntries: number,
-    baseRoute: string,
-    options: PageOptionsDto,
-  ) {
-    console.log(data)
+  constructor(data: T[], totalEntries: number, options: PageOptionsDto) {
     this.data = data
     this.meta = new PageMeta(totalEntries, options)
   }
