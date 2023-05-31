@@ -3,7 +3,6 @@ import { UserDto } from './dto/user.dto'
 import { User } from './entities/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate'
 import { CircularDependencyException } from '@nestjs/core/errors/exceptions'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { Pagination } from '../util/pagination/pagination'
@@ -103,14 +102,14 @@ export class UsersService {
     //   where: { spotify_uri: spotify_uri },
     // });
 
-    const queryBuilder1 = this.userRepo.query(
+    const query = this.userRepo.query(
       Pagination.pageQuery(
         'SELECT following FROM user_following_user',
         pageOpt,
       ),
     )
 
-    return queryBuilder1.then((result) => {
+    return query.then((result) => {
       return result.map((user) => {
         return new User(user.following)
       })

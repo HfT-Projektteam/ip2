@@ -15,7 +15,7 @@ export class Pagination {
     return queryBuilder.skip(this.getSkip(options)).take(options.take)
   }
 
-  static pageQuery(query: String, options: PageOptionsDto) {
+  static pageQuery(query: String, options: PageOptionsDto): string {
     return `${query} LIMIT ${options.take} OFFSET ${this.getSkip(options)}`
   }
 }
