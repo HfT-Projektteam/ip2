@@ -24,13 +24,7 @@ export function Post(props: postInterface): JSX.Element {
   return (
     <Card
       style={{ width: '300px' }}
-      cover={
-        <img
-          onClick={() => (location.href = 'spotify:track:' + props.spotifyId)}
-          alt='example'
-          src={post?.imgUrl}
-        />
-      }
+      cover={<img alt='example' src={post?.imgUrl} />}
     >
       <Meta
         title={
