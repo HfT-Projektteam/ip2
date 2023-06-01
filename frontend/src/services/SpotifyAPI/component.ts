@@ -77,6 +77,32 @@ export async function getProfile(): Promise<PrivateUserObject | null> {
     })
 }
 
+export async function searchSong(value: string): Promise<trackObject[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `https://api.spotify.com/v1/search?q=${value}&type=track&limit=10`,
+    options,
+  )
+    .then((searchItems) => {
+      return searchItems.tracks.items ?? null
+    })
+    .catch((error) => {
+      console.error('Error in searchSong:', error)
+      return null
+    })
+}
+
 async function request<T>(url: string, options: RequestInit): Promise<T> {
   const response = await fetch(url, options)
   if (!response.ok) {

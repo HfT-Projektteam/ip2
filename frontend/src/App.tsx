@@ -16,6 +16,7 @@ import {
   getRefreshToken,
   redirectToSpotifyAuthorizeEndpoint,
 } from '@services/SpotifyAPI/Authorization'
+import NewPost from '@pages/NewPost'
 
 const { Content, Footer } = Layout
 
@@ -110,6 +111,7 @@ function App(): JSX.Element {
             Switch Theme
           </Button>
           <Content>
+            <NewPost />
             {spotifyToken !== '' ? (
               <Feed {...feed}></Feed>
             ) : (
