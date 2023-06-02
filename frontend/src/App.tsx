@@ -16,8 +16,9 @@ import {
   getRefreshToken,
   redirectToSpotifyAuthorizeEndpoint,
 } from '@services/SpotifyAPI/Authorization'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Profile from '@pages/Profile'
+import NavBar from '@Components/ui/NavBar'
 
 const { Content, Footer } = Layout
 
@@ -111,10 +112,7 @@ function App(): JSX.Element {
           >
             Switch Theme
           </Button>
-          <Link to='/'>Home</Link>
-          <Link to='/feed'>Feed</Link>
-          <Link to='/profile'>Profile</Link>
-          <Content>
+          <Content style={{ paddingBottom: '60px' }}>
             <Routes>
               <Route path='/' element={<Title level={2}>Home</Title>} />
               <Route
@@ -128,11 +126,22 @@ function App(): JSX.Element {
                 }
               />
               <Route path='/profile' element={<Profile />} />
+              <Route path='*' element={'Route Not Found'} />
             </Routes>
-
-            {/* ToDo: Routing with Login workflow ? */}
           </Content>
-          <Footer></Footer>
+          <Footer style={{ padding: 0 }}>
+            <Layout
+              style={{
+                position: 'fixed',
+                bottom: '0',
+                padding: '10px',
+                width: '100%',
+                height: '60px',
+              }}
+            >
+              <NavBar />
+            </Layout>
+          </Footer>
         </Layout>
       </ConfigProvider>
     </>
