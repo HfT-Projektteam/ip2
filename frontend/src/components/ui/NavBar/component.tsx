@@ -5,6 +5,7 @@ import {
   SearchOutlined,
   UserOutlined,
 } from '@ant-design/icons'
+import { generateRandomUID } from '@services/IdGenertor'
 import { Button, Col, Row } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
@@ -22,7 +23,11 @@ export function NavBar(): JSX.Element {
     <Row justify='space-evenly' align='middle'>
       {menuItems.map((item) => {
         return (
-          <Col span={4} style={{ display: 'flex', justifyContent: 'center' }}>
+          <Col
+            key={generateRandomUID()}
+            span={4}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
             <Button
               size='large'
               type='primary'
