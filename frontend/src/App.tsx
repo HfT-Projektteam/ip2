@@ -19,6 +19,7 @@ import {
 import { Route, Routes } from 'react-router-dom'
 import Profile from '@pages/Profile'
 import NavBar from '@Components/ui/NavBar'
+import useWindowDimensions from '@hooks/useWindowDimensions'
 
 const { Content, Footer } = Layout
 
@@ -33,6 +34,12 @@ function App(): JSX.Element {
   const [feed, setFeed] = useState<feedInterface>({ posts: [] })
   const [spotifyToken, setSpotifyToken] = useState('')
   const [, setRefreshToken] = useState('')
+
+  const { width } = useWindowDimensions()
+  const [footerWidth, setFooterWidth] = useState('100%')
+  useEffect(() => {
+    width <= 768 ? setFooterWidth('100%') : setFooterWidth('500px')
+  }, [width])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -129,16 +136,17 @@ function App(): JSX.Element {
               <Route path='*' element={'Route Not Found'} />
             </Routes>
           </Content>
-          <Footer style={{ padding: 0 }}>
-            <Layout
-              style={{
-                position: 'fixed',
-                bottom: '0',
-                padding: '10px',
-                width: '100%',
-                height: '60px',
-              }}
-            >
+
+          <Footer
+            style={{
+              position: 'fixed',
+              bottom: '0',
+              padding: '10px',
+              width: `${footerWidth}`,
+              height: '60px',
+            }}
+          >
+            <Layout>
               <NavBar />
             </Layout>
           </Footer>
