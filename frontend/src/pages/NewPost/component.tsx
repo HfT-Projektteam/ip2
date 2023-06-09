@@ -32,8 +32,11 @@ export function NewPost(): JSX.Element {
   }
 
   const onPostClick = (): void => {
-    console.log(`POST!!: song: ${songId} comment: ${comment}`)
-    // Send all Data to the backend
+    alert(
+      `POST to backend not implemented yet\n` +
+        ` Spotify songID: ${songId} comment: ${comment}`,
+    )
+    // todo: Send all Data to the backend
   }
 
   return (
