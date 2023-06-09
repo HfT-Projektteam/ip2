@@ -16,6 +16,10 @@ import {
   getRefreshToken,
   redirectToSpotifyAuthorizeEndpoint,
 } from '@services/SpotifyAPI/Authorization'
+import { Route, Routes } from 'react-router-dom'
+import Profile from '@pages/Profile'
+import NavBar from '@Components/ui/NavBar'
+import useWindowDimensions from '@hooks/useWindowDimensions'
 
 const { Content, Footer } = Layout
 
@@ -30,6 +34,12 @@ function App(): JSX.Element {
   const [feed, setFeed] = useState<feedInterface>({ posts: [] })
   const [spotifyToken, setSpotifyToken] = useState('')
   const [, setRefreshToken] = useState('')
+
+  const { width } = useWindowDimensions()
+  const [footerWidth, setFooterWidth] = useState('100%')
+  useEffect(() => {
+    width <= 768 ? setFooterWidth('100%') : setFooterWidth('500px')
+  }, [width])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -109,14 +119,37 @@ function App(): JSX.Element {
           >
             Switch Theme
           </Button>
-          <Content>
-            {spotifyToken !== '' ? (
-              <Feed {...feed}></Feed>
-            ) : (
-              <Title level={2}>Please login</Title>
-            )}
+          <Content style={{ paddingBottom: '60px' }}>
+            <Routes>
+              <Route path='/' element={<Title level={2}>Home</Title>} />
+              <Route
+                path='/feed'
+                element={
+                  spotifyToken !== '' ? (
+                    <Feed {...feed}></Feed>
+                  ) : (
+                    <Title level={2}>Please login</Title>
+                  )
+                }
+              />
+              <Route path='/profile' element={<Profile />} />
+              <Route path='*' element={'Route Not Found'} />
+            </Routes>
           </Content>
-          <Footer></Footer>
+
+          <Footer
+            style={{
+              position: 'fixed',
+              bottom: '0',
+              padding: '10px',
+              width: `${footerWidth}`,
+              height: '60px',
+            }}
+          >
+            <Layout>
+              <NavBar />
+            </Layout>
+          </Footer>
         </Layout>
       </ConfigProvider>
     </>
