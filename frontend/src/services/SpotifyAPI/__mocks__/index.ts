@@ -1,3 +1,3 @@
-import { getTrack } from './component'
+import { getTrack, searchSong } from './component'
 
-export { getTrack }
+export { getTrack, searchSong }
