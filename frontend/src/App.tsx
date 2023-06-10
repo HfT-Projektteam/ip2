@@ -12,11 +12,10 @@ import themesConfig from '@data/ThemesConfig'
 import Header from '@Components/layout/Header'
 import { type feedInterface } from '@pages/Feed/interface'
 import {
-  getAccessToken,
-  getRefreshToken,
   redirectToSpotifyAuthorizeEndpoint,
+  setAccessToken,
 } from '@services/SpotifyAPI/Authorization'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Profile from '@pages/Profile'
 import NavBar from '@Components/ui/NavBar'
 import useWindowDimensions from '@hooks/useWindowDimensions'
@@ -33,44 +32,23 @@ function App(): JSX.Element {
 
   const [feed, setFeed] = useState<feedInterface>({ posts: [] })
   const [spotifyToken, setSpotifyToken] = useState('')
-  const [, setRefreshToken] = useState('')
 
   const { width } = useWindowDimensions()
   const [footerWidth, setFooterWidth] = useState('100%')
   useEffect(() => {
     width <= 768 ? setFooterWidth('100%') : setFooterWidth('500px')
   }, [width])
+  const location = useLocation()
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code') ?? ''
-    const accessToken = window.localStorage.getItem('access_token') ?? ''
-    const refreshToken = window.localStorage.getItem('refresh_token') ?? ''
-
-    if (code !== '') {
-      // received the code from spotify and exchange it for a access_token
-      getAccessToken(code)
-        .then(() => {
-          setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
-          setRefreshToken(window.localStorage.getItem('refresh_token') ?? '')
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    } else if (accessToken !== '' && refreshToken !== '') {
-      // we are already authorized and refresh our token
-      console.log('get access_token by refresh_token')
-      getRefreshToken(refreshToken)
-        .then(() => {
-          setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    } else {
-      logout()
-    }
-  }, [])
+    setAccessToken()
+      .then(() => {
+        setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
+      })
+      .catch(() => {
+        logout()
+      })
+  }, [location])
 
   useEffect(() => {
     setFeed(mockData)
