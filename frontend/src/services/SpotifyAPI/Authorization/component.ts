@@ -9,7 +9,8 @@ export function redirectToSpotifyAuthorizeEndpoint(): void {
   generateCodeChallenge(codeVerifier)
     .then((codeChallenge) => {
       const state = generateRandomString(16)
-      const scope = 'user-read-private user-read-email'
+      const scope =
+        'user-read-private user-read-email playlist-modify-public playlist-modify-private playlist-read-private'
 
       window.localStorage.setItem('code_verifier', codeVerifier)
 

@@ -1,3 +1,8 @@
-import { getRandomTrack, getTrack, getProfile } from './component'
+import {
+  getRandomTrack,
+  getTrack,
+  getProfile,
+  addSongToPlaylist,
+} from './component'
 
-export { getRandomTrack, getProfile, getTrack }
+export { getRandomTrack, getProfile, getTrack, addSongToPlaylist }

@@ -7,6 +7,7 @@ export interface postInterface {
 
 export interface trackInterface {
   id: randomUID
+  spotifyId: string
   title: string
   artist: string
   album: string
