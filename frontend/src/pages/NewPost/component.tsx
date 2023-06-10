@@ -1,6 +1,6 @@
-import { searchSong } from '@services/SpotifyAPI'
+import { getRecentPlayedTracks, searchSong } from '@services/SpotifyAPI'
 import { Input, Space, Avatar, List, Button } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { type components } from '@data/spotify-types'
 import TextArea from 'antd/es/input/TextArea'
 
@@ -12,6 +12,16 @@ export function NewPost(): JSX.Element {
   const [songId, setSongId] = useState<string>('')
   const [comment, setComment] = useState<string>('')
 
+  useEffect(() => {
+    getRecentPlayedTracks()
+      .then((songs) => {
+        setSongs(songs != null ? songs : [])
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }, [])
+
   const onSearch = async (value: string): Promise<void> => {
     await searchSong(value)
       .then((songs) => {
@@ -22,9 +32,9 @@ export function NewPost(): JSX.Element {
       })
   }
 
-  const onSongClick = (songId: string): void => {
-    setSongs([])
-    setSongId(songId)
+  const onSongClick = (song: trackObject): void => {
+    setSongs([song])
+    setSongId(song.id ?? '')
   }
 
   const onCommentChange = (comment: string): void => {
@@ -56,7 +66,7 @@ export function NewPost(): JSX.Element {
           renderItem={(song, index) => (
             <List.Item
               onClick={() => {
-                onSongClick(song?.id ?? '')
+                onSongClick(song)
               }}
             >
               <List.Item.Meta

@@ -6,13 +6,26 @@ jest.mock('@services/SpotifyAPI')
 
 describe('Render Create Post Page', () => {
   it('should have all Components', async () => {
-    render(<NewPost />)
+    act(() => {
+      render(<NewPost />)
+    })
 
     const buttons = await screen.findAllByRole('button')
     const textarea = await screen.findAllByRole('textbox')
 
     expect(buttons).toHaveLength(2)
     expect(textarea).toHaveLength(2)
+  })
+
+  it('should have 10 recent played song', async () => {
+    act(() => {
+      render(<NewPost />)
+    })
+
+    await waitFor(() => {
+      const songList = screen.queryAllByRole('listitem')
+      expect(songList).toHaveLength(10)
+    })
   })
 
   it('Input should be in the Input value', async () => {
