@@ -115,6 +115,35 @@ export async function searchSong(value: string): Promise<trackObject[] | null> {
     })
 }
 
+export async function searchSongByLink(
+  trackId: string,
+): Promise<trackObject | null> {
+  const bearer = window.localStorage.getItem('access_token') ?? ''
+
+  if (bearer === '') {
+    console.error('Token was empty string')
+  }
+
+  const optionsTrack = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${bearer}`,
+    },
+  }
+
+  return await request<trackObject>(
+    `https://api.spotify.com/v1/tracks/${trackId}`,
+    optionsTrack,
+  )
+    .then((track) => {
+      return track
+    })
+    .catch((err) => {
+      console.error(err)
+      return null
+    })
+}
+
 export async function getRecentPlayedTracks(): Promise<trackObject[] | null> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
