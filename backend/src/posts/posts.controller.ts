@@ -12,6 +12,7 @@ import {
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PostQuery } from './entities/post-query.entity';
 
 @Controller('posts')
 export class PostsController {
@@ -23,7 +24,7 @@ export class PostsController {
   }
 
   @Get()
-  findAll(@Query() query) {
+  findAll(@Query() query: PostQuery) {
     return this.postsService.findAll();
   }
 

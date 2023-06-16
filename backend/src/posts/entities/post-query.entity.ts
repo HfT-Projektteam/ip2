@@ -1,7 +1,7 @@
 export class PostQuery {
-  genre: string;
-  followerFeed: boolean;
-  sort: PostSort;
+  genre?: string;
+  followerFeed?: boolean;
+  sort?: PostSort;
 }
 
 export enum PostSort {
