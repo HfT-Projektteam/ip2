@@ -10,11 +10,11 @@ import { UsersController } from './users/users.controller';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: '127.0.0.1',
+      host: 'localhost',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
-      database: 'local',
+      database: 'e2e_test',
       autoLoadEntities: true,
       synchronize: true,
     }),
