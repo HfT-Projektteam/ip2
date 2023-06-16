@@ -20,6 +20,7 @@ import { Route, Routes } from 'react-router-dom'
 import Profile from '@pages/Profile'
 import NavBar from '@Components/ui/NavBar'
 import useWindowDimensions from '@hooks/useWindowDimensions'
+import NewPost from '@pages/NewPost'
 
 const { Content, Footer } = Layout
 
@@ -127,6 +128,16 @@ function App(): JSX.Element {
                 element={
                   spotifyToken !== '' ? (
                     <Feed {...feed}></Feed>
+                  ) : (
+                    <Title level={2}>Please login</Title>
+                  )
+                }
+              />
+              <Route
+                path='/plus'
+                element={
+                  spotifyToken !== '' ? (
+                    <NewPost />
                   ) : (
                     <Title level={2}>Please login</Title>
                   )

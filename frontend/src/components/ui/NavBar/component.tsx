@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 const menuItems = [
   { route: '/feed', icon: <HomeOutlined rev={undefined} /> },
-  { route: 'plus', icon: <PlusOutlined rev={undefined} /> },
+  { route: '/plus', icon: <PlusOutlined rev={undefined} /> },
   { route: '/search', icon: <SearchOutlined rev={undefined} /> },
   { route: '/profile', icon: <UserOutlined rev={undefined} /> },
 ]

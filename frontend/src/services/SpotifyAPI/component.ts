@@ -3,6 +3,8 @@ import { generateRandomUID } from '@services/IdGenertor'
 import { type components } from '@data/spotify-types'
 type trackObject = components['schemas']['TrackObject']
 type PrivateUserObject = components['schemas']['PrivateUserObject']
+type CursorPagingPlayHistoryObject =
+  components['schemas']['CursorPagingPlayHistoryObject']
 
 export async function getTrack(trackId: string): Promise<trackInterface> {
   const bearer = window.localStorage.getItem('access_token') ?? ''
@@ -77,6 +79,64 @@ export async function getProfile(): Promise<PrivateUserObject | null> {
     })
     .catch((error) => {
       console.error('Error:', error)
+      return null
+    })
+}
+
+export async function searchSong(value: string): Promise<trackObject[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `https://api.spotify.com/v1/search?q=${value}&type=track&limit=10`,
+    options,
+  )
+    .then((searchItems) => {
+      return searchItems.tracks.items ?? null
+    })
+    .catch((error) => {
+      console.error('Error in searchSong:', error)
+      return null
+    })
+}
+
+export async function getRecentPlayedTracks(): Promise<trackObject[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<CursorPagingPlayHistoryObject>(
+    `https://api.spotify.com/v1/me/player/recently-played?limit=10`,
+    options,
+  )
+    .then((recentItems) => {
+      const trackArray: trackObject[] = []
+      recentItems.items?.forEach((track) => {
+        if (track.track != null) {
+          trackArray.push(track.track)
+        }
+      })
+      return trackArray
+    })
+    .catch((error) => {
+      console.error('Error in getRecentPlayedTracks:', error)
       return null
     })
 }
