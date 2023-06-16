@@ -6,55 +6,47 @@ jest.mock('@services/SpotifyAPI')
 
 describe('Render Create Post Page', () => {
   it('should have all Components', async () => {
-    act(() => {
-      render(<NewPost />)
+    await act(async () => render(<NewPost />)).then(async () => {
+      const buttons = await screen.findAllByRole('button')
+      const textarea = await screen.findAllByRole('textbox')
+
+      expect(buttons).toHaveLength(2)
+      expect(textarea).toHaveLength(2)
     })
-
-    const buttons = await screen.findAllByRole('button')
-    const textarea = await screen.findAllByRole('textbox')
-
-    expect(buttons).toHaveLength(2)
-    expect(textarea).toHaveLength(2)
   })
 
   it('should have 10 recent played song', async () => {
-    act(() => {
-      render(<NewPost />)
-    })
-
-    await waitFor(() => {
-      const songList = screen.queryAllByRole('listitem')
+    await act(async () => render(<NewPost />)).then(async () => {
+      const songList = await screen.findAllByRole('listitem')
       expect(songList).toHaveLength(10)
     })
   })
 
   it('Input should be in the Input value', async () => {
-    const { findByPlaceholderText } = render(<NewPost />)
-    const searchBox = await findByPlaceholderText('Search Song')
-    const commentBox = await findByPlaceholderText('Say something')
+    await act(async () => render(<NewPost />)).then(async () => {
+      const searchBox = await screen.findByPlaceholderText('Search Song')
+      const commentBox = await screen.findByPlaceholderText('Say something')
 
-    act(() => {
       userEvent.type(searchBox, 'Casper{enter}')
       userEvent.type(commentBox, 'The song is cool')
-    })
 
-    await waitFor(() => {
-      expect(searchBox).toHaveValue('Casper')
-      expect(commentBox).toHaveValue('The song is cool')
+      await waitFor(() => {
+        expect(searchBox).toHaveValue('Casper')
+        expect(commentBox).toHaveValue('The song is cool')
+      })
     })
   })
 
   it('it should search for the song on spotify', async () => {
-    const { findByPlaceholderText } = render(<NewPost />)
-    const searchBox = await findByPlaceholderText('Search Song')
+    await act(async () => render(<NewPost />)).then(async () => {
+      const searchBox = await screen.findByPlaceholderText('Search Song')
 
-    act(() => {
       userEvent.type(searchBox, 'Casper{enter}')
-    })
 
-    await waitFor(() => {
-      const songList = screen.queryAllByRole('listitem')
-      expect(songList).toHaveLength(3)
+      await waitFor(() => {
+        const songList = screen.queryAllByRole('listitem')
+        expect(songList).toHaveLength(3)
+      })
     })
   })
 })
