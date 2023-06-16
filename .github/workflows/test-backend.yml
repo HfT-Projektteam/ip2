@@ -1,4 +1,4 @@
-name: Test Frontend
+name: Test Backend
 
 on:
   workflow_dispatch:
@@ -6,16 +6,16 @@ on:
     types: ['opened', 'reopened', 'edited']
     branches: ['main', 'devops/**']
     paths:
-      - 'frontend/**'
+      - 'backend/**'
 
 jobs:
-  test-frontend:
-    name: Check frontend source code
+  test-backend:
+    name: Check backend source code
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./backend
 
     strategy:
       matrix:
@@ -29,11 +29,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          cache-dependency-path: frontend/yarn.lock
+          cache-dependency-path: backend/yarn.lock
       - name: Yarn install
         run: yarn install --frozen-lockfile
-      - name: Prettier Check
-        run: yarn format:check
+      #      - name: Prettier Check
+      #       run: yarn format:check
       - name: Lint
         run: yarn lint
       - name: Yarn test
