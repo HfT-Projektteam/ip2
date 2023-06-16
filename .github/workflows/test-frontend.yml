@@ -10,16 +10,29 @@ jobs:
   paths-filter:
     runs-on: ubuntu-latest
     outputs:
-      frontend: ${{ steps.filter.outputs.frontend }}
-      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.frontend.outputs.frontend }}
+      backend: ${{ steps.backend.outputs.backend }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
-      id: filter
+      id: frontend
+      with:
+        filters: |
+          frontend:
+            - 'frontend'
+    - uses: dorny/paths-filter@v2
+      id: backend
       with:
         filters: |
           backend:
             - 'backend'
+    - name: not workflow tests
+      if: steps.frontend.outputs.frontend != 'true'
+      run: echo "NOT frontend workflow file"
+    - name: not workflow tests
+      if: steps.backend.outputs.backend != 'true'
+      run: echo "NOT backend workflow file"
+    
   test-frontend:
     name: Check frontend source code
     runs-on: ubuntu-latest
