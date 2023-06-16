@@ -3,7 +3,9 @@ import { generateRandomUID } from '@services/IdGenertor'
 import { type components } from '@data/spotify-types'
 type trackObject = components['schemas']['TrackObject']
 type PrivateUserObject = components['schemas']['PrivateUserObject']
-type PlaylistObject = components['schemas']['PlaylistObject']
+// type PlaylistObject = components['schemas']['PlaylistObject']
+type SimplifiedPlaylistObject =
+  components['schemas']['SimplifiedPlaylistObject']
 type PagingPlaylistObject = components['schemas']['PagingPlaylistObject']
 
 export async function getTrack(trackId: string): Promise<trackInterface> {
@@ -81,7 +83,7 @@ export async function getProfile(): Promise<PrivateUserObject | null> {
     })
 }
 
-async function createPlaylist(): Promise<PlaylistObject | null> {
+async function createPlaylist(): Promise<SimplifiedPlaylistObject | null> {
   return await getProfile()
     .then(async (profile) => {
       const accessToken = localStorage.getItem('access_token') ?? ''
@@ -98,12 +100,11 @@ async function createPlaylist(): Promise<PlaylistObject | null> {
         body: JSON.stringify({ name: 'Friendify' }),
       }
 
-      return await request<PlaylistObject>(
+      return await request<SimplifiedPlaylistObject>(
         `https://api.spotify.com/v1/users/${profile?.id}/playlists`,
         options,
       )
         .then((playlist) => {
-          console.log('created Playlist')
           return playlist
         })
         .catch((error) => {
@@ -117,7 +118,9 @@ async function createPlaylist(): Promise<PlaylistObject | null> {
     })
 }
 
-async function getPlaylist(name: string): Promise<PlaylistObject | null> {
+async function getPlaylist(
+  name: string,
+): Promise<SimplifiedPlaylistObject | null> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
   if (accessToken === '' || name == null) {
@@ -136,16 +139,7 @@ async function getPlaylist(name: string): Promise<PlaylistObject | null> {
     options,
   )
     .then((playlists) => {
-      let playlistretVal = null
-      playlists.items?.every((playlist) => {
-        console.log(`loade Name ${playlist.name ?? ''} === ${name}`)
-        if (playlist.name === name) {
-          playlistretVal = playlist
-          return false
-        }
-        return false
-      })
-      return playlistretVal
+      return playlists.items?.find((playlist) => playlist.name === name) ?? null
     })
     .catch((error) => {
       console.error('Error in createPlaylist:', error)
@@ -180,7 +174,7 @@ export async function addSongToPlaylist(songId: string): Promise<void> {
       options,
     )
       .then((recentItems) => {
-        console.log('added song to playlist')
+        // console.log('added song to playlist')
       })
       .catch((error) => {
         console.error('Error in addSongToPlaylist:', error)
