@@ -20,8 +20,6 @@ jobs:
         filters: |
           backend:
             - 'backend'
-          frontend
-            - 'frontend'
   test-frontend:
     name: Check frontend source code
     runs-on: ubuntu-latest
