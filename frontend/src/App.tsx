@@ -100,7 +100,6 @@ function App(): JSX.Element {
           </Button>
           <Content style={{ paddingBottom: '60px' }}>
             <Routes>
-              <Route path='/' element={<Title level={2}>Home</Title>} />
               <Route
                 path='/feed'
                 element={
