@@ -2,6 +2,12 @@ import {
   redirectToSpotifyAuthorizeEndpoint,
   getAccessToken,
   getRefreshToken,
+  setAccessToken,
 } from './component'
 
-export { redirectToSpotifyAuthorizeEndpoint, getAccessToken, getRefreshToken }
+export {
+  redirectToSpotifyAuthorizeEndpoint,
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+}

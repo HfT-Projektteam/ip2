@@ -124,3 +124,25 @@ export async function getRefreshToken(refreshToken: string): Promise<void> {
       console.error('Error:', error)
     })
 }
+
+export async function setAccessToken(): Promise<void> {
+  const urlParams = new URLSearchParams(window.location.search)
+  const code = urlParams.get('code') ?? ''
+  const accessToken = window.localStorage.getItem('access_token') ?? ''
+  const refreshToken = window.localStorage.getItem('refresh_token') ?? ''
+
+  if (code !== '') {
+    // received the code from spotify and exchange it for a access_token
+    await getAccessToken(code)
+    window.history.pushState({}, document.title, window.location.pathname)
+  } else if (accessToken !== '' && refreshToken !== '') {
+    // we are already authorized and refresh our token
+    await getRefreshToken(refreshToken)
+  } else {
+    // logout
+    window.localStorage.removeItem('access_token')
+    window.localStorage.removeItem('refresh_token')
+    window.localStorage.removeItem('expires_in')
+    window.localStorage.removeItem('code_verifier')
+  }
+}
