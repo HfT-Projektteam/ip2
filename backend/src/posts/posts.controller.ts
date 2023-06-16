@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -22,7 +23,7 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Query() query) {
     return this.postsService.findAll();
   }
 
@@ -42,12 +43,13 @@ export class PostsController {
     return this.postsService.remove(+id);
   }
 
+  //Likes
   @Put(':id/like')
   like() {
-    // TODO
+    // TODO Hier auch entscheiden, ob like hinzugefügt wird oder nicht
   }
   @Put(':id/dislike')
   dislike() {
-    // TODO
+    // TODO Hier auch entscheiden, ob like hinzugefügt wird oder nicht
   }
 }

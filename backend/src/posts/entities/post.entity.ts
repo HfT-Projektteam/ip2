@@ -4,8 +4,6 @@ import { User } from '../../users/entities/user.entity';
 export class Post {
   uuid: string;
 
-  spotify_uri: string;
-
   description: string;
 
   // @CreateDateColumn({
@@ -18,7 +16,9 @@ export class Post {
 
   creator: User;
 
+  liker: User[];
   likes: number;
 
+  disliker: User[];
   dislikes: number;
 }
