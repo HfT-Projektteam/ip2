@@ -1,4 +1,8 @@
-import { getRecentPlayedTracks, searchSong } from '@services/SpotifyAPI'
+import {
+  getRecentPlayedTracks,
+  searchSong,
+  searchSongByLink,
+} from '@services/SpotifyAPI'
 import { Input, Space, Avatar, List, Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { type components } from '@data/spotify-types'
@@ -23,13 +27,30 @@ export function NewPost(): JSX.Element {
   }, [])
 
   const onSearch = async (value: string): Promise<void> => {
-    await searchSong(value)
-      .then((songs) => {
-        setSongs(songs != null ? songs : [])
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    if (value.includes('open.spotify.com')) {
+      const urlSplitArray = value.split('/')
+      const songId = urlSplitArray[urlSplitArray.length - 1]
+      await searchSongByLink(songId)
+        .then((song) => {
+          if (song === null) {
+            return
+          }
+
+          setSongs(song != null ? [song] : [])
+          setSongId(song.id ?? '')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    } else {
+      await searchSong(value)
+        .then((songs) => {
+          setSongs(songs != null ? songs : [])
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   }
 
   const onSongClick = (song: trackObject): void => {
