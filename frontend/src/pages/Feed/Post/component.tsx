@@ -1,9 +1,10 @@
+import { PlusOutlined } from '@ant-design/icons'
 import {
   type trackInterface,
   type postInterface,
 } from '@pages/Feed/Post/interface'
-import { getTrack } from '@services/SpotifyAPI'
-import { Card } from 'antd'
+import { addSongToPlaylist, getTrack } from '@services/SpotifyAPI'
+import { Button, Card } from 'antd'
 import { useEffect, useState } from 'react'
 
 const { Meta } = Card
@@ -22,7 +23,21 @@ export function Post(props: postInterface): JSX.Element {
   }, [])
 
   return (
-    <Card cover={<img alt='example' src={post?.imgUrl} />}>
+    <Card
+      cover={<img alt='example' src={post?.imgUrl} />}
+      actions={[
+        <>
+          <Button
+            type='primary'
+            shape='circle'
+            icon={<PlusOutlined rev='AddSongToPlaylist' />}
+            onClick={() => {
+              void addSongToPlaylist(post?.spotifyId ?? '')
+            }}
+          />
+        </>,
+      ]}
+    >
       <Meta
         title={
           <a href={'spotify:track:' + String(props.spotifyId ?? '')}>
