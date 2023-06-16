@@ -4,6 +4,7 @@ import {
   getProfile,
   searchSong,
   getRecentPlayedTracks,
+  addSongToPlaylist,
 } from './component'
 
 export {
@@ -12,4 +13,5 @@ export {
   getTrack,
   searchSong,
   getRecentPlayedTracks,
+  addSongToPlaylist,
 }
