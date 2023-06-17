@@ -86,13 +86,12 @@ export async function getAccessToken(code: string): Promise<void> {
       window.localStorage.setItem('refresh_token', data.refresh_token)
       window.localStorage.setItem('expires_in', data.expires_in)
     })
-    .catch((error) => {
-      console.error('Error:', error)
+    .catch((_error) => {
+      //  console.error('Error:', error)
     })
 }
 
 export async function getRefreshToken(refreshToken: string): Promise<void> {
-  console.log('refreshToken: ' + refreshToken)
   const body = new URLSearchParams({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
@@ -111,8 +110,6 @@ export async function getRefreshToken(refreshToken: string): Promise<void> {
         throw new Error('HTTP status ' + response.status.toString())
       }
       const body = await response.json()
-      console.log('response refresh token request:')
-      console.log(body)
       return body
     })
     .then((data) => {
@@ -120,8 +117,8 @@ export async function getRefreshToken(refreshToken: string): Promise<void> {
       window.localStorage.setItem('refresh_token', data.refresh_token)
       window.localStorage.setItem('expires_in', data.expires_in)
     })
-    .catch((error) => {
-      console.error('Error:', error)
+    .catch((_error) => {
+      // console.error('Error: ', error)
     })
 }
 
@@ -134,10 +131,17 @@ export async function setAccessToken(): Promise<void> {
   if (code !== '') {
     // received the code from spotify and exchange it for a access_token
     await getAccessToken(code)
-    window.history.pushState({}, document.title, window.location.pathname)
+      .then(() => {
+        window.history.pushState({}, document.title, window.location.pathname)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
   } else if (accessToken !== '' && refreshToken !== '') {
     // we are already authorized and refresh our token
-    await getRefreshToken(refreshToken)
+    await getRefreshToken(refreshToken).catch((error) => {
+      console.error('Error:', error)
+    })
   } else {
     // logout
     window.localStorage.removeItem('access_token')

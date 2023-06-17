@@ -1,23 +1,30 @@
+// eslint-disable-next-line max-len
+import { redirectToSpotifyAuthorizeEndpoint } from '@services/SpotifyAPI/Authorization'
 import {
-  redirectToSpotifyAuthorizeEndpoint,
-  setAccessToken,
-} from '@services/SpotifyAPI/Authorization'
-import { createContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+  type Dispatch,
+  type SetStateAction,
+  createContext,
+  useState,
+} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 // context object structure
 export interface AuthContextValue {
   loginToken: string
-  onLogin: () => Promise<void>
-  onLogout: () => void
+  setLoginToken: Dispatch<SetStateAction<string>>
+  handleLogin: () => void
+  handleLogout: () => void
 }
 
 const initValue: AuthContextValue = {
   loginToken: '',
-  onLogin: async (): Promise<void> => {
+  setLoginToken: (): void => {
     throw new Error('Function not implemented.')
   },
-  onLogout: (): void => {
+  handleLogin: (): void => {
+    throw new Error('Function not implemented.')
+  },
+  handleLogout: (): void => {
     throw new Error('Function not implemented.')
   },
 }
@@ -28,26 +35,7 @@ export default function AuthProvider({ children }: any): JSX.Element {
   const navigate = useNavigate()
   const [loginToken, setLoginToken] = useState(initValue.loginToken)
 
-  const location = useLocation()
-
-  // ToDo: Set Timeout => Reload Page after 60min (when Access Token expires)
-  // Or find clean solution => Open new Ticket
-  useEffect(() => {
-    setAccessToken()
-      .then(() => {
-        const token = window.localStorage.getItem('access_token') ?? ''
-        setLoginToken(token)
-        console.log('Set token', token)
-        if (token !== '') navigate('/feed')
-      })
-      .catch(() => {
-        console.log('Logout')
-        handleLogout()
-      })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location])
-
-  const handleLogin = async (): Promise<void> => {
+  const handleLogin = (): void => {
     redirectToSpotifyAuthorizeEndpoint()
     // usually redirect with navigate hook but method above already redirects
   }
@@ -63,8 +51,9 @@ export default function AuthProvider({ children }: any): JSX.Element {
 
   const value: AuthContextValue = {
     loginToken,
-    onLogin: handleLogin,
-    onLogout: handleLogout,
+    setLoginToken,
+    handleLogin,
+    handleLogout,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -35,7 +35,7 @@ function App(): JSX.Element {
       : setTheme(configThemeDefault)
   }
 
-  const { loginToken, onLogout } = useAuth()
+  const { loginToken, handleLogout } = useAuth()
   return (
     <>
       <ConfigProvider theme={theme}>
@@ -43,7 +43,7 @@ function App(): JSX.Element {
           <Header></Header>
           NEW:
           {loginToken !== '' && (
-            <Button type='primary' onClick={onLogout}>
+            <Button type='primary' onClick={handleLogout}>
               Logout
             </Button>
           )}
@@ -59,7 +59,6 @@ function App(): JSX.Element {
           <Content style={{ paddingBottom: '60px' }}>
             <Routes>
               <Route index element={<Login />} />
-              {/* <Route path='/login' element={<Login onLogin={handleLogin} />} /> */}
               <Route
                 path='/feed'
                 element={
