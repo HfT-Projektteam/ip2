@@ -1,40 +1,7 @@
 {
   "users": [
     {
-      "id": 132424324,
-      "firstName": "Benny",
-      "lastName": "Burkert",
-      "email": "bb@email.com",
-      "dateOfBirth": "01.01.2001",
-      "emailVerified": true,
-      "createDate": "10.10.2010"
-    },
-    {
-      "id": 132424324,
-      "firstName": "Thomas",
-      "lastName": "Jakkel",
-      "email": "tj@email.com",
-      "dateOfBirth": "01.01.2001",
-      "emailVerified": true,
-      "createDate": "10.10.2010"
-    },
-    {
-      "id": 132424324,
-      "firstName": "Lukas",
-      "lastName": "Reinke",
-      "email": "lr@email.com",
-      "dateOfBirth": "01.01.2001",
-      "emailVerified": true,
-      "createDate": "10.10.2010"
-    },
-    {
-      "id": 132424324,
-      "firstName": "Luca",
-      "lastName": "Schmid",
-      "email": "ls@email.com",
-      "dateOfBirth": "01.01.2001",
-      "emailVerified": true,
-      "createDate": "10.10.2010"
+      "spotify_uri": "luca.jona"
     }
   ]
 }

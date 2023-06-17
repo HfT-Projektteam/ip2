@@ -1,29 +1,42 @@
 import Feed from '@pages/Feed'
-import {
-  Avatar,
-  Button,
-  Col,
-  Divider,
-  Popover,
-  Row,
-  Space,
-  Typography,
-} from 'antd'
-import { useState } from 'react'
-import mockData from '@data/mockdata/feed.json'
+import { Avatar, Col, Divider, Popover, Row, Space, Typography } from 'antd'
+import { useEffect, useState } from 'react'
+import mockDataFeed from '@data/mockdata/feed.json'
+import mockDataUser from '@data/mockdata/user.json'
 import { type feedInterface } from '@pages/Feed/interface'
 import Follower from '@Components/ui/Follower'
+import { getFollowers, getFollowings } from '@services/BackendAPI'
 
 const { Text } = Typography
 
 export function ProfileComponent(): JSX.Element {
   const [numPosts] = useState<number>(0)
-  const [numFollowers] = useState<number>(0)
-  const [numFollowings] = useState<number>(0)
-  const [feed] = useState<feedInterface>(mockData)
+  const [numFollowers, setNumFollowers] = useState<number>(0)
+  const [numFollowings, setNumFollowings] = useState<number>(0)
+
+  const [feed] = useState<feedInterface>(mockDataFeed)
   const [url] = useState<string>(
     'https://ionicframework.com/docs/img/demos/avatar.svg',
   )
+
+  useEffect(() => {
+    getFollowers('')
+      .then((followers) => {
+        // todo: remove mockData
+        setNumFollowers(followers?.length ?? mockDataUser.users.length)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    getFollowings('')
+      .then((followings) => {
+        // todo: remove mockData
+        setNumFollowings(followings?.length ?? mockDataUser.users.length)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }, [])
 
   return (
     <>
@@ -51,13 +64,21 @@ export function ProfileComponent(): JSX.Element {
                     title='Follower'
                     trigger='click'
                   >
-                    <Button>Follower</Button>
+                    Follower
                   </Popover>
                 </Text>
               </Col>
               <Col span={8}>
                 <Text strong>
-                  {numFollowings} <br /> Following{' '}
+                  {numFollowings} <br />
+                  <Popover
+                    placement='bottom'
+                    content={<Follower />}
+                    title='Following'
+                    trigger='click'
+                  >
+                    Following
+                  </Popover>
                 </Text>
               </Col>
             </Row>

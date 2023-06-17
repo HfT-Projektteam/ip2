@@ -1,16 +1,51 @@
 import { type components as BackendComponents } from '@data/openapi'
-type User = BackendComponents['schemas']['User']
+type User = BackendComponents['schemas']['UserDto']
 
 const backendUri: string = process.env.REACT_APP_BACKEND_URI ?? ''
 
-export async function getFollower(userId: string): Promise<User[] | null> {
+export async function getFollowers(userId: string): Promise<User[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || userId == null) {
+    return null
+  }
+
   const options = {
     method: 'POST',
-    headers: {},
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
   }
 
   return await request<User[]>(
     `${backendUri}/users/${userId}/follower`,
+    options,
+  )
+    .then((user) => {
+      return user
+    })
+    .catch((error) => {
+      console.error('Error in getFollower:', error)
+      return null
+    })
+}
+
+export async function getFollowings(userId: string): Promise<User[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || userId == null) {
+    return null
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<User[]>(
+    `${backendUri}/users/${userId}/followings`,
     options,
   )
     .then((user) => {

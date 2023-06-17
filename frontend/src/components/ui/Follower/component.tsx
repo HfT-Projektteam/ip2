@@ -1,24 +1,44 @@
-import { List } from 'antd'
+import { Avatar, List } from 'antd'
 import { useEffect, useState } from 'react'
 import { type components as BackendComponents } from '@data/openapi'
-import { getFollower } from '@services/BackendAPI/component'
-type FollowerType = BackendComponents['schemas']['User']
+import { type components as SpotifyComponents } from '@data/spotify-types'
+import { getFollowers } from '@services/BackendAPI/component'
+import { getUser } from '@services/SpotifyAPI'
+import mockData from '@data/mockdata/user.json'
+type FollowerType = BackendComponents['schemas']['UserDto']
+type User = SpotifyComponents['schemas']['PublicUserObject']
 
 export function Follower(): JSX.Element {
   const [follower, setFollower] = useState<FollowerType[]>([])
+  const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
-    getFollower('')
+    getFollowers('')
       .then((follower) => {
-        setFollower(follower ?? [])
+        // todo: remove mockData
+        setFollower(follower ?? mockData.users)
       })
       .catch((err) => {
         console.error(err)
       })
   }, [])
 
-  const onUserClick = (follower: FollowerType): void => {
-    alert(`open user: + ${follower.firstName}`)
+  useEffect(() => {
+    follower.forEach((follower) => {
+      getUser(follower.spotify_uri)
+        .then((user) => {
+          if (user === null) return
+          setUsers((users) => [...users, user])
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    })
+  }, [follower])
+
+  const onUserClick = (user: User): void => {
+    if (user.display_name === undefined || user.display_name === null) return
+    alert(`open user: + ${user.display_name}`)
   }
 
   return (
@@ -26,15 +46,16 @@ export function Follower(): JSX.Element {
       <List
         key='follower.list'
         itemLayout='horizontal'
-        dataSource={follower}
-        renderItem={(follower, index) => (
+        dataSource={users}
+        renderItem={(user, index) => (
           <List.Item
             onClick={() => {
-              onUserClick(follower)
+              onUserClick(user)
             }}
           >
             <List.Item.Meta
-              title={`${follower.firstName} ${follower.lastName}`}
+              avatar={<Avatar src={user?.images?.at(0)?.url} />}
+              title={`${user?.display_name ?? 'No name'}`}
             />
           </List.Item>
         )}

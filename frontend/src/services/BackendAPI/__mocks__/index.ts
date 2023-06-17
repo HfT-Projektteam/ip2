@@ -1,3 +1,3 @@
-import { getFollower } from './component'
+import { getFollowers } from './component'
 
-export { getFollower }
+export { getFollowers }
