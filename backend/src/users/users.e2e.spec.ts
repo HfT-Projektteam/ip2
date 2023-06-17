@@ -86,11 +86,11 @@ describe('Test basic DB connectivity', () => {
 })
 
 describe('Pagination', () => {
+  let users = []
+  for (let i = 0; i < 20; i++) {
+    users.push({ spotify_uri: 'raise' + i })
+  }
   beforeAll(async () => {
-    let users = []
-    for (let i = 0; i < 20; i++) {
-      users.push({ spotify_uri: uuid() })
-    }
     await repository.save(users)
   })
   it('should return all users with pagination limit 10', async () => {
@@ -116,7 +116,7 @@ describe('Pagination', () => {
   })
 
   afterAll(async () => {
-    await repository.clear()
+    await repository.delete(users)
   })
 })
 
