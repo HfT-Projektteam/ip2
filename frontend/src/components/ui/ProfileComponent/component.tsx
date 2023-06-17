@@ -1,8 +1,18 @@
 import Feed from '@pages/Feed'
-import { Avatar, Col, Divider, Row, Space, Typography } from 'antd'
+import {
+  Avatar,
+  Button,
+  Col,
+  Divider,
+  Popover,
+  Row,
+  Space,
+  Typography,
+} from 'antd'
 import { useState } from 'react'
 import mockData from '@data/mockdata/feed.json'
 import { type feedInterface } from '@pages/Feed/interface'
+import Follower from '@Components/ui/Follower'
 
 const { Text } = Typography
 
@@ -34,8 +44,15 @@ export function ProfileComponent(): JSX.Element {
               </Col>
               <Col span={8}>
                 <Text strong>
-                  {' '}
-                  {numFollowers} <br /> Followers{' '}
+                  {numFollowers} <br />
+                  <Popover
+                    placement='bottom'
+                    content={<Follower />}
+                    title='Follower'
+                    trigger='click'
+                  >
+                    <Button>Follower</Button>
+                  </Popover>
                 </Text>
               </Col>
               <Col span={8}>
