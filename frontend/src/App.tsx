@@ -1,69 +1,33 @@
+/* eslint-disable max-len */
 import Feed from '@pages/Feed'
 import mockData from '@data/mockdata/feed.json'
-import {
-  ConfigProvider,
-  theme as antdTheme,
-  Button,
-  Layout,
-  Typography,
-} from 'antd'
+import { ConfigProvider, Button, Layout } from 'antd'
 import { useEffect, useState } from 'react'
 import themesConfig from '@data/ThemesConfig'
 import Header from '@Components/layout/Header'
 import { type feedInterface } from '@pages/Feed/interface'
-import {
-  redirectToSpotifyAuthorizeEndpoint,
-  setAccessToken,
-} from '@services/SpotifyAPI/Authorization'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Profile from '@pages/Profile'
 import NavBar from '@Components/ui/NavBar'
 import useWindowDimensions from '@hooks/useWindowDimensions'
 import NewPost from '@pages/NewPost'
+import Login, { ProtectedRoute } from '@pages/Login'
+import useAuth from '@hooks/useAuth'
 
 const { Content, Footer } = Layout
-
-const { useToken } = antdTheme
 const { configThemeDefault, configThemeDark } = themesConfig
-const { Title } = Typography
 
 function App(): JSX.Element {
   const [theme, setTheme] = useState(configThemeDefault)
-  const { token } = useToken()
 
-  const [feed, setFeed] = useState<feedInterface>({ posts: [] })
-  const [spotifyToken, setSpotifyToken] = useState('')
+  const [feed] = useState<feedInterface>(mockData)
 
   const { width } = useWindowDimensions()
   const [footerWidth, setFooterWidth] = useState('100%')
+
   useEffect(() => {
     width <= 768 ? setFooterWidth('100%') : setFooterWidth('500px')
   }, [width])
-  const location = useLocation()
-
-  useEffect(() => {
-    setAccessToken()
-      .then(() => {
-        setSpotifyToken(window.localStorage.getItem('access_token') ?? '')
-      })
-      .catch(() => {
-        logout()
-      })
-  }, [location])
-
-  useEffect(() => {
-    setFeed(mockData)
-  }, [spotifyToken])
-
-  const logout = (): void => {
-    window.localStorage.removeItem('access_token')
-    window.localStorage.removeItem('refresh_token')
-    window.localStorage.removeItem('expires_in')
-    window.localStorage.removeItem('code_verifier')
-    setSpotifyToken('')
-    setFeed({ posts: [] })
-    // todo: code param aus url entfernen
-  }
 
   const themeChange = (): void => {
     theme === configThemeDefault
@@ -71,17 +35,15 @@ function App(): JSX.Element {
       : setTheme(configThemeDefault)
   }
 
+  const { loginToken, onLogout } = useAuth()
   return (
     <>
       <ConfigProvider theme={theme}>
         <Layout>
           <Header></Header>
-          {spotifyToken === '' ? (
-            <Button type='primary' onClick={redirectToSpotifyAuthorizeEndpoint}>
-              Login
-            </Button>
-          ) : (
-            <Button type='primary' onClick={logout}>
+          NEW:
+          {loginToken !== '' && (
+            <Button type='primary' onClick={onLogout}>
               Logout
             </Button>
           )}
@@ -90,41 +52,27 @@ function App(): JSX.Element {
             size='large'
             onClick={() => {
               themeChange()
-              console.log(
-                'I can access the current theme props through the token',
-                token.colorPrimary,
-              )
             }}
           >
             Switch Theme
           </Button>
           <Content style={{ paddingBottom: '60px' }}>
             <Routes>
+              <Route index element={<Login />} />
+              {/* <Route path='/login' element={<Login onLogin={handleLogin} />} /> */}
               <Route
                 path='/feed'
                 element={
-                  spotifyToken !== '' ? (
+                  <ProtectedRoute>
                     <Feed {...feed}></Feed>
-                  ) : (
-                    <Title level={2}>Please login</Title>
-                  )
+                  </ProtectedRoute>
                 }
               />
-              <Route
-                path='/plus'
-                element={
-                  spotifyToken !== '' ? (
-                    <NewPost />
-                  ) : (
-                    <Title level={2}>Please login</Title>
-                  )
-                }
-              />
+              <Route path='/plus' element={<NewPost />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='*' element={'Route Not Found'} />
             </Routes>
           </Content>
-
           <Footer
             style={{
               position: 'fixed',
