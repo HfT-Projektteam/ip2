@@ -114,6 +114,20 @@
         ]
       }
     },
+    "/users/search": {
+      "get": {
+        "operationId": "UsersController_searchMany",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
     "/users/{id}/followings/{following_id}": {
       "post": {
         "operationId": "UsersController_follow",
@@ -252,6 +266,20 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/users/{id}/posts": {
+      "get": {
+        "operationId": "UsersController_getPosts",
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
