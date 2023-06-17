@@ -16,6 +16,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
 
+
 @ApiTags('user')
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -38,11 +39,15 @@ export class UsersController {
     return await this.usersService.findOne(id)
   }
 
+  @Get('search')
+  searchMany(@Query() query: string) {
+    // TODO
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
   //   return this.usersService.update(id, updateUserDto);
   // }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id)
@@ -83,5 +88,10 @@ export class UsersController {
     @Query() pageOptionsDto: PageOptionsDto,
   ): Promise<Page<User>> {
     return this.usersService.getFollowings(id, pageOptionsDto)
+  }
+
+  @Get(':id/posts')
+  getPosts() {
+    //TODO
   }
 }

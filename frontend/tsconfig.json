@@ -16,8 +16,18 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["jest"]
+    "types": ["jest"],
+    "downlevelIteration": true
   },
-  "include": ["src", "src/**/*", "**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "**/.test.ts", "**/.test.tsx"],
+  "include": [
+    "src",
+    "src/**/*",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/.test.ts",
+    "**/.test.tsx"
+  ],
   "extends": "./tsconfig.paths.json"
 }

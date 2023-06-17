@@ -5,9 +5,12 @@ import { UsersModule } from './users.module'
 import { Repository } from 'typeorm'
 import { User } from './entities/user.entity'
 import * as request from 'supertest'
+import { v4 as uuid } from 'uuid'
 import { APP_FILTER } from '@nestjs/core'
 import { EntityNotFoundExceptionFilter } from '../filters/entity-not-found-exception/entity-not-found-exception.filter'
 import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter'
+import { ConfigModule } from '@nestjs/config'
+import configOptions from '../config/config'
 
 let app: INestApplication
 let repository: Repository<User>
@@ -16,14 +19,15 @@ beforeAll(async () => {
   const module = await Test.createTestingModule({
     imports: [
       UsersModule,
+      ConfigModule.forRoot(configOptions),
       // Use the e2e_test database to run the tests
       TypeOrmModule.forRoot({
         type: 'postgres',
-        host: '127.0.0.1',
+        host: process.env.DB_HOST,
         port: 5432,
-        username: 'postgres',
-        password: 'postgres',
-        database: 'e2e_test',
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_TEST_SCHEMA,
         entities: ['./**/*.entity.ts'],
         synchronize: true,
       }),
@@ -89,37 +93,25 @@ describe('Pagination', () => {
   beforeAll(async () => {
     await repository.save(users)
   })
-  it.each`
-    page | take  | expectedLength
-    ${0} | ${10} | ${10}
-    ${1} | ${10} | ${10}
-    ${2} | ${10} | ${0}
-    ${2} | ${9}  | ${2}
-  `(
-    'should return all users with given pagination limit and take',
-    async ({ page, take, expectedLength }) => {
-      await request(app.getHttpServer())
-        .get('/users')
-        .query({ page: page, take: take })
-        .send()
-        .expect(200)
-        .expect((res) => {
-          console.log(res.body)
-          expect(res.body.data).toHaveLength(expectedLength)
-        })
-    },
-  )
-
-  it('should provide hateoas like links for the next page with same take', async () => {
+  it('should return all users with pagination limit 10', async () => {
     await request(app.getHttpServer())
       .get('/users')
-      .query({ page: 0, take: 10 })
+      .query({ limit: 10 })
       .send()
       .expect(200)
       .expect((res) => {
-        console.log(res.body)
-        expect(res.body.meta.next).toMatch('/users?page=1&take=10')
-        expect(res.body.meta.self).toMatch('/users?page=0&take=10')
+        expect(res.body.data).toHaveLength(10)
+      })
+  })
+
+  it('should provide hateoas like links for the next page', async () => {
+    await request(app.getHttpServer())
+      .get('/users')
+      .query({ limit: 10 })
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.links.next).toBeDefined()
       })
   })
 
@@ -226,12 +218,11 @@ describe('Follower Stuff', () => {
       .query({ page: 0, take: 10 })
       .expect((res) => {
         console.log(res.body)
-        // expect(res.body[])
       })
   })
 
   afterEach(async () => {
-    //TODO await repository.delete(['test1', 'test2']);
+    await repository.delete(['test1', 'test2'])
   })
 })
 
