@@ -82,11 +82,11 @@ describe('Test basic DB connectivity', () => {
 })
 
 describe('Pagination', () => {
+  let users = []
+  for (let i = 0; i < 20; i++) {
+    users.push({ spotify_uri: 'raise' + i })
+  }
   beforeAll(async () => {
-    let users = []
-    for (let i = 0; i < 20; i++) {
-      users.push({ spotify_uri: 'raise' + i })
-    }
     await repository.save(users)
   })
   it.each`
@@ -124,7 +124,7 @@ describe('Pagination', () => {
   })
 
   afterAll(async () => {
-    await repository.clear()
+    await repository.delete(users)
   })
 })
 
