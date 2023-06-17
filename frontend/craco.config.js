@@ -4,6 +4,34 @@ const CracoAlias = require('craco-alias')
 const { pathsToModuleNameMapper } = require('ts-jest')
 const { compilerOptions } = require('./tsconfig.paths.json')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
+const DotEnv = require('dotenv')
+const webpack = require('webpack')
+
+// https://raviolicode.hashnode.dev/how-to-load-custom-env-variables-in-webpack-with-craco
+const ENV = process.env.REACT_APP_DEPLOY_ENV || 'dev'
+const result = DotEnv.config({ path: `./.env.${ENV}` })
+
+if (result.error) {
+  throw result.error
+}
+
+const env = DotEnv.config({ path: `./.env.${ENV}` }).parsed
+// const envLocal = DotEnv.config({ path: './.env.local' }).parsed || {}
+
+// collect all .env keys and values
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  // first we search for each key inside of .env.local, because of precedence
+  prev[`process.env.${next.trim()}`] = JSON.stringify(env[next].trim())
+
+  return prev
+}, {})
+
+// check things out
+/* console.log(`
+  key: ${ENV.toLocaleUpperCase()},
+  value: ${process.env.REACT_APP_DEPLOY_ENV},
+  accumulator: ${envKeys}
+`) */
 
 module.exports = {
   plugins: [
@@ -27,6 +55,7 @@ module.exports = {
       services: path.resolve(__dirname, 'src/services'),
     },
     plugins: [
+      new webpack.DefinePlugin(envKeys),
       new CircularDependencyPlugin({
         // `onStart` is called before the cycle detection starts
         onStart({ compilation }) {

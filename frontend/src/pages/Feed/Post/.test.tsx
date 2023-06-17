@@ -1,19 +1,17 @@
-import { render, screen } from '@testing-library/react'
+import { render, waitFor, screen, act } from '@testing-library/react'
 import { Post } from '@pages/Feed/Post'
-import postMock from '@data/mockdata/posts.json'
+import feedMock from '@data/mockdata/feed.json'
 
-describe('Post', () => {
-  const post = postMock.posts[0]
+jest.mock('@services/SpotifyAPI')
 
-  it('should render Post component correctly', () => {
-    render(<Post {...post} />)
-    const elementImg = screen.getByRole('img')
-    const title = screen.getByText(new RegExp(post.title, 'i'))
-    const album = screen.getByText(new RegExp(post.album, 'i'))
-    const artist = screen.getByText(new RegExp(post.artist, 'i'))
-    expect(elementImg).toBeInTheDocument()
-    expect(title).toBeInTheDocument()
-    expect(album).toBeInTheDocument()
-    expect(artist).toBeInTheDocument()
+describe('Post component', () => {
+  it('should render Post component correctly', async () => {
+    await act(async () => render(<Post {...feedMock.posts[0]} />)).then(
+      async () => {
+        expect(await screen.findByText(/Title Name/i)).toBeInTheDocument()
+        expect(await screen.findByText(/Album Name/i)).toBeInTheDocument()
+        expect(await screen.findByText(/Artist Name/i)).toBeInTheDocument()
+      },
+    )
   })
 })

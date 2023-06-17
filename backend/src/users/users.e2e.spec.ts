@@ -19,7 +19,7 @@ beforeAll(async () => {
       // Use the e2e_test database to run the tests
       TypeOrmModule.forRoot({
         type: 'postgres',
-        host: '127.0.0.1',
+        host: 'localhost',
         port: 5432,
         username: 'postgres',
         password: 'postgres',

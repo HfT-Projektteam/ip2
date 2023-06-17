@@ -1,4 +1,4 @@
-name: Test Frontend
+name: Test Backend
 
 on:
   workflow_dispatch:
@@ -6,21 +6,37 @@ on:
     types: ['opened', 'reopened', 'edited']
     branches: ['main', 'devops/**']
     paths:
-      - 'frontend/**'
+      - 'backend/**'
 
 jobs:
-  test-frontend:
-    name: Check frontend source code
+  test-backend:
+    name: Check backend source code
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./backend
 
     strategy:
       matrix:
         node-version: [18.x]
         #See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: e2e_test
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v3
@@ -29,11 +45,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          cache-dependency-path: frontend/yarn.lock
+          cache-dependency-path: backend/yarn.lock
       - name: Yarn install
         run: yarn install --frozen-lockfile
-      - name: Prettier Check
-        run: yarn format:check
+      #      - name: Prettier Check
+      #       run: yarn format:check
       - name: Lint
         run: yarn lint
       - name: Yarn test

@@ -1,29 +1,61 @@
-import { type postInterface } from '@pages/Feed/Post/interface'
-import { Card } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import {
+  type trackInterface,
+  type postInterface,
+} from '@pages/Feed/Post/interface'
+import { addSongToPlaylist, getTrack } from '@services/SpotifyAPI'
+import { Button, Card } from 'antd'
+import { useEffect, useState } from 'react'
 
 const { Meta } = Card
 
 export function Post(props: postInterface): JSX.Element {
+  const [post, setPost] = useState<trackInterface>()
+
+  useEffect(() => {
+    getTrack(`${props.spotifyId}`)
+      .then((res) => {
+        setPost(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
   return (
     <Card
-      style={{ width: '300px' }}
-      cover={<img alt='example' src={props.imgUrl} />}
+      cover={<img alt='example' src={post?.imgUrl} />}
+      actions={[
+        <>
+          <Button
+            type='primary'
+            shape='circle'
+            icon={<PlusOutlined rev='AddSongToPlaylist' />}
+            onClick={() => {
+              void addSongToPlaylist(post?.spotifyId ?? '')
+            }}
+          />
+        </>,
+      ]}
     >
       <Meta
-        title={props.title}
-        description={`${props.album} \n ${props.artist}`}
+        title={
+          <a href={'spotify:track:' + String(props.spotifyId ?? '')}>
+            {post?.title}
+          </a>
+        }
+        description={
+          <>
+            <a href={'spotify:album:' + String(post?.albumId ?? '')}>
+              {post?.album}
+            </a>
+            <br />
+            <a href={'spotify:artist:' + String(post?.artistId ?? '')}>
+              {post?.artist}
+            </a>
+          </>
+        }
       />
     </Card>
-
-    /* old bootstrap example
-    <Card key={props.id}>
-      <Card.Img variant='top' src={props.imgUrl} />
-      <Card.Body>
-        <Card.Title>{props.title}</Card.Title>
-        <Card.Text>{props.album}</Card.Text>
-        <Card.Text>{props.artist}</Card.Text>
-      </Card.Body>
-    </Card>
-    */
   )
 }
