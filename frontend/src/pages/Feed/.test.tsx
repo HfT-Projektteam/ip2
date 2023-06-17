@@ -1,16 +1,18 @@
 import { Feed } from './component'
 import { act, render, screen } from '@testing-library/react'
-import mockData from '@data/mockdata/feed.json'
+import feedMock from '@data/mockdata/feed.json'
 
 jest.mock('@services/SpotifyAPI')
 
 describe('example', () => {
-  it('should render Feed component correctly', async () => {
-    const feed = mockData
+  it('should render Profile correctly', async () => {
+    act(() => render(<Feed {...feedMock} />))
+
     await act(async () => {
-      render(<Feed {...feed} />)
-    }).then(async () => {
-      expect(await screen.findAllByRole('img')).toHaveLength(3)
+      // Wait for the update in Post to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
     })
+
+    expect(await screen.findAllByText('Title Name')).toHaveLength(3)
   })
 })

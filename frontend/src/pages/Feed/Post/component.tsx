@@ -24,6 +24,7 @@ export function Post(props: postInterface): JSX.Element {
 
   return (
     <Card
+      id={props.id}
       cover={<img alt='example' src={post?.imgUrl} />}
       actions={[
         <>
