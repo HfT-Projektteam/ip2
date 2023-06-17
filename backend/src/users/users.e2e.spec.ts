@@ -93,25 +93,37 @@ describe('Pagination', () => {
   beforeAll(async () => {
     await repository.save(users)
   })
-  it('should return all users with pagination limit 10', async () => {
-    await request(app.getHttpServer())
-      .get('/users')
-      .query({ limit: 10 })
-      .send()
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.data).toHaveLength(10)
-      })
-  })
+  it.each`
+    page | take  | expectedLength
+    ${0} | ${10} | ${10}
+    ${1} | ${10} | ${10}
+    ${2} | ${10} | ${0}
+    ${2} | ${9}  | ${2}
+  `(
+    'should return all users with given pagination limit and take',
+    async ({ page, take, expectedLength }) => {
+      await request(app.getHttpServer())
+        .get('/users')
+        .query({ page: page, take: take })
+        .send()
+        .expect(200)
+        .expect((res) => {
+          console.log(res.body)
+          expect(res.body.data).toHaveLength(expectedLength)
+        })
+    },
+  )
 
-  it('should provide hateoas like links for the next page', async () => {
+  it('should provide hateoas like links for the next page with same take', async () => {
     await request(app.getHttpServer())
       .get('/users')
-      .query({ limit: 10 })
+      .query({ page: 0, take: 10 })
       .send()
       .expect(200)
       .expect((res) => {
-        expect(res.body.links.next).toBeDefined()
+        console.log(res.body)
+        expect(res.body.meta.next).toMatch('/users?page=1&take=10')
+        expect(res.body.meta.self).toMatch('/users?page=0&take=10')
       })
   })
 
