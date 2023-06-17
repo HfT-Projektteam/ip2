@@ -37,12 +37,13 @@ export default function AuthProvider({ children }: any): JSX.Element {
       .then(() => {
         const token = window.localStorage.getItem('access_token') ?? ''
         setLoginToken(token)
+        console.log('Set token', token)
+        if (token !== '') navigate('/feed')
       })
       .catch(() => {
+        console.log('Logout')
         handleLogout()
       })
-
-    console.log('CALLED YAY')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
 
