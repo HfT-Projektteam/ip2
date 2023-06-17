@@ -4,49 +4,73 @@ import userEvent from '@testing-library/user-event'
 
 jest.mock('@services/SpotifyAPI')
 
-describe('Render Create Post Page', () => {
+describe('Render Create NewPost Page', () => {
   it('should have all Components', async () => {
-    await act(async () => render(<NewPost />)).then(async () => {
-      const buttons = await screen.findAllByRole('button')
-      const textarea = await screen.findAllByRole('textbox')
+    act(() => render(<NewPost />))
 
-      expect(buttons).toHaveLength(2)
-      expect(textarea).toHaveLength(2)
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
     })
+
+    const buttons = await screen.findAllByRole('button')
+    const textarea = await screen.findAllByRole('textbox')
+
+    expect(buttons).toHaveLength(2)
+    expect(textarea).toHaveLength(2)
   })
 
-  it('should have 10 recent played song', async () => {
-    await act(async () => render(<NewPost />)).then(async () => {
-      const songList = await screen.findAllByRole('listitem')
-      expect(songList).toHaveLength(10)
+  it('should have all recent played songs', async () => {
+    act(() => render(<NewPost />))
+
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
     })
+
+    const songList = await screen.findAllByRole('listitem')
+    expect(songList).toHaveLength(10)
   })
 
   it('Input should be in the Input value', async () => {
-    await act(async () => render(<NewPost />)).then(async () => {
-      const searchBox = await screen.findByPlaceholderText('Search Song')
-      const commentBox = await screen.findByPlaceholderText('Say something')
+    act(() => render(<NewPost />))
 
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    })
+
+    const searchBox = await screen.findByPlaceholderText('Search Song')
+    const commentBox = await screen.findByPlaceholderText('Say something')
+
+    await act(async () => {
       userEvent.type(searchBox, 'Casper{enter}')
       userEvent.type(commentBox, 'The song is cool')
-
-      await waitFor(() => {
-        expect(searchBox).toHaveValue('Casper')
-        expect(commentBox).toHaveValue('The song is cool')
-      })
     })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    expect(searchBox).toHaveValue('Casper')
+    expect(commentBox).toHaveValue('The song is cool')
   })
 
   it('it should search for the song on spotify', async () => {
-    await act(async () => render(<NewPost />)).then(async () => {
-      const searchBox = await screen.findByPlaceholderText('Search Song')
+    act(() => render(<NewPost />))
 
-      userEvent.type(searchBox, 'Casper{enter}')
-
-      await waitFor(() => {
-        const songList = screen.queryAllByRole('listitem')
-        expect(songList).toHaveLength(3)
-      })
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
     })
+
+    const searchBox = await screen.findByPlaceholderText('Search Song')
+
+    await act(async () => {
+      userEvent.type(searchBox, 'Casper{enter}')
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    const songList = screen.queryAllByRole('listitem')
+    expect(songList).toHaveLength(3)
   })
 })
