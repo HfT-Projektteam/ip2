@@ -21,7 +21,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
+                "$ref": "#/components/schemas/UserDto"
               }
             }
           }
@@ -37,7 +37,29 @@
       },
       "get": {
         "operationId": "UsersController_findAll",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -92,7 +114,7 @@
         ]
       }
     },
-    "/users/{id}/following/{following_id}": {
+    "/users/{id}/followings/{following_id}": {
       "post": {
         "operationId": "UsersController_follow",
         "parameters": [
@@ -121,14 +143,20 @@
         "tags": [
           "user"
         ]
-      }
-    },
-    "/users/{id}/following": {
+      },
       "get": {
-        "operationId": "UsersController_getFollowings",
+        "operationId": "UsersController_getIfFollow",
         "parameters": [
           {
             "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "following_id",
             "required": true,
             "in": "path",
             "schema": {
@@ -146,39 +174,53 @@
         ]
       }
     },
-    "/posts": {
-      "post": {
-        "operationId": "PostsController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePostDto"
-              }
+    "/users/{id}/follower": {
+      "get": {
+        "operationId": "UsersController_getFollower",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
             }
           }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "operationId": "PostsController_findAll",
-        "parameters": [],
+        ],
         "responses": {
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "user"
+        ]
       }
     },
-    "/posts/{id}": {
+    "/users/{id}/followings": {
       "get": {
-        "operationId": "PostsController_findOne",
+        "operationId": "UsersController_getFollowings",
         "parameters": [
           {
             "name": "id",
@@ -186,60 +228,38 @@
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
             }
           }
         ],
         "responses": {
           "200": {
             "description": ""
-          }
-        }
-      },
-      "patch": {
-        "operationId": "PostsController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePostDto"
-              }
-            }
           }
         },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      },
-      "delete": {
-        "operationId": "PostsController_remove",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
+        "tags": [
+          "user"
+        ]
       }
     }
   },
@@ -258,7 +278,7 @@
   "servers": [],
   "components": {
     "schemas": {
-      "CreateUserDto": {
+      "UserDto": {
         "type": "object",
         "properties": {
           "spotify_uri": {
@@ -269,14 +289,6 @@
         "required": [
           "spotify_uri"
         ]
-      },
-      "CreatePostDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "UpdatePostDto": {
-        "type": "object",
-        "properties": {}
       }
     }
   }
