@@ -18,6 +18,7 @@ module.exports = {
   ],
   webpack: {
     alias: {
+      assets: path.resolve(__dirname, 'src/assets'),
       components: path.resolve(__dirname, 'src/components'),
       form: path.resolve(__dirname, 'src/form'),
       context: path.resolve(__dirname, 'src/context'),

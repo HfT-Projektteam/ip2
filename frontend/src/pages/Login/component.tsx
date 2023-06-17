@@ -1,12 +1,14 @@
 import useAuth from '@hooks/useAuth'
 import { setAccessToken } from '@services/SpotifyAPI/Authorization'
-import { Button } from 'antd'
+import { Button, Col, Image, Row, Typography } from 'antd'
 import { useEffect } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+// eslint-disable-next-line max-len
+import spotify_logo from '@assets/Spotify_Logo_RGB_Black.png'
+
+const { Title } = Typography
 
 export function Login(): JSX.Element {
-  const name = 'Login'
-
   const navigate = useNavigate()
   const { handleLogin, handleLogout, setLoginToken } = useAuth()
 
@@ -22,17 +24,42 @@ export function Login(): JSX.Element {
       .catch(() => {
         handleLogout()
       })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <>
-      <h1>{name}</h1>
-
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      <Button type='primary' onClick={handleLogin}>
-        Login
-      </Button>
+      <Row style={{ height: '100vh', padding: '1em' }} align={'middle'}>
+        <Row>
+          <Col
+            style={{
+              width: '100%',
+              borderBottom: '1px solid rgb(217, 218, 220)',
+              padding: '10px',
+              marginBottom: '30px',
+              textAlign: 'center',
+            }}
+          >
+            <Image
+              src={spotify_logo}
+              alt={spotify_logo}
+              preview={false}
+              width={'60%'}
+            />
+          </Col>
+          <Col style={{ width: '100%', marginBottom: '30px' }}>
+            <Button
+              type='primary'
+              onClick={handleLogin}
+              block
+              style={{ height: 'fit-content' }}
+            >
+              <Title level={2} style={{ margin: 0 }}>
+                Please Login
+              </Title>
+            </Button>
+          </Col>
+        </Row>
+      </Row>
     </>
   )
 }

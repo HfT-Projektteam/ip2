@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import Feed from '@pages/Feed'
 import mockData from '@data/mockdata/feed.json'
 import { ConfigProvider, Button, Layout } from 'antd'
@@ -20,25 +19,12 @@ const { configThemeDefault, configThemeDark } = themesConfig
 function App(): JSX.Element {
   const [feed] = useState<feedInterface>(mockData)
   const [theme, setTheme] = useState(configThemeDefault)
-  const themeChange = (): void => {
-    theme === configThemeDefault
-      ? setTheme(configThemeDark)
-      : setTheme(configThemeDefault)
-  }
+
   return (
     <ConfigProvider theme={theme}>
-      <Button
-        type='primary'
-        size='large'
-        onClick={() => {
-          themeChange()
-        }}
-      >
-        Switch Theme
-      </Button>
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route element={<AppLayoutRoute />}>
+        <Route element={<AppLayoutRoute theme={theme} setTheme={setTheme} />}>
           <Route path='/feed' element={<Feed {...feed}></Feed>} />
           <Route path='/plus' element={<NewPost />} />
           <Route path='/profile' element={<Profile />} />
@@ -49,7 +35,7 @@ function App(): JSX.Element {
   )
 }
 
-export function AppLayoutRoute(): JSX.Element {
+export function AppLayoutRoute({ theme, setTheme }: any): JSX.Element {
   /*
   weird concept to implement general Layout to multiple react routes
   https://reactrouter.com/en/main/start/concepts#layout-route
@@ -62,11 +48,26 @@ export function AppLayoutRoute(): JSX.Element {
     width <= 768 ? setFooterWidth('100%') : setFooterWidth('500px')
   }, [width])
 
+  const themeChange = (): void => {
+    theme === configThemeDefault
+      ? setTheme(configThemeDark)
+      : setTheme(configThemeDefault)
+  }
+
   const { handleLogout } = useAuth()
   return (
     <ProtectedRoute>
       <Layout>
         <Header></Header>
+        <Button
+          type='primary'
+          size='large'
+          onClick={() => {
+            themeChange()
+          }}
+        >
+          Switch Theme
+        </Button>
         <Button type='primary' onClick={handleLogout}>
           Logout
         </Button>
