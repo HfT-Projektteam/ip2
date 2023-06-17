@@ -4,6 +4,7 @@ import { EntityNotFoundExceptionFilter } from './filters/entity-not-found-except
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import * as fs from 'fs'
 import { ValidationPipe } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -11,6 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
   app.enableCors()
+  const configService = app.get(ConfigService)
 
   const config = new DocumentBuilder()
     .setTitle('Friendify Backend Service')
@@ -22,6 +24,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document)
   fs.writeFileSync('./openapi-spec.json', JSON.stringify(document, null, 2))
 
-  await app.listen(3000)
+  await app.listen(configService.get('PORT'))
 }
 bootstrap()
