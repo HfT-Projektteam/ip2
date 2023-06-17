@@ -1,11 +1,11 @@
-import { UserDto } from './dto/user.dto'
+import { Injectable } from '@nestjs/common'
 import { User } from './entities/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CircularDependencyException } from '@nestjs/core/errors/exceptions'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
+import { UserDto } from './dto/user.dto'
 import { Pagination } from '../util/pagination/pagination'
-import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class UsersService {
