@@ -3,145 +3,143 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/": {
-    get: operations["AppController_getHello"];
-  };
-  "/users": {
-    get: operations["UsersController_findAll"];
-    post: operations["UsersController_create"];
-  };
-  "/users/{id}": {
-    get: operations["UsersController_findOne"];
-    delete: operations["UsersController_remove"];
-  };
-  "/users/{id}/followings/{following_id}": {
-    get: operations["UsersController_getIfFollow"];
-    post: operations["UsersController_follow"];
-  };
-  "/users/{id}/follower": {
-    get: operations["UsersController_getFollower"];
-  };
-  "/users/{id}/followings": {
-    get: operations["UsersController_getFollowings"];
-  };
+  '/': {
+    get: operations['AppController_getHello']
+  }
+  '/users': {
+    get: operations['UsersController_findAll']
+    post: operations['UsersController_create']
+  }
+  '/users/{id}': {
+    get: operations['UsersController_findOne']
+    delete: operations['UsersController_remove']
+  }
+  '/users/{id}/followings/{following_id}': {
+    get: operations['UsersController_getIfFollow']
+    post: operations['UsersController_follow']
+  }
+  '/users/{id}/follower': {
+    get: operations['UsersController_getFollower']
+  }
+  '/users/{id}/followings': {
+    get: operations['UsersController_getFollowings']
+  }
 }
 
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
     UserDto: {
       /** @description The URI of a spotify user, which used this service */
-      spotify_uri: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+      spotify_uri: string
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
 
-export type external = Record<string, never>;
+export type external = Record<string, never>
 
 export interface operations {
-
   AppController_getHello: {
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
   UsersController_findAll: {
     parameters: {
       query: {
-        page?: number;
-        take?: number;
-      };
-    };
+        page?: number
+        take?: number
+      }
+    }
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
   UsersController_create: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UserDto"];
-      };
-    };
+        'application/json': components['schemas']['UserDto']
+      }
+    }
     responses: {
-      201: never;
-    };
-  };
+      201: never
+    }
+  }
   UsersController_findOne: {
     parameters: {
       path: {
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
   UsersController_remove: {
     parameters: {
       path: {
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
   UsersController_getIfFollow: {
     parameters: {
       path: {
-        id: string;
-        following_id: string;
-      };
-    };
+        id: string
+        following_id: string
+      }
+    }
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
   UsersController_follow: {
     parameters: {
       path: {
-        id: string;
-        following_id: string;
-      };
-    };
+        id: string
+        following_id: string
+      }
+    }
     responses: {
-      201: never;
-    };
-  };
+      201: never
+    }
+  }
   UsersController_getFollower: {
     parameters: {
       query: {
-        page?: number;
-        take?: number;
-      };
+        page?: number
+        take?: number
+      }
       path: {
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
   UsersController_getFollowings: {
     parameters: {
       query: {
-        page?: number;
-        take?: number;
-      };
+        page?: number
+        take?: number
+      }
       path: {
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
-      200: never;
-    };
-  };
+      200: never
+    }
+  }
 }
