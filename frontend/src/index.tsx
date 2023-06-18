@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals'
 import GlobalStyle from 'assets/global'
 import styled from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
+import AuthProvider from '@context/AuthProvider'
 
 const MobileWrapper = styled.div`
   @media (min-width: 768px) {
@@ -25,7 +26,9 @@ root.render(
     <MobileWrapper>
       <MobileContainer>
         <BrowserRouter>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </BrowserRouter>
       </MobileContainer>
     </MobileWrapper>
