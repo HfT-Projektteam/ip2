@@ -2,6 +2,7 @@ import Profile from '@pages/Profile'
 import { act, render, screen } from '@testing-library/react'
 
 jest.mock('@services/SpotifyAPI')
+jest.mock('@services/BackendAPI')
 
 describe('Profile', () => {
   it('should render Profile correctly', async () => {
@@ -12,6 +13,6 @@ describe('Profile', () => {
       await new Promise((resolve) => setTimeout(resolve, 0))
     })
 
-    expect(await screen.findByText('My Profile')).toBeInTheDocument()
+    expect(await screen.findByText('Test Name')).toBeInTheDocument()
   })
 })
