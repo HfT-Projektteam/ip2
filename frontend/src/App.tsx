@@ -10,8 +10,9 @@ import Profile from '@pages/Profile'
 import NavBar from '@Components/ui/NavBar'
 import useWindowDimensions from '@hooks/useWindowDimensions'
 import NewPost from '@pages/NewPost'
-import Login, { ProtectedRoute } from '@pages/Login'
+import Login from '@pages/Login'
 import useAuth from '@hooks/useAuth'
+import ProtectedRoute from '@pages/Login/ProtectedRoute'
 
 const { Content, Footer } = Layout
 const { configThemeDefault, configThemeDark } = themesConfig

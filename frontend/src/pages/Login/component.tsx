@@ -2,7 +2,7 @@ import useAuth from '@hooks/useAuth'
 import { setAccessToken } from '@services/SpotifyAPI/Authorization'
 import { Button, Col, Image, Row, Typography } from 'antd'
 import { useEffect } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Logo_RGB_Black.png'
 
 const { Title } = Typography
@@ -61,14 +61,4 @@ export function Login(): JSX.Element {
       </Row>
     </>
   )
-}
-
-export function ProtectedRoute({ children }: any): JSX.Element {
-  const { loginToken } = useAuth()
-  const location = useLocation()
-
-  if (loginToken === '') {
-    return <Navigate to='/' replace state={{ from: location }} />
-  }
-  return children
 }

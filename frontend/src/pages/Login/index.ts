@@ -1,4 +1,3 @@
-import { Login, ProtectedRoute } from './component'
+import { Login } from './component'
 
 export default Login
-export { ProtectedRoute }
