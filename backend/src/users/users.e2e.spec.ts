@@ -228,7 +228,7 @@ describe('Follower Stuff', () => {
       .get('/users/test2/followings')
       .query({ page: 0, take: 10 })
       .expect((res) => {
-        console.log(res.body)
+        // TODO
       })
   })
 

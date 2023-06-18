@@ -26,7 +26,6 @@ export class UsersService {
       this.userRepo.createQueryBuilder(),
       pageOpt,
     )
-    console.log('Query:' + query.getQuery())
 
     return query.getManyAndCount().then((res) => {
       return new Page(res[0], res[1], pageOpt)

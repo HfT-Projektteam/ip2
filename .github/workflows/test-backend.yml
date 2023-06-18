@@ -53,4 +53,4 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Yarn test
-        run: yarn test
+        run: yarn test:ci_cd
