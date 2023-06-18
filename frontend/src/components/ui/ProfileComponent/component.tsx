@@ -70,7 +70,7 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowings} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower type='following' />}
+                    content={<Follower type='followings' />}
                     title='Following'
                     trigger='click'
                   >

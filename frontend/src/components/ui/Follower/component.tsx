@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getUser } from '@services/SpotifyAPI'
 import { type components as BackendComponents } from '@data/openapi'
 import { type components as SpotifyComponents } from '@data/spotify-types'
-import { getFollowers, getFollowings } from '@services/BackendAPI'
+import { getFollowers } from '@services/BackendAPI'
 import { type followerInterface } from './interface'
 type FollowerType = BackendComponents['schemas']['UserDto']
 type User = SpotifyComponents['schemas']['PublicUserObject']
@@ -13,9 +13,7 @@ export function Follower(props: followerInterface): JSX.Element {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(false)
   const [followers, setFollowers] = useState<FollowerType[]>([])
-  const [followings, setFollowings] = useState<FollowerType[]>([])
   const [followersPage, setFollowersPage] = useState(0)
-  const [followingsPage, setFollowingsPage] = useState(0)
   let ranOnce = false
 
   useEffect(() => {
@@ -24,19 +22,6 @@ export function Follower(props: followerInterface): JSX.Element {
     ranOnce = true
     loadMoreData()
   }, [])
-
-  useEffect(() => {
-    followings.forEach((follower) => {
-      getUser(follower.spotify_uri)
-        .then((user) => {
-          if (user === null) return
-          setUsers((users) => [...users, user])
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    })
-  }, [followings])
 
   useEffect(() => {
     followers.forEach((follower) => {
@@ -57,29 +42,16 @@ export function Follower(props: followerInterface): JSX.Element {
     }
     setLoading(true)
 
-    if (props.type === 'following')
-      getFollowings(followingsPage)
-        .then((follower) => {
-          setFollowings(follower ?? [])
-          setFollowingsPage(followingsPage + 1)
-          setLoading(false)
-        })
-        .catch((err) => {
-          console.error(err)
-          setLoading(false)
-        })
-
-    if (props.type === 'follower')
-      getFollowers(followersPage)
-        .then((follower) => {
-          setFollowers(follower ?? [])
-          setFollowersPage(followersPage + 1)
-          setLoading(false)
-        })
-        .catch((err) => {
-          console.error(err)
-          setLoading(false)
-        })
+    getFollowers(props.type, followersPage)
+      .then((follower) => {
+        setFollowers(follower ?? [])
+        setFollowersPage(followersPage + 1)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setLoading(false)
+      })
   }
 
   const onUserClick = (user: User): void => {

@@ -4,7 +4,10 @@ type User = BackendComponents['schemas']['UserDto']
 
 const backendUri: string = process.env.REACT_APP_BACKEND_URI ?? ''
 
-export async function getFollowers(page: number): Promise<User[] | null> {
+export async function getFollowers(
+  type: string,
+  page: number,
+): Promise<User[] | null> {
   return await getProfile()
     .then(async (profile) => {
       const accessToken = localStorage.getItem('access_token') ?? ''
@@ -21,41 +24,7 @@ export async function getFollowers(page: number): Promise<User[] | null> {
       }
 
       return await request<any>(
-        `${backendUri}/users/${profile?.id}/follower?page=${page}&take=10`,
-        options,
-      )
-        .then((user) => {
-          return user.data
-        })
-        .catch((error) => {
-          console.error('Error in getFollower:', error)
-          return null
-        })
-    })
-    .catch((err) => {
-      console.error(err)
-      return null
-    })
-}
-
-export async function getFollowings(page: number): Promise<User[] | null> {
-  return await getProfile()
-    .then(async (profile) => {
-      const accessToken = localStorage.getItem('access_token') ?? ''
-
-      if (accessToken === '' || profile?.id == null) {
-        return null
-      }
-
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }
-
-      return await request<any>(
-        `${backendUri}/users/${profile?.id}/followings?page=${page}&take=10`,
+        `${backendUri}/users/${profile?.id}/${type}?page=${page}&take=10`,
         options,
       )
         .then((user) => {
