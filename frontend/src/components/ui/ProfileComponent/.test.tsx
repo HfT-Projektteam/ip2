@@ -2,6 +2,7 @@ import { act, render, screen } from '@testing-library/react'
 import { ProfileComponent } from './component'
 
 jest.mock('@services/SpotifyAPI')
+jest.mock('@services/BackendAPI')
 
 describe('ProfileComponent', () => {
   it('should render ProfileComponent correctly', async () => {
@@ -13,7 +14,7 @@ describe('ProfileComponent', () => {
     })
 
     expect(await screen.findByText(/Posts/i)).toBeInTheDocument()
-    expect(await screen.findByText(/Followers/i)).toBeInTheDocument()
+    expect(await screen.findByText(/Follower/i)).toBeInTheDocument()
     expect(await screen.findByText(/Following/i)).toBeInTheDocument()
     expect(await screen.findByAltText(/avatar/i)).toBeInTheDocument()
   })

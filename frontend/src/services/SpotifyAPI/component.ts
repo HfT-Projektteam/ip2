@@ -3,6 +3,7 @@ import { generateRandomUID } from '@services/IdGenertor'
 import { type components } from '@data/spotify-types'
 type trackObject = components['schemas']['TrackObject']
 type PrivateUserObject = components['schemas']['PrivateUserObject']
+type PublicUserObject = components['schemas']['PublicUserObject']
 
 type CursorPagingPlayHistoryObject =
   components['schemas']['CursorPagingPlayHistoryObject']
@@ -274,6 +275,35 @@ export async function addSongToPlaylist(songId: string): Promise<void> {
         return null
       })
   })
+}
+
+export async function getUser(
+  userId: string,
+): Promise<PublicUserObject | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || userId == null) {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<PublicUserObject>(
+    `https://api.spotify.com/v1/users/${userId}`,
+    options,
+  )
+    .then((user) => {
+      return user
+    })
+    .catch((error) => {
+      console.error('Error in getUser:', error)
+      return null
+    })
 }
 
 async function request<T>(url: string, options: RequestInit): Promise<T> {

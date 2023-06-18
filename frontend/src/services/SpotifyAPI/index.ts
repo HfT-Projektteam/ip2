@@ -6,6 +6,7 @@ import {
   getRecentPlayedTracks,
   addSongToPlaylist,
   searchSongByLink,
+  getUser,
 } from './component'
 
 export {
@@ -16,4 +17,5 @@ export {
   getRecentPlayedTracks,
   addSongToPlaylist,
   searchSongByLink,
+  getUser,
 }

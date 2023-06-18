@@ -4,42 +4,26 @@
  */
 
 export interface paths {
-  '/users/{userId}': {
-    /**
-     * Get User Info by User ID
-     * @description Retrieve the information of the user with the matching user ID.
-     */
-    get: operations['get-users-userId']
-    /**
-     * Update User Information
-     * @description Update the information of an existing user.
-     */
-    patch: operations['patch-users-userId']
-    parameters: {
-      path: {
-        /** @description Id of an existing user. */
-        userId: number
-      }
-    }
+  '/': {
+    get: operations['AppController_getHello']
   }
-  '/user': {
-    /**
-     * Create New User
-     * @description Create a new user.
-     */
-    post: operations['post-user']
+  '/users': {
+    get: operations['UsersController_findAll']
+    post: operations['UsersController_create']
   }
-  '/feed/{page}': {
-    /**
-     * Your GET endpoint
-     * @description Get 20 feed entry items
-     */
-    get: operations['get-feed']
-    parameters: {
-      path: {
-        page: string
-      }
-    }
+  '/users/{id}': {
+    get: operations['UsersController_findOne']
+    delete: operations['UsersController_remove']
+  }
+  '/users/{id}/followings/{following_id}': {
+    get: operations['UsersController_getIfFollow']
+    post: operations['UsersController_follow']
+  }
+  '/users/{id}/follower': {
+    get: operations['UsersController_getFollower']
+  }
+  '/users/{id}/followings': {
+    get: operations['UsersController_getFollowings']
   }
 }
 
@@ -47,36 +31,9 @@ export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
-    /** User */
-    User: {
-      /** @description Unique identifier for the given user. */
-      id: number
-      firstName: string
-      lastName: string
-      /** Format: email */
-      email: string
-      /**
-       * Format: date
-       * @example 1997-10-31
-       */
-      dateOfBirth?: string
-      /** @description Set to true if the user's email has been verified. */
-      emailVerified: boolean
-      /**
-       * Format: date
-       * @description The date that the user was created.
-       */
-      createDate?: string
-    }
-    /**
-     * Entry
-     * @description Mostly based on query params?
-     */
-    Entry: {
-      song_uri?: string
-      poster_id?: components['schemas']['User']
-      likes?: number
-      disklikes?: number
+    UserDto: {
+      /** @description The URI of a spotify user, which used this service */
+      spotify_uri: string
     }
   }
   responses: never
@@ -89,100 +46,100 @@ export interface components {
 export type external = Record<string, never>
 
 export interface operations {
-  /**
-   * Get User Info by User ID
-   * @description Retrieve the information of the user with the matching user ID.
-   */
-  'get-users-userId': {
+  AppController_getHello: {
     responses: {
-      /** @description User Found */
-      200: {
-        content: {
-          'application/json': components['schemas']['User']
-        }
-      }
-      /** @description User Not Found */
-      404: never
+      200: never
     }
   }
-  /**
-   * Update User Information
-   * @description Update the information of an existing user.
-   */
-  'patch-users-userId': {
-    /** @description Patch user properties to update. */
-    requestBody?: {
-      content: {
-        'application/json': {
-          firstName?: string
-          lastName?: string
-          /** @description If a new email is given, the user's email verified property will be set to false. */
-          email?: string
-          dateOfBirth?: string
-        }
-      }
-    }
-    responses: {
-      /** @description User Updated */
-      200: {
-        content: {
-          'application/json': components['schemas']['User']
-        }
-      }
-      /** @description User Not Found */
-      404: never
-      /** @description Email Already Taken */
-      409: never
-    }
-  }
-  /**
-   * Create New User
-   * @description Create a new user.
-   */
-  'post-user': {
-    /** @description Post the necessary fields for the API to create a new user. */
-    requestBody?: {
-      content: {
-        'application/json': {
-          firstName: string
-          lastName: string
-          email: string
-          /** Format: date */
-          dateOfBirth: string
-        }
-      }
-    }
-    responses: {
-      /** @description User Created */
-      200: {
-        content: {
-          'application/json': components['schemas']['User']
-        }
-      }
-      /** @description Missing Required Information */
-      400: never
-      /** @description Email Already Taken */
-      409: never
-    }
-  }
-  /**
-   * Your GET endpoint
-   * @description Get 20 feed entry items
-   */
-  'get-feed': {
+  UsersController_findAll: {
     parameters: {
       query: {
-        /** @description Entries must include this genre */
-        genre?: string
+        page?: number
+        take?: number
       }
     }
     responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': Array<components['schemas']['Entry']>
-        }
+      200: never
+    }
+  }
+  UsersController_create: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UserDto']
       }
+    }
+    responses: {
+      201: never
+    }
+  }
+  UsersController_findOne: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  UsersController_remove: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  UsersController_getIfFollow: {
+    parameters: {
+      path: {
+        id: string
+        following_id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  UsersController_follow: {
+    parameters: {
+      path: {
+        id: string
+        following_id: string
+      }
+    }
+    responses: {
+      201: never
+    }
+  }
+  UsersController_getFollower: {
+    parameters: {
+      query: {
+        page?: number
+        take?: number
+      }
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  UsersController_getFollowings: {
+    parameters: {
+      query: {
+        page?: number
+        take?: number
+      }
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
     }
   }
 }
