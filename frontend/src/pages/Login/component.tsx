@@ -3,7 +3,6 @@ import { setAccessToken } from '@services/SpotifyAPI/Authorization'
 import { Button, Col, Image, Row, Typography } from 'antd'
 import { useEffect } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-// eslint-disable-next-line max-len
 import spotify_logo from '@assets/Spotify_Logo_RGB_Black.png'
 
 const { Title } = Typography

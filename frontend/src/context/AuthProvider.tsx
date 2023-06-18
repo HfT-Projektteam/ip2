@@ -6,7 +6,6 @@ import {
   createContext,
   useState,
 } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 // context object structure
 export interface AuthContextValue {
@@ -32,7 +31,6 @@ const initValue: AuthContextValue = {
 export const AuthContext = createContext<AuthContextValue>(initValue)
 
 export default function AuthProvider({ children }: any): JSX.Element {
-  const navigate = useNavigate()
   const [loginToken, setLoginToken] = useState(initValue.loginToken)
 
   const handleLogin = (): void => {
@@ -46,7 +44,6 @@ export default function AuthProvider({ children }: any): JSX.Element {
     window.localStorage.removeItem('expires_in')
     window.localStorage.removeItem('code_verifier')
     setLoginToken('')
-    navigate('/')
   }
 
   const value: AuthContextValue = {
