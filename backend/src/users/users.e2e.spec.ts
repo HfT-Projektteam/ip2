@@ -5,7 +5,6 @@ import { UsersModule } from './users.module'
 import { Repository } from 'typeorm'
 import { User } from './entities/user.entity'
 import * as request from 'supertest'
-import { v4 as uuid } from 'uuid'
 import { APP_FILTER } from '@nestjs/core'
 import { EntityNotFoundExceptionFilter } from '../filters/entity-not-found-exception/entity-not-found-exception.filter'
 import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter'
@@ -138,7 +137,7 @@ describe('Exception stuff', () => {
   })
   it('should throw a 400 error if users tries to follow himself', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/follower/test1')
+      .post('/users/test1/followings/test1')
       .send()
       .expect(400)
       .expect((res) => {
@@ -184,7 +183,7 @@ describe('Follower Stuff', () => {
 
   it('should make one user follow another (only once)', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/follower/test2')
+      .post('/users/test1/followings/test2')
       .expect((res) => {
         expect(res.body).toMatchObject({
           spotify_uri: 'test1',
@@ -193,7 +192,7 @@ describe('Follower Stuff', () => {
       })
 
     await request(app.getHttpServer())
-      .post('/users/test1/follower/test2')
+      .post('/users/test1/followings/test2')
       .expect((res) => {
         expect(res.body).toMatchObject({
           spotify_uri: 'test1',
@@ -208,13 +207,13 @@ describe('Follower Stuff', () => {
     await repository.save(follwedUser)
 
     await request(app.getHttpServer())
-      .get('/users/test2/follower/test1')
+      .get('/users/test2/followings/test1')
       .expect((res) => {
         expect(res.body.doesUserFollowUser).toBeTruthy()
       })
 
     await request(app.getHttpServer())
-      .get('/users/test2/follower/test2')
+      .get('/users/test2/followings/test2')
       .expect((res) => {
         expect(res.body.doesUserFollowUser).toBeFalsy()
       })
