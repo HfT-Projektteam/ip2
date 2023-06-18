@@ -1,30 +1,21 @@
 import { Avatar, List } from 'antd'
 import { useEffect, useState } from 'react'
+import { getUser } from '@services/SpotifyAPI'
 import { type components as BackendComponents } from '@data/openapi'
 import { type components as SpotifyComponents } from '@data/spotify-types'
-import { getFollowers } from '@services/BackendAPI/component'
-import { getUser } from '@services/SpotifyAPI'
-import mockData from '@data/mockdata/user.json'
 type FollowerType = BackendComponents['schemas']['UserDto']
 type User = SpotifyComponents['schemas']['PublicUserObject']
 
-export function Follower(): JSX.Element {
-  const [follower, setFollower] = useState<FollowerType[]>([])
+export function Follower(props: FollowerType[]): JSX.Element {
   const [users, setUsers] = useState<User[]>([])
+  let ranonce = false
 
   useEffect(() => {
-    getFollowers('')
-      .then((follower) => {
-        // todo: remove mockData
-        setFollower(follower ?? mockData.users)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [])
+    // dirty solution to prevent issues from useEffect triggered twice
+    if (ranonce) return
+    ranonce = true
 
-  useEffect(() => {
-    follower.forEach((follower) => {
+    Object.values(props).forEach((follower) => {
       getUser(follower.spotify_uri)
         .then((user) => {
           if (user === null) return
@@ -34,7 +25,7 @@ export function Follower(): JSX.Element {
           console.error(err)
         })
     })
-  }, [follower])
+  }, [])
 
   const onUserClick = (user: User): void => {
     if (user.display_name === undefined || user.display_name === null) return

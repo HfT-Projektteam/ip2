@@ -6,32 +6,38 @@ import mockDataUser from '@data/mockdata/user.json'
 import { type feedInterface } from '@pages/Feed/interface'
 import Follower from '@Components/ui/Follower'
 import { getFollowers, getFollowings } from '@services/BackendAPI'
+import { type components as BackendComponents } from '@data/openapi'
+type FollowerType = BackendComponents['schemas']['UserDto']
 
 const { Text } = Typography
 
 export function ProfileComponent(): JSX.Element {
+  const [followers, setFollowers] = useState<FollowerType[]>([])
+  const [followings, setFollowings] = useState<FollowerType[]>([])
   const [numPosts] = useState<number>(0)
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)
-
   const [feed] = useState<feedInterface>(mockDataFeed)
   const [url] = useState<string>(
     'https://ionicframework.com/docs/img/demos/avatar.svg',
   )
 
   useEffect(() => {
-    getFollowers('')
-      .then((followers) => {
+    getFollowers()
+      .then((follower) => {
         // todo: remove mockData
-        setNumFollowers(followers?.length ?? mockDataUser.users.length)
+        setFollowers(follower ?? mockDataUser.users)
+        setNumFollowers(follower?.length ?? mockDataUser.users.length)
       })
       .catch((err) => {
         console.error(err)
       })
-    getFollowings('')
-      .then((followings) => {
+
+    getFollowings()
+      .then((follower) => {
         // todo: remove mockData
-        setNumFollowings(followings?.length ?? mockDataUser.users.length)
+        setFollowings(follower ?? mockDataUser.users)
+        setNumFollowings(follower?.length ?? mockDataUser.users.length)
       })
       .catch((err) => {
         console.error(err)
@@ -60,7 +66,7 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowers} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower />}
+                    content={<Follower {...followers} />}
                     title='Follower'
                     trigger='click'
                   >
@@ -73,7 +79,7 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowings} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower />}
+                    content={<Follower {...followings} />}
                     title='Following'
                     trigger='click'
                   >
