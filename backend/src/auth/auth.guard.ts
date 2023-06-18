@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest()
     const token = this.extractTokenFromHeader(request)
 
-    if (process.env.ENV == 'local') {
+    if (process.env.ENV == 'local' || process.env.ENV == 'ci_cd') {
       request['spotify_uri'] = 'local-user'
       return true
     }
@@ -26,7 +26,9 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const uri = await this.authService.getURIfromAccessCode(token)
-      if (uri == undefined) throw new UnauthorizedException()
+      if (uri == undefined) {
+        throw new UnauthorizedException()
+      }
       request['spotify_uri'] = uri
     } catch {
       throw new UnauthorizedException()
