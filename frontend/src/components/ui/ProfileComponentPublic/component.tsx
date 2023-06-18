@@ -5,6 +5,7 @@ import mockDataFeed from '@data/mockdata/feed.json'
 import { type feedInterface } from '@pages/Feed/interface'
 import Follower from '@Components/ui/Follower'
 import { getFollowersNum, getFollowingsNum } from '@services/BackendAPI'
+import { getProfile } from '@services/SpotifyAPI'
 
 const { Text } = Typography
 
@@ -16,10 +17,20 @@ export function ProfileComponentPublic(): JSX.Element {
   const [url] = useState<string>(
     'https://ionicframework.com/docs/img/demos/avatar.svg',
   )
-  const urlParams = new URLSearchParams(window.location.search)
-  const [spotifyId, setSpotifyId] = useState(urlParams.get('spotifyId') ?? '')
+
+  const [spotifyId, setSpotifyId] = useState('')
 
   useEffect(() => {
+    if (spotifyId === '') {
+      getProfile()
+        .then((profile) => {
+          if (profile?.id === undefined) return
+          setSpotifyId(profile?.id)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
     getFollowersNum(spotifyId)
       .then((num) => {
         setNumFollowers(num ?? 0)

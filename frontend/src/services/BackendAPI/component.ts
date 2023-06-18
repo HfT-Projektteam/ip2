@@ -21,7 +21,6 @@ export async function getFollowers(
     },
   }
 
-  console.log(`${backendUri}/users/${spotifyId}/${type}?page=${page}&take=1`)
   return await request<any>(
     `${backendUri}/users/${spotifyId}/${type}?page=${page}&take=10`,
     options,
@@ -38,7 +37,7 @@ export async function getFollowers(
 export async function getFollowersNum(spotifyId: string): Promise<number> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
-  if (accessToken === '' || spotifyId == null) {
+  if (accessToken === '' || spotifyId == null || spotifyId === '') {
     return 0
   }
 
@@ -65,7 +64,7 @@ export async function getFollowersNum(spotifyId: string): Promise<number> {
 export async function getFollowingsNum(spotifyId: string): Promise<number> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
-  if (accessToken === '' || spotifyId == null) {
+  if (accessToken === '' || spotifyId == null || spotifyId === '') {
     return 0
   }
 
