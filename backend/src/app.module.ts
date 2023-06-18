@@ -8,16 +8,19 @@ import { UsersController } from './users/users.controller'
 import { AuthModule } from './auth/auth.module'
 import { AuthGuard } from './auth/auth.guard'
 import { APP_GUARD } from '@nestjs/core'
+import { ConfigModule } from '@nestjs/config'
+import configOptions from './config/config'
 
 @Module({
   imports: [
+    ConfigModule.forRoot(configOptions),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: process.env.DB_HOST,
       port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'e2e_test',
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_SCHEMA,
       autoLoadEntities: true,
       synchronize: true,
     }),
