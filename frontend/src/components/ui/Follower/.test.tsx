@@ -2,10 +2,11 @@ import { act, render, screen } from '@testing-library/react'
 import { Follower } from './component'
 
 jest.mock('@services/BackendAPI')
+jest.mock('@services/SpotifyAPI')
 
-describe('ProfileComponent', () => {
+describe('Follower', () => {
   it('should render Follower correctly', async () => {
-    act(() => render(<Follower />))
+    act(() => render(<Follower type='follower' />))
 
     await act(async () => {
       // Wait for the update in NewPost to complete

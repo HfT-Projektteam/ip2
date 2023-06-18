@@ -2,18 +2,13 @@ import Feed from '@pages/Feed'
 import { Avatar, Col, Divider, Popover, Row, Space, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import mockDataFeed from '@data/mockdata/feed.json'
-import mockDataUser from '@data/mockdata/user.json'
 import { type feedInterface } from '@pages/Feed/interface'
 import Follower from '@Components/ui/Follower'
-import { getFollowers, getFollowings } from '@services/BackendAPI'
-import { type components as BackendComponents } from '@data/openapi'
-type FollowerType = BackendComponents['schemas']['UserDto']
+import { getFollowersNum, getFollowingsNum } from '@services/BackendAPI'
 
 const { Text } = Typography
 
 export function ProfileComponent(): JSX.Element {
-  const [followers, setFollowers] = useState<FollowerType[]>([])
-  const [followings, setFollowings] = useState<FollowerType[]>([])
   const [numPosts] = useState<number>(0)
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)
@@ -23,21 +18,17 @@ export function ProfileComponent(): JSX.Element {
   )
 
   useEffect(() => {
-    getFollowers()
-      .then((follower) => {
-        // todo: remove mockData
-        setFollowers(follower ?? mockDataUser.users)
-        setNumFollowers(follower?.length ?? mockDataUser.users.length)
+    getFollowersNum()
+      .then((num) => {
+        setNumFollowers(num ?? 0)
       })
       .catch((err) => {
         console.error(err)
       })
 
-    getFollowings()
-      .then((follower) => {
-        // todo: remove mockData
-        setFollowings(follower ?? mockDataUser.users)
-        setNumFollowings(follower?.length ?? mockDataUser.users.length)
+    getFollowingsNum()
+      .then((num) => {
+        setNumFollowings(num ?? 0)
       })
       .catch((err) => {
         console.error(err)
@@ -66,7 +57,7 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowers} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower {...followers} />}
+                    content={<Follower type='follower' />}
                     title='Follower'
                     trigger='click'
                   >
@@ -79,7 +70,7 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowings} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower {...followings} />}
+                    content={<Follower type='following' />}
                     title='Following'
                     trigger='click'
                   >

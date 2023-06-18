@@ -4,7 +4,7 @@ type User = BackendComponents['schemas']['UserDto']
 
 const backendUri: string = process.env.REACT_APP_BACKEND_URI ?? ''
 
-export async function getFollowers(): Promise<User[] | null> {
+export async function getFollowers(page: number): Promise<User[] | null> {
   return await getProfile()
     .then(async (profile) => {
       const accessToken = localStorage.getItem('access_token') ?? ''
@@ -21,11 +21,10 @@ export async function getFollowers(): Promise<User[] | null> {
       }
 
       return await request<any>(
-        `${backendUri}/users/${profile?.id}/follower?page=0&take=10`,
+        `${backendUri}/users/${profile?.id}/follower?page=${page}&take=10`,
         options,
       )
         .then((user) => {
-          console.log('user from Backend ', user)
           return user.data
         })
         .catch((error) => {
@@ -39,7 +38,7 @@ export async function getFollowers(): Promise<User[] | null> {
     })
 }
 
-export async function getFollowings(): Promise<User[] | null> {
+export async function getFollowings(page: number): Promise<User[] | null> {
   return await getProfile()
     .then(async (profile) => {
       const accessToken = localStorage.getItem('access_token') ?? ''
@@ -56,7 +55,7 @@ export async function getFollowings(): Promise<User[] | null> {
       }
 
       return await request<any>(
-        `${backendUri}/users/${profile?.id}/followings?page=0&take=10`,
+        `${backendUri}/users/${profile?.id}/followings?page=${page}&take=10`,
         options,
       )
         .then((user) => {
@@ -70,6 +69,74 @@ export async function getFollowings(): Promise<User[] | null> {
     .catch((err) => {
       console.error(err)
       return null
+    })
+}
+
+export async function getFollowersNum(): Promise<number> {
+  return await getProfile()
+    .then(async (profile) => {
+      const accessToken = localStorage.getItem('access_token') ?? ''
+
+      if (accessToken === '' || profile?.id == null) {
+        return 0
+      }
+
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }
+
+      return await request<any>(
+        `${backendUri}/users/${profile?.id}/follower?page=0&take=1`,
+        options,
+      )
+        .then((user) => {
+          return user.meta.itemCount
+        })
+        .catch((error) => {
+          console.error('Error in getFollowersNum:', error)
+          return 0
+        })
+    })
+    .catch((err) => {
+      console.error(err)
+      return 0
+    })
+}
+
+export async function getFollowingsNum(): Promise<number> {
+  return await getProfile()
+    .then(async (profile) => {
+      const accessToken = localStorage.getItem('access_token') ?? ''
+
+      if (accessToken === '' || profile?.id == null) {
+        return 0
+      }
+
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }
+
+      return await request<any>(
+        `${backendUri}/users/${profile?.id}/followings?page=0&take=1`,
+        options,
+      )
+        .then((user) => {
+          return user.meta.itemCount
+        })
+        .catch((error) => {
+          console.error('Error in getFollowingsNum:', error)
+          return 0
+        })
+    })
+    .catch((err) => {
+      console.error(err)
+      return 0
     })
 }
 

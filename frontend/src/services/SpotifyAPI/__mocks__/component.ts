@@ -2,6 +2,8 @@ import { type trackInterface } from '@pages/Feed/Post'
 import { type components } from '@data/spotify-types'
 
 type trackObject = components['schemas']['TrackObject']
+type PrivateUserObject = components['schemas']['PrivateUserObject']
+type PublicUserObject = components['schemas']['PublicUserObject']
 
 export async function getTrack(trackId: string): Promise<trackInterface> {
   const mockedResponse: trackInterface = {
@@ -240,4 +242,21 @@ export async function getRecentPlayedTracks(): Promise<trackObject[] | null> {
   ]
 
   return await Promise.resolve(mockedResponse)
+}
+
+export async function getProfile(): Promise<PrivateUserObject | null> {
+  return {
+    id: 'Test.Id',
+    display_name: 'Test Name',
+  }
+}
+
+export async function getUser(
+  userId: string,
+): Promise<PublicUserObject | null> {
+  return {
+    id: 'Test.Id',
+    display_name: 'Test Name',
+    images: [{ url: 'testUrl', height: 10, width: 10 }],
+  }
 }
