@@ -20,12 +20,13 @@ export async function getFollowers(): Promise<User[] | null> {
         },
       }
 
-      return await request<User[]>(
-        `${backendUri}/users/${profile?.id}/follower`,
+      return await request<any>(
+        `${backendUri}/users/${profile?.id}/follower?page=0&take=10`,
         options,
       )
         .then((user) => {
-          return user
+          console.log('user from Backend ', user)
+          return user.data
         })
         .catch((error) => {
           console.error('Error in getFollower:', error)
@@ -54,12 +55,12 @@ export async function getFollowings(): Promise<User[] | null> {
         },
       }
 
-      return await request<User[]>(
-        `${backendUri}/users/${profile?.id}/followings`,
+      return await request<any>(
+        `${backendUri}/users/${profile?.id}/followings?page=0&take=10`,
         options,
       )
         .then((user) => {
-          return user
+          return user.data
         })
         .catch((error) => {
           console.error('Error in getFollower:', error)
