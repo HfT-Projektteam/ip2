@@ -8,7 +8,7 @@ import { getFollowersNum, getFollowingsNum } from '@services/BackendAPI'
 
 const { Text } = Typography
 
-export function ProfileComponent(): JSX.Element {
+export function ProfileComponentPrivate(): JSX.Element {
   const [numPosts] = useState<number>(0)
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)
