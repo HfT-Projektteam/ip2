@@ -2,6 +2,7 @@ import { type components as BackendComponents } from '@data/openapi'
 type User = BackendComponents['schemas']['UserDto']
 
 export async function getFollowers(
+  spotifyId: string,
   type: string,
   page: number,
 ): Promise<User[] | null> {
@@ -21,10 +22,10 @@ export async function getFollowers(
   ]
 }
 
-export async function getFollowingsNum(): Promise<number> {
+export async function getFollowingsNum(spotifyId: string): Promise<number> {
   return 4
 }
 
-export async function getFollowersNum(): Promise<number> {
+export async function getFollowersNum(spotifyId: string): Promise<number> {
   return 4
 }

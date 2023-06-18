@@ -8,7 +8,7 @@ import { getFollowersNum, getFollowingsNum } from '@services/BackendAPI'
 
 const { Text } = Typography
 
-export function ProfileComponentPrivate(): JSX.Element {
+export function ProfileComponentPublic(): JSX.Element {
   const [numPosts] = useState<number>(0)
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)
@@ -16,9 +16,11 @@ export function ProfileComponentPrivate(): JSX.Element {
   const [url] = useState<string>(
     'https://ionicframework.com/docs/img/demos/avatar.svg',
   )
+  const urlParams = new URLSearchParams(window.location.search)
+  const [spotifyId, setSpotifyId] = useState(urlParams.get('spotifyId') ?? '')
 
   useEffect(() => {
-    getFollowersNum()
+    getFollowersNum(spotifyId)
       .then((num) => {
         setNumFollowers(num ?? 0)
       })
@@ -26,7 +28,7 @@ export function ProfileComponentPrivate(): JSX.Element {
         console.error(err)
       })
 
-    getFollowingsNum()
+    getFollowingsNum(spotifyId)
       .then((num) => {
         setNumFollowings(num ?? 0)
       })
@@ -34,6 +36,24 @@ export function ProfileComponentPrivate(): JSX.Element {
         console.error(err)
       })
   }, [])
+
+  useEffect(() => {
+    getFollowersNum(spotifyId)
+      .then((num) => {
+        setNumFollowers(num ?? 0)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+
+    getFollowingsNum(spotifyId)
+      .then((num) => {
+        setNumFollowings(num ?? 0)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }, [spotifyId])
 
   return (
     <>
@@ -57,7 +77,13 @@ export function ProfileComponentPrivate(): JSX.Element {
                   {numFollowers} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower type='follower' />}
+                    content={
+                      <Follower
+                        type='follower'
+                        spotify_id={spotifyId}
+                        setSpotifyId={setSpotifyId}
+                      />
+                    }
                     title='Follower'
                     trigger='click'
                   >
@@ -70,7 +96,13 @@ export function ProfileComponentPrivate(): JSX.Element {
                   {numFollowings} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower type='followings' />}
+                    content={
+                      <Follower
+                        type='followings'
+                        spotify_id={spotifyId}
+                        setSpotifyId={setSpotifyId}
+                      />
+                    }
                     title='Following'
                     trigger='click'
                   >

@@ -17,11 +17,16 @@ export function Follower(props: followerInterface): JSX.Element {
   let ranOnce = false
 
   useEffect(() => {
-    // dirty solution to prevent issues from useEffect triggered twice
     if (ranOnce) return
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ranOnce = true
-    loadMoreData()
-  }, [])
+
+    setUsers([]) // Clear existing user data
+    setFollowers([]) // Clear existing follower data
+    setFollowersPage(0) // Reset the page counter
+    setLoading(false) // Reset the loading state
+    loadMoreData(true)
+  }, [props.spotify_id, props.type])
 
   useEffect(() => {
     followers.forEach((follower) => {
@@ -36,13 +41,13 @@ export function Follower(props: followerInterface): JSX.Element {
     })
   }, [followers])
 
-  const loadMoreData = (): void => {
+  const loadMoreData = (initialPage: boolean): void => {
     if (loading) {
       return
     }
     setLoading(true)
 
-    getFollowers(props.type, followersPage)
+    getFollowers(props.spotify_id, props.type, initialPage ? 0 : followersPage)
       .then((follower) => {
         setFollowers(follower ?? [])
         setFollowersPage(followersPage + 1)
@@ -55,15 +60,17 @@ export function Follower(props: followerInterface): JSX.Element {
   }
 
   const onUserClick = (user: User): void => {
-    if (user.display_name === undefined || user.display_name === null) return
-    alert(`open user: + ${user.display_name}`)
+    if (user.id == null) return
+    props.setSpotifyId(user.id)
   }
 
   return (
     <>
       <InfiniteScroll
         dataLength={users.length}
-        next={loadMoreData}
+        next={() => {
+          loadMoreData(false)
+        }}
         hasMore={users.length < 0}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         // endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}

@@ -1,110 +1,90 @@
 import { type components as BackendComponents } from '@data/openapi'
-import { getProfile } from '@services/SpotifyAPI'
 type User = BackendComponents['schemas']['UserDto']
 
 const backendUri: string = process.env.REACT_APP_BACKEND_URI ?? ''
 
 export async function getFollowers(
+  spotifyId: string,
   type: string,
   page: number,
 ): Promise<User[] | null> {
-  return await getProfile()
-    .then(async (profile) => {
-      const accessToken = localStorage.getItem('access_token') ?? ''
+  const accessToken = localStorage.getItem('access_token') ?? ''
 
-      if (accessToken === '' || profile?.id == null) {
-        return null
-      }
+  if (accessToken === '' || spotifyId == null) {
+    return null
+  }
 
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
 
-      return await request<any>(
-        `${backendUri}/users/${profile?.id}/${type}?page=${page}&take=10`,
-        options,
-      )
-        .then((user) => {
-          return user.data
-        })
-        .catch((error) => {
-          console.error('Error in getFollower:', error)
-          return null
-        })
+  console.log(`${backendUri}/users/${spotifyId}/${type}?page=${page}&take=1`)
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/${type}?page=${page}&take=10`,
+    options,
+  )
+    .then((user) => {
+      return user.data
     })
-    .catch((err) => {
-      console.error(err)
+    .catch((error) => {
+      console.error('Error in getFollower:', error)
       return null
     })
 }
 
-export async function getFollowersNum(): Promise<number> {
-  return await getProfile()
-    .then(async (profile) => {
-      const accessToken = localStorage.getItem('access_token') ?? ''
+export async function getFollowersNum(spotifyId: string): Promise<number> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
 
-      if (accessToken === '' || profile?.id == null) {
-        return 0
-      }
+  if (accessToken === '' || spotifyId == null) {
+    return 0
+  }
 
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
 
-      return await request<any>(
-        `${backendUri}/users/${profile?.id}/follower?page=0&take=1`,
-        options,
-      )
-        .then((user) => {
-          return user.meta.itemCount
-        })
-        .catch((error) => {
-          console.error('Error in getFollowersNum:', error)
-          return 0
-        })
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/follower?page=0&take=1`,
+    options,
+  )
+    .then((user) => {
+      return user.meta.itemCount
     })
-    .catch((err) => {
-      console.error(err)
+    .catch((error) => {
+      console.error('Error in getFollowersNum:', error)
       return 0
     })
 }
 
-export async function getFollowingsNum(): Promise<number> {
-  return await getProfile()
-    .then(async (profile) => {
-      const accessToken = localStorage.getItem('access_token') ?? ''
+export async function getFollowingsNum(spotifyId: string): Promise<number> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
 
-      if (accessToken === '' || profile?.id == null) {
-        return 0
-      }
+  if (accessToken === '' || spotifyId == null) {
+    return 0
+  }
 
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
 
-      return await request<any>(
-        `${backendUri}/users/${profile?.id}/followings?page=0&take=1`,
-        options,
-      )
-        .then((user) => {
-          return user.meta.itemCount
-        })
-        .catch((error) => {
-          console.error('Error in getFollowingsNum:', error)
-          return 0
-        })
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/followings?page=0&take=1`,
+    options,
+  )
+    .then((user) => {
+      return user.meta.itemCount
     })
-    .catch((err) => {
-      console.error(err)
+    .catch((error) => {
+      console.error('Error in getFollowingsNum:', error)
       return 0
     })
 }
