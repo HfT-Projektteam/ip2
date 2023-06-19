@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable, Scope } from '@nestjs/common'
 import { User } from './entities/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -6,13 +6,20 @@ import { CircularDependencyException } from '@nestjs/core/errors/exceptions'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { UserDto } from './dto/user.dto'
 import { Pagination } from '../util/pagination/pagination'
+import { REQUEST } from '@nestjs/core'
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    @Inject(REQUEST) private readonly request: Request,
   ) {}
+  async signIn() {
+    return this.create({
+      spotify_uri: this.request['spotify_uri'],
+    })
+  }
 
   async create(createUserDto: UserDto): Promise<User> {
     const user = new User()

@@ -13,6 +13,7 @@ import Login from '@pages/Login'
 import ProtectedRoute from '@pages/Login/ProtectedRoute'
 import ScrollToTop from '@services/ScrollToTop'
 import { useTheme } from '@hooks/useTheme'
+import SearchPage from '@pages/Search'
 
 const { Content, Footer } = Layout
 
@@ -28,6 +29,7 @@ function App(): JSX.Element {
         <Route element={<AppLayoutRoute />}>
           <Route path='/feed' element={<Feed {...feed}></Feed>} />
           <Route path='/plus' element={<NewPost />} />
+          <Route path='/search' element={<SearchPage />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='*' element={'Route Not Found'} />
         </Route>

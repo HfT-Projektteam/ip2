@@ -7,9 +7,15 @@ export interface paths {
   '/': {
     get: operations['AppController_getHello']
   }
+  '/signIn': {
+    post: operations['AppController_signIn']
+  }
   '/users': {
     get: operations['UsersController_findAll']
     post: operations['UsersController_create']
+  }
+  '/users/{id}/search': {
+    get: operations['UsersController_searchMany']
   }
   '/users/{id}': {
     get: operations['UsersController_findOne']
@@ -25,6 +31,24 @@ export interface paths {
   '/users/{id}/followings': {
     get: operations['UsersController_getFollowings']
   }
+  '/users/{id}/posts': {
+    get: operations['UsersController_getPosts']
+  }
+  '/posts': {
+    get: operations['PostsController_findAll']
+    post: operations['PostsController_create']
+  }
+  '/posts/{id}': {
+    get: operations['PostsController_findOne']
+    delete: operations['PostsController_remove']
+    patch: operations['PostsController_update']
+  }
+  '/posts/{id}/like': {
+    put: operations['PostsController_like']
+  }
+  '/posts/{id}/dislike': {
+    put: operations['PostsController_dislike']
+  }
 }
 
 export type webhooks = Record<string, never>
@@ -35,6 +59,8 @@ export interface components {
       /** @description The URI of a spotify user, which used this service */
       spotify_uri: string
     }
+    CreatePostDto: Record<string, never>
+    UpdatePostDto: Record<string, never>
   }
   responses: never
   parameters: never
@@ -51,9 +77,14 @@ export interface operations {
       200: never
     }
   }
+  AppController_signIn: {
+    responses: {
+      201: never
+    }
+  }
   UsersController_findAll: {
     parameters: {
-      query: {
+      query?: {
         page?: number
         take?: number
       }
@@ -70,6 +101,20 @@ export interface operations {
     }
     responses: {
       201: never
+    }
+  }
+  UsersController_searchMany: {
+    parameters: {
+      query?: {
+        page?: number
+        take?: number
+      }
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
     }
   }
   UsersController_findOne: {
@@ -116,7 +161,7 @@ export interface operations {
   }
   UsersController_getFollower: {
     parameters: {
-      query: {
+      query?: {
         page?: number
         take?: number
       }
@@ -130,10 +175,85 @@ export interface operations {
   }
   UsersController_getFollowings: {
     parameters: {
-      query: {
+      query?: {
         page?: number
         take?: number
       }
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  UsersController_getPosts: {
+    responses: {
+      200: never
+    }
+  }
+  PostsController_findAll: {
+    responses: {
+      200: never
+    }
+  }
+  PostsController_create: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreatePostDto']
+      }
+    }
+    responses: {
+      201: never
+    }
+  }
+  PostsController_findOne: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  PostsController_remove: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  PostsController_update: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePostDto']
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  PostsController_like: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      200: never
+    }
+  }
+  PostsController_dislike: {
+    parameters: {
       path: {
         id: string
       }
