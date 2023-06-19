@@ -1,7 +1,7 @@
 import { Avatar, Button, Input, List } from 'antd'
 import { type components as BackendComponents } from '@data/openapi'
 import { type components as SpotifyComponents } from '@data/spotify-types'
-import { searchUsers } from '@services/BackendAPI'
+import { searchUsers, setFollower } from '@services/BackendAPI'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getUser } from '@services/SpotifyAPI'
@@ -11,6 +11,7 @@ type UserSpotify = SpotifyComponents['schemas']['PublicUserObject']
 const { Search } = Input
 
 export function SearchPage(): JSX.Element {
+  const currentUserId = localStorage.getItem('spotifyId')
   const [usersBackend, setUsersBackend] = useState<UserBackend[]>([])
   const [userSpotify, setUserSpotify] = useState<UserSpotify[]>([])
   const [spotifyId, setSpotifyId] = useState<string>('')
@@ -68,6 +69,12 @@ export function SearchPage(): JSX.Element {
     setUsersPage(usersPage + 1)
   }
 
+  const onFollowClick = async (user: UserSpotify): Promise<void> => {
+    if (user.id == null) return
+    if (currentUserId == null || currentUserId === '') return
+    await setFollower(currentUserId, user.id)
+  }
+
   return (
     <>
       <Search
@@ -96,7 +103,14 @@ export function SearchPage(): JSX.Element {
                 avatar={<Avatar src={user?.images?.at(0)?.url} />}
                 title={`${user?.display_name ?? 'No name'}`}
               />
-              <Button type='primary'>Follow</Button>
+              <Button
+                type='primary'
+                onClick={() => {
+                  void onFollowClick(user)
+                }}
+              >
+                Follow
+              </Button>
             </List.Item>
           )}
         />

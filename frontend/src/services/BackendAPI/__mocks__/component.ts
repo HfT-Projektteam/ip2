@@ -49,3 +49,8 @@ export async function searchUsers(
     },
   ]
 }
+
+export async function setFollower(
+  spotifyIdCurrent: string,
+  spotifyIdFollowing: string,
+): Promise<void> {}

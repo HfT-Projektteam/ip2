@@ -34,6 +34,39 @@ export async function getFollowers(
     })
 }
 
+export async function setFollower(
+  spotifyIdCurrent: string,
+  spotifyIdFollowing: string,
+): Promise<void> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (
+    accessToken === '' ||
+    spotifyIdCurrent == null ||
+    spotifyIdCurrent === '' ||
+    spotifyIdFollowing == null ||
+    spotifyIdFollowing === ''
+  ) {
+    return
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  await request<any>(
+    `${backendUri}/users/${spotifyIdCurrent}/followings/${spotifyIdFollowing}`,
+    options,
+  )
+    .then((user) => {})
+    .catch((error) => {
+      console.error('Error in getFollowersNum:', error)
+    })
+}
+
 export async function getFollowersNum(spotifyId: string): Promise<number> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
