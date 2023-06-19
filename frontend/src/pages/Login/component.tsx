@@ -4,6 +4,7 @@ import { Button, Col, Image, Row, Typography } from 'antd'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Logo_RGB_Black.png'
+import { setCurrentUser } from '@services/Functions'
 
 const { Title } = Typography
 
@@ -18,6 +19,7 @@ export function Login(): JSX.Element {
       .then(() => {
         const token = window.localStorage.getItem('access_token') ?? ''
         setLoginToken(token)
+        void setCurrentUser()
         if (token !== '') navigate('/feed')
       })
       .catch(() => {

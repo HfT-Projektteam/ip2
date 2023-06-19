@@ -34,6 +34,39 @@ export async function getFollowers(
     })
 }
 
+export async function setFollower(
+  spotifyIdCurrent: string,
+  spotifyIdFollowing: string,
+): Promise<void> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (
+    accessToken === '' ||
+    spotifyIdCurrent == null ||
+    spotifyIdCurrent === '' ||
+    spotifyIdFollowing == null ||
+    spotifyIdFollowing === ''
+  ) {
+    return
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  await request<any>(
+    `${backendUri}/users/${spotifyIdCurrent}/followings/${spotifyIdFollowing}`,
+    options,
+  )
+    .then((user) => {})
+    .catch((error) => {
+      console.error('Error in getFollowersNum:', error)
+    })
+}
+
 export async function getFollowersNum(spotifyId: string): Promise<number> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
@@ -85,6 +118,36 @@ export async function getFollowingsNum(spotifyId: string): Promise<number> {
     .catch((error) => {
       console.error('Error in getFollowingsNum:', error)
       return 0
+    })
+}
+
+export async function searchUsers(
+  spotifyId: string,
+  page: number,
+): Promise<User[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || spotifyId == null) {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/search?page=${page}&take=10`,
+    options,
+  )
+    .then((user) => {
+      return user.data
+    })
+    .catch((error) => {
+      console.error('Error in searchUsers:', error)
+      return null
     })
 }
 
