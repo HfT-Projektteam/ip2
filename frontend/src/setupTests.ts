@@ -4,6 +4,9 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 
+const noop = (): any => {}
+Object.defineProperty(window, 'scrollTo', { value: noop, writable: true })
+
 beforeAll(() => {
   /* I have no fucking clue why but this fixed the error in NavBar/.test.ts:
   TypeError: Cannot read properties of undefined (reading 'addListener') 
