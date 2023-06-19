@@ -250,7 +250,7 @@ describe('Follower Stuff', () => {
       .get('/users/test2/followings')
       .query({ page: 0, take: 10 })
       .expect((res) => {
-        // TODO
+        expect(res.body.data[0].spotify_uri).toMatch('test1')
       })
   })
 
