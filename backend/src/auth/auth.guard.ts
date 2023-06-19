@@ -1,3 +1,5 @@
+// noinspection ExceptionCaughtLocallyJS
+
 import {
   CanActivate,
   ExecutionContext,
@@ -21,14 +23,12 @@ export class AuthGuard implements CanActivate {
       return true
     }
 
-    if (!token) {
-      throw new UnauthorizedException()
-    }
+    if (!token) throw new UnauthorizedException()
+
     try {
       const uri = await this.authService.getURIfromAccessCode(token)
-      if (uri == undefined) {
-        throw new UnauthorizedException()
-      }
+      if (uri == undefined) throw new UnauthorizedException()
+
       request['spotify_uri'] = uri
     } catch {
       throw new UnauthorizedException()
