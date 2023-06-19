@@ -338,7 +338,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       },
       "get": {
         "operationId": "PostsController_findAll",
@@ -347,7 +350,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       }
     },
     "/posts/{id}": {
@@ -367,7 +373,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       },
       "patch": {
         "operationId": "PostsController_update",
@@ -395,7 +404,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       },
       "delete": {
         "operationId": "PostsController_remove",
@@ -413,29 +425,56 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       }
     },
     "/posts/{id}/like": {
       "put": {
         "operationId": "PostsController_like",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       }
     },
     "/posts/{id}/dislike": {
       "put": {
         "operationId": "PostsController_dislike",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "posts"
+        ]
       }
     }
   },
