@@ -34,7 +34,8 @@
     "max-len": ["warn", { "code": 80 }],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "no-dupe-keys": "error"
+    "no-dupe-keys": "error",
+    "no-console": "warn"
     // "react/jsx-key": "off"
   }
 }
