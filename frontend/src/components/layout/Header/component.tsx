@@ -24,12 +24,12 @@ import spotify_logo from '@assets/Spotify_Icon_RGB_Black.png'
 const { Text } = Typography
 
 const FeedHeader = (): JSX.Element => {
-  const handleChange = (value: string): void => {
-    // POST API / Filter Feed
+  const handleGenreChange = (value: string): void => {
+    // GET API / Filter Feed by Genre
   }
 
   const handleFeedChange = (value: string): void => {
-    // POST API / Change Feed
+    // GET API / Change Feed
   }
 
   // ToDo: Fetch Endpoint, which Genres are available
@@ -40,7 +40,7 @@ const FeedHeader = (): JSX.Element => {
           allowClear
           placeholder={'Genre'}
           style={{ width: 120 }}
-          onChange={handleChange}
+          onChange={handleGenreChange}
           options={[
             { value: 'genre1', label: 'Rap' },
             { value: 'genre2', label: 'Indie' },
