@@ -5,6 +5,7 @@ import mockDataFeed from '@data/mockdata/feed.json'
 import { type feedInterface } from '@pages/Feed/interface'
 import Follower from '@Components/ui/Follower'
 import { getFollowersNum, getFollowingsNum } from '@services/BackendAPI'
+import { getProfile, getUser } from '@services/SpotifyAPI'
 
 const { Text } = Typography
 
@@ -13,12 +14,44 @@ export function ProfileComponent(): JSX.Element {
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)
   const [feed] = useState<feedInterface>(mockDataFeed)
-  const [url] = useState<string>(
+  const [profileUrl, setProfileUrl] = useState<string>(
     'https://ionicframework.com/docs/img/demos/avatar.svg',
   )
+  const [profileName, setProfileName] = useState<string>('user')
+
+  const [spotifyId, setSpotifyId] = useState('')
 
   useEffect(() => {
-    getFollowersNum()
+    getProfile()
+      .then((profile) => {
+        if (profile?.id === undefined) return
+
+        if (spotifyId === '') setSpotifyId(profile?.id)
+        setProfileUrl(
+          profile.images?.at(0)?.url ??
+            'https://ionicframework.com/docs/img/demos/avatar.svg',
+        )
+      })
+      .then(() => {
+        getUser(spotifyId)
+          .then((user) => {
+            if (user == null) return
+            setProfileName(user.display_name ?? '')
+            setProfileUrl(
+              user.images?.at(0)?.url ??
+                'https://ionicframework.com/docs/img/demos/avatar.svg',
+            )
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      })
+
+      .catch((err) => {
+        console.error(err)
+      })
+
+    getFollowersNum(spotifyId)
       .then((num) => {
         setNumFollowers(num ?? 0)
       })
@@ -26,14 +59,14 @@ export function ProfileComponent(): JSX.Element {
         console.error(err)
       })
 
-    getFollowingsNum()
+    getFollowingsNum(spotifyId)
       .then((num) => {
         setNumFollowings(num ?? 0)
       })
       .catch((err) => {
         console.error(err)
       })
-  }, [])
+  }, [spotifyId])
 
   return (
     <>
@@ -42,7 +75,7 @@ export function ProfileComponent(): JSX.Element {
           <Col flex={2}>
             <Avatar
               size={{ xs: 100, sm: 100, md: 100, lg: 120, xl: 120, xxl: 120 }}
-              src={<img src={url} alt='avatar' />}
+              src={<img src={profileUrl} alt='avatar' />}
             />
           </Col>
           <Col flex={3}>
@@ -57,7 +90,13 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowers} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower type='follower' />}
+                    content={
+                      <Follower
+                        type='follower'
+                        spotify_id={spotifyId}
+                        setSpotifyId={setSpotifyId}
+                      />
+                    }
                     title='Follower'
                     trigger='click'
                   >
@@ -70,7 +109,13 @@ export function ProfileComponent(): JSX.Element {
                   {numFollowings} <br />
                   <Popover
                     placement='bottom'
-                    content={<Follower type='followings' />}
+                    content={
+                      <Follower
+                        type='followings'
+                        spotify_id={spotifyId}
+                        setSpotifyId={setSpotifyId}
+                      />
+                    }
                     title='Following'
                     trigger='click'
                   >
@@ -81,6 +126,7 @@ export function ProfileComponent(): JSX.Element {
             </Row>
           </Col>
         </Row>
+        <Text strong>{profileName}</Text>
       </Space>
       <Divider />
       <Feed {...feed}></Feed>
