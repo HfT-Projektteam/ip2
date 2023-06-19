@@ -13,6 +13,7 @@ import NewPost from '@pages/NewPost'
 import Login from '@pages/Login'
 import useAuth from '@hooks/useAuth'
 import ProtectedRoute from '@pages/Login/ProtectedRoute'
+import ScrollToTop from '@services/ScrollToTop'
 
 const { Content, Footer } = Layout
 const { configThemeDefault, configThemeDark } = themesConfig
@@ -23,6 +24,7 @@ function App(): JSX.Element {
 
   return (
     <ConfigProvider theme={theme}>
+      <ScrollToTop />
       <Routes>
         <Route path='/' element={<Login />} />
         <Route element={<AppLayoutRoute theme={theme} setTheme={setTheme} />}>
