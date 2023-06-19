@@ -31,6 +31,7 @@ export function SearchPage(): JSX.Element {
   }, [usersBackend])
 
   useEffect(() => {
+    if (usersPage === 0) return
     searchUsers(spotifyId, usersPage)
       .then((user) => {
         if (user == null) return
@@ -46,6 +47,7 @@ export function SearchPage(): JSX.Element {
   const onSearch = async (value: string): Promise<void> => {
     setUserSpotify([])
     setSpotifyId(value)
+    setUsersPage(0)
     searchUsers(value, 0)
       .then((user) => {
         if (user == null) return
