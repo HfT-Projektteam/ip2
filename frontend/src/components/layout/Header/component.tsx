@@ -64,16 +64,17 @@ const FeedHeader = (): JSX.Element => {
   )
 }
 
+// If you remove Text, adapt the Tests ! Maybe like Post with a data-tedId
 const PostHeader = (): JSX.Element => {
-  return <>Post</>
+  return <Text data-testid={'post-header'}>Post</Text>
 }
 
 const SearchHeader = (): JSX.Element => {
-  return <>Search</>
+  return <Text>Search</Text>
 }
 
 const ProfileHeader = (): JSX.Element => {
-  return <>Profile</>
+  return <Text>Profile</Text>
 }
 
 const headersContent: Array<{ path: string; node: JSX.Element }> = [
@@ -93,6 +94,7 @@ const ModalContainer = ({ children }: any): JSX.Element => {
   return (
     <>
       <Button
+        data-testid='modal-button'
         type='primary'
         shape='circle'
         icon={<EllipsisOutlined rev={undefined} />}
