@@ -6,6 +6,7 @@ import GlobalStyle from 'assets/global'
 import styled from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import AuthProvider from '@context/AuthProvider'
+import ThemeProvider from '@context/ThemeProvider'
 
 const MobileWrapper = styled.div`
   @media (min-width: 768px) {
@@ -27,7 +28,9 @@ root.render(
       <MobileContainer>
         <BrowserRouter>
           <AuthProvider>
-            <App />
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
           </AuthProvider>
         </BrowserRouter>
       </MobileContainer>

@@ -1,9 +1,13 @@
-import { theme as antdTheme } from 'antd'
+import { type ThemeConfig, theme as antdTheme } from 'antd'
 import defaultTheme from '@data/Style'
+export interface ThemeConfigCollection {
+  configThemeDefault: ThemeConfig
+  configThemeDark: ThemeConfig
+}
 
 const { colors } = defaultTheme
 
-const configThemeDefault = {
+const configThemeDefault: ThemeConfig = {
   token: {
     colorPrimary: colors.mutedKhakiColorPalette.khakiDark,
   },
@@ -15,7 +19,7 @@ const configThemeDefault = {
   },
 }
 
-const configThemeDark = {
+const configThemeDark: ThemeConfig = {
   token: {
     colorPrimary: colors.mutedKhakiColorPalette.khakiDark,
   },
@@ -27,6 +31,9 @@ const configThemeDark = {
   },
 }
 
-const themesConfig = { configThemeDefault, configThemeDark }
+const themesConfig: ThemeConfigCollection = {
+  configThemeDefault,
+  configThemeDark,
+}
 
 export default themesConfig

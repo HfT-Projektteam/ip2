@@ -1,5 +1,41 @@
+import useAuth from '@hooks/useAuth'
+import { useTheme } from '@hooks/useTheme'
+import { Button } from 'antd'
+import { useLocation } from 'react-router-dom'
+
 export const Header = (): JSX.Element => {
-  return <>Header</>
+  const location = useLocation()
+
+  return (
+    <>
+      <p>{'Header'}</p>
+      <br />
+      <>{location.pathname}</>
+      <Settings />
+    </>
+  )
+}
+
+const Settings = (): JSX.Element => {
+  const { changeTheme } = useTheme()
+  const { handleLogout } = useAuth()
+
+  return (
+    <>
+      <Button
+        type='primary'
+        size='large'
+        onClick={() => {
+          changeTheme()
+        }}
+      >
+        Switch Theme
+      </Button>
+      <Button type='primary' onClick={handleLogout}>
+        Logout
+      </Button>
+    </>
+  )
 }
 
 /**
