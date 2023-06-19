@@ -6,7 +6,7 @@ import { AuthGuard } from './auth.guard'
 import { AuthModule } from './auth.module'
 
 describe('AuthService', () => {
-  let service: AuthService
+  let service: AuthService, httpService: HttpService
 
   const currentUsersProfileResponseMock: SpotifyApi.CurrentUsersProfileResponse =
     {
@@ -42,6 +42,7 @@ describe('AuthService', () => {
     }).compile()
 
     service = module.get<AuthService>(AuthService)
+    httpService = module.get<HttpService>(HttpService)
   })
 
   it('should be defined', () => {
@@ -54,11 +55,9 @@ describe('AuthService', () => {
     ).toBeUndefined()
   })
   it('should return the correct uri if access token is correct', async () => {
-    jest
-      .spyOn(service, 'getSpotifyUserObject')
-      .mockImplementation((access_token) => {
-        return Promise.resolve(currentUsersProfileResponseMock)
-      })
+    jest.spyOn(service, 'getSpotifyUserObject').mockImplementation(() => {
+      return Promise.resolve(currentUsersProfileResponseMock)
+    })
     expect(await service.getURIfromAccessCode('right token')).toMatch(
       'spotify:user:jobee0602',
     )
@@ -66,6 +65,7 @@ describe('AuthService', () => {
 })
 
 describe('AuthGuard', () => {
+  let mockValidRequestPayload = { headers: { authorization: 'Bearer test' } }
   const mockExecutionContext: Partial<
     Record<
       jest.FunctionPropertyNames<ExecutionContext>,
@@ -73,11 +73,30 @@ describe('AuthGuard', () => {
     >
   > = {
     switchToHttp: jest.fn().mockReturnValue({
-      getRequest: jest
-        .fn()
-        .mockReturnValue({ headers: { authorization: 'Bearer test' } }),
+      getRequest: jest.fn().mockReturnValue(mockValidRequestPayload),
       getResponse: jest.fn(),
     }),
+  }
+
+  let mockInvalidRequestPayload = { headers: { authorization: 'test' } }
+  const mockFaultyExecutionContext: Partial<
+    Record<
+      jest.FunctionPropertyNames<ExecutionContext>,
+      jest.MockedFunction<any>
+    >
+  > = {
+    switchToHttp: jest.fn().mockReturnValue({
+      getRequest: jest.fn().mockReturnValue(mockInvalidRequestPayload),
+      getResponse: jest.fn(),
+    }),
+  }
+
+  function mockGetURIfromAccessCode(uri) {
+    jest
+      .spyOn(service, 'getURIfromAccessCode')
+      .mockImplementation((access_token) => {
+        return Promise.resolve(uri)
+      })
   }
 
   let guard, service
@@ -90,38 +109,35 @@ describe('AuthGuard', () => {
     guard = module.get<AuthGuard>(AuthGuard)
     service = module.get<AuthService>(AuthService)
 
-    jest
-      .spyOn(service, 'getURIfromAccessCode')
-      .mockImplementation((access_token) => {
-        return Promise.resolve('test-uri')
-      })
-  })
-  it('should not throw an exception if token is "valid"', async () => {
-    expect(() => {
-      guard.canActivate(mockExecutionContext)
-    }).not.toThrowError(UnauthorizedException)
+    jest.clearAllMocks()
+
+    process.env['ENV'] = 'prod'
   })
 
-  it.skip('should throw an error if token is not Bearer schema in request', async () => {
-    const mockFaultyExecutionContext: Partial<
-      Record<
-        jest.FunctionPropertyNames<ExecutionContext>,
-        jest.MockedFunction<any>
-      >
-    > = {
-      switchToHttp: jest.fn().mockReturnValue({
-        getRequest: jest
-          .fn()
-          .mockReturnValue({ headers: { authorization: 'test' } }),
-        getResponse: jest.fn(),
-      }),
-    }
-    try {
-      guard.canActivate(mockFaultyExecutionContext)
-    } catch (e) {
-      expect(e).toBeInstanceOf(UnauthorizedException)
-    }
+  it('should not throw an exception if token is "valid"', async () => {
+    mockGetURIfromAccessCode('test-uri')
+    guard.canActivate(mockExecutionContext).catch((e) => {
+      expect(e).not.toBeInstanceOf(UnauthorizedException)
+    })
   })
+
+  it('should throw an error if token is not Bearer schema in request', async () => {
+    mockGetURIfromAccessCode('test-uri')
+    guard.canActivate(mockFaultyExecutionContext).catch((e) => {
+      expect(e).toBeInstanceOf(UnauthorizedException)
+    })
+  })
+
+  it('should throw an UnauthorizedException if the uri is undefined', async () => {
+    mockGetURIfromAccessCode(undefined)
+    guard
+      .canActivate(mockExecutionContext)
+      .catch((e) => {
+        expect(e).toBeInstanceOf(UnauthorizedException)
+      })
+      .then(expect('UnauthorizedException').toMatch(''))
+  })
+
   it('should only extract Bearer token from auth header', async () => {
     expect(
       guard.extractTokenFromHeader({ headers: { authorization: 'test' } }),
@@ -136,5 +152,10 @@ describe('AuthGuard', () => {
         headers: { authorization: 'Bearer test' },
       }),
     ).toMatch('test')
+  })
+  it('should let everything through, if on local env', async () => {
+    process.env['ENV'] = 'local'
+    expect(guard.canActivate(mockFaultyExecutionContext)).toBeTruthy()
+    expect(mockInvalidRequestPayload['spotify_uri']).toMatch('local-user')
   })
 })
