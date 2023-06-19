@@ -1,5 +1,12 @@
-import { Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
+import { Post } from '../../posts/entities/post.entity'
 
 @Entity()
 export class User {
@@ -7,7 +14,7 @@ export class User {
     description: 'The URI of a spotify user, which used this service',
   })
   @PrimaryColumn()
-  spotify_uri: string;
+  spotify_uri: string
 
   @ApiProperty({ type: () => [User] })
   @ManyToMany((type) => User, (user: User) => user.spotify_uri)
@@ -16,9 +23,19 @@ export class User {
     joinColumn: { name: 'follower' },
     inverseJoinColumn: { name: 'following' },
   })
-  following: User[];
+  following: User[]
 
+  @OneToMany(() => Post, (post) => post.creator)
+  posts: Post[]
   constructor(spotify_uri?: string) {
-    this.spotify_uri = spotify_uri;
+    this.spotify_uri = spotify_uri
   }
+
+  @ManyToMany(() => Post)
+  @JoinTable()
+  likes: Post[]
+
+  @ManyToMany(() => Post)
+  @JoinTable()
+  dislikes: Post[]
 }

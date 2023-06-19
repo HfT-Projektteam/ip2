@@ -10,6 +10,9 @@ import { AuthGuard } from './auth/auth.guard'
 import { APP_GUARD } from '@nestjs/core'
 import { ConfigModule } from '@nestjs/config'
 import configOptions from './config/config'
+import { PostsModule } from './posts/posts.module'
+import { Post } from './posts/entities/post.entity'
+import { User } from './users/entities/user.entity'
 
 @Module({
   imports: [
@@ -21,11 +24,12 @@ import configOptions from './config/config'
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_SCHEMA,
-      autoLoadEntities: true,
+      entities: [User, Post],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
+    PostsModule,
   ],
   controllers: [AppController, UsersController],
   providers: [
