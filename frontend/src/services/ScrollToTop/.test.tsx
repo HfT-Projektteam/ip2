@@ -4,6 +4,7 @@ import { act } from 'react-dom/test-utils'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 
+window.scrollTo = jest.fn()
 describe('ScrollToTop', () => {
   it('Should be called with scrollTo(0,0)', () => {
     jest.spyOn(window, 'scrollTo')
