@@ -9,7 +9,7 @@ import { getProfile, getUser } from '@services/SpotifyAPI'
 
 const { Text } = Typography
 
-export function ProfileComponentPublic(): JSX.Element {
+export function ProfileComponent(): JSX.Element {
   const [numPosts] = useState<number>(0)
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)

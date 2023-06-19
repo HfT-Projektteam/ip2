@@ -1,12 +1,12 @@
 import { act, render, screen } from '@testing-library/react'
-import { ProfileComponentPublic } from './component'
+import { ProfileComponent } from './component'
 
 jest.mock('@services/SpotifyAPI')
 jest.mock('@services/BackendAPI')
 
 describe('ProfileComponent', () => {
   it('should render ProfileComponent correctly', async () => {
-    act(() => render(<ProfileComponentPublic />))
+    act(() => render(<ProfileComponent />))
 
     await act(async () => {
       // Wait for the update in Post to complete

@@ -1,9 +1,9 @@
-import ProfileComponentPublic from '@Components/ui/ProfileComponentPublic'
+import ProfileComponent from '@Components/ui/ProfileComponent'
 
 export function Profile(): JSX.Element {
   return (
     <>
-      <ProfileComponentPublic />
+      <ProfileComponent />
     </>
   )
 }
