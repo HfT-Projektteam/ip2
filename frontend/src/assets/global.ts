@@ -10,5 +10,9 @@ const GlobalStyle = createGlobalStyle`
        font-family: 'Open Sans', sans-serif; 
    }
    
+   body::-webkit-scrollbar{
+    display: none;
+  }
+   
 `
 export default GlobalStyle
