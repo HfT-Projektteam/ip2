@@ -1,4 +1,4 @@
-export const buttonTheme = {
+const buttonTheme = {
   widths: {
     width50: '50%',
     width100: '100%',
@@ -7,7 +7,7 @@ export const buttonTheme = {
   colors: {},
 }
 
-export const mutedKhakiColorPalette = {
+const mutedKhakiColorPalette = {
   grey: '#e2e2e2',
   khakiLight: '#e2ded0',
   khakiDark: '#c8c09e',
@@ -15,11 +15,16 @@ export const mutedKhakiColorPalette = {
   red: '#d88d71',
 }
 
+const typography = {
+  primaryBlack: '#333333',
+}
+
 const defaultTheme = {
   colors: {
     primary100: '#fffff',
     primary200: '#fff00',
     mutedKhakiColorPalette,
+    typography,
   },
   button: { buttonTheme },
 }

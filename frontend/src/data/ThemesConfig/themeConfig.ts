@@ -13,8 +13,14 @@ const configThemeDefault: ThemeConfig = {
   },
   algorithm: antdTheme.defaultAlgorithm,
   components: {
-    Button: {
-      colorPrimary: colors.mutedKhakiColorPalette.green,
+    Button: { colorPrimary: colors.mutedKhakiColorPalette.green },
+    Switch: {
+      colorTextTertiary: colors.mutedKhakiColorPalette.red,
+      colorTextQuaternary: colors.mutedKhakiColorPalette.green,
+    },
+    Typography: {
+      colorLink: colors.typography.primaryBlack,
+      colorLinkHover: colors.typography.primaryBlack,
     },
   },
 }
@@ -25,8 +31,14 @@ const configThemeDark: ThemeConfig = {
   },
   algorithm: antdTheme.darkAlgorithm,
   components: {
-    Button: {
+    Button: { colorPrimary: colors.mutedKhakiColorPalette.red },
+    Switch: {
       colorPrimary: colors.mutedKhakiColorPalette.red,
+      colorPrimaryHover: colors.mutedKhakiColorPalette.green,
+    },
+    Typography: {
+      colorLink: colors.mutedKhakiColorPalette.red,
+      colorLinkHover: colors.mutedKhakiColorPalette.khakiDark,
     },
   },
 }

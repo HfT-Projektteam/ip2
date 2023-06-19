@@ -4,10 +4,11 @@ import {
   type postInterface,
 } from '@pages/Feed/Post/interface'
 import { addSongToPlaylist, getTrack } from '@services/SpotifyAPI'
-import { Button, Card } from 'antd'
+import { Button, Card, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 
 const { Meta } = Card
+const { Link } = Typography
 
 export function Post(props: postInterface): JSX.Element {
   const [post, setPost] = useState<trackInterface>()
@@ -41,19 +42,19 @@ export function Post(props: postInterface): JSX.Element {
     >
       <Meta
         title={
-          <a href={'spotify:track:' + String(props.spotifyId ?? '')}>
+          <Link href={'spotify:track:' + String(props.spotifyId ?? '')}>
             {post?.title}
-          </a>
+          </Link>
         }
         description={
           <>
-            <a href={'spotify:album:' + String(post?.albumId ?? '')}>
+            <Link href={'spotify:album:' + String(post?.albumId ?? '')}>
               {post?.album}
-            </a>
+            </Link>
             <br />
-            <a href={'spotify:artist:' + String(post?.artistId ?? '')}>
+            <Link href={'spotify:artist:' + String(post?.artistId ?? '')}>
               {post?.artist}
-            </a>
+            </Link>
           </>
         }
       />
