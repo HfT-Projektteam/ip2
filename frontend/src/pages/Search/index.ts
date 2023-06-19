@@ -1,3 +1,3 @@
-import { Search } from './component'
+import { SearchPage } from './component'
 
-export default Search
+export default SearchPage
