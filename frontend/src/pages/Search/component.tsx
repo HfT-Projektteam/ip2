@@ -14,7 +14,7 @@ export function SearchPage(): JSX.Element {
   const currentUserId = localStorage.getItem('spotifyId')
   const [usersBackend, setUsersBackend] = useState<UserBackend[]>([])
   const [userSpotify, setUserSpotify] = useState<UserSpotify[]>([])
-  const [spotifyId, setSpotifyId] = useState<string>('')
+  const [searchInput, setSearchInput] = useState<string>('')
   const [usersPage, setUsersPage] = useState<number>(0)
   const [loading, setLoading] = useState(false)
 
@@ -33,7 +33,7 @@ export function SearchPage(): JSX.Element {
 
   useEffect(() => {
     if (usersPage === 0) return
-    searchUsers(spotifyId, usersPage)
+    searchUsers(searchInput, usersPage)
       .then((user) => {
         if (user == null) return
         setUsersBackend(user)
@@ -47,7 +47,7 @@ export function SearchPage(): JSX.Element {
 
   const onSearch = async (value: string): Promise<void> => {
     setUserSpotify([])
-    setSpotifyId(value)
+    setSearchInput(value)
     setUsersPage(0)
     searchUsers(value, 0)
       .then((user) => {
@@ -62,7 +62,7 @@ export function SearchPage(): JSX.Element {
   }
 
   const loadMoreData = (): void => {
-    if (loading || spotifyId === '') {
+    if (loading || searchInput === '') {
       return
     }
     setLoading(true)
