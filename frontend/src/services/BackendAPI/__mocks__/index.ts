@@ -1,3 +1,8 @@
-import { getFollowers, getFollowingsNum, getFollowersNum } from './component'
+import {
+  getFollowers,
+  getFollowingsNum,
+  getFollowersNum,
+  searchUsers,
+} from './component'
 
-export { getFollowers, getFollowingsNum, getFollowersNum }
+export { getFollowers, getFollowingsNum, getFollowersNum, searchUsers }
