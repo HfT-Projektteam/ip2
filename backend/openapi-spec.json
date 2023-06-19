@@ -12,6 +12,17 @@
         }
       }
     },
+    "/signIn": {
+      "post": {
+        "operationId": "AppController_signIn",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "operationId": "UsersController_create",

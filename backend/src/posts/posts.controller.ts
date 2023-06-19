@@ -8,6 +8,8 @@ import {
   Delete,
   Put,
   Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common'
 import { PostsService } from './posts.service'
 import { CreatePostDto } from './dto/create-post.dto'
@@ -17,6 +19,7 @@ import { ApiTags } from '@nestjs/swagger'
 
 @ApiTags('posts')
 @Controller('posts')
+@UseInterceptors(ClassSerializerInterceptor)
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

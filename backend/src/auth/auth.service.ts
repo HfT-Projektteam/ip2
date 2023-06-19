@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable, Scope } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class AuthService {
   constructor(
-    // private usersService: UsersService,
-    private readonly httpService: HttpService,
+    private readonly httpService: HttpService, // private usersService: UsersService,
   ) {}
 
   async getURIfromAccessCode(access_token) {
