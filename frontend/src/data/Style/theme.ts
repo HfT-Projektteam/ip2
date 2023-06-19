@@ -19,12 +19,18 @@ const typography = {
   primaryBlack: '#333333',
 }
 
+const header = {
+  backgorundLight: '#c8c09e',
+  backgroundDark: '#60694e',
+}
+
 const defaultTheme = {
   colors: {
     primary100: '#fffff',
     primary200: '#fff00',
     mutedKhakiColorPalette,
     typography,
+    header,
   },
   button: { buttonTheme },
 }

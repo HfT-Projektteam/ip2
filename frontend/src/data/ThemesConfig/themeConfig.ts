@@ -22,6 +22,7 @@ const configThemeDefault: ThemeConfig = {
       colorLink: colors.typography.primaryBlack,
       colorLinkHover: colors.typography.primaryBlack,
     },
+    Layout: { colorBgHeader: colors.header.backgorundLight },
   },
 }
 
@@ -40,6 +41,7 @@ const configThemeDark: ThemeConfig = {
       colorLink: colors.mutedKhakiColorPalette.red,
       colorLinkHover: colors.mutedKhakiColorPalette.khakiDark,
     },
+    Layout: { colorBgHeader: colors.header.backgroundDark },
   },
 }
 

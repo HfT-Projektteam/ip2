@@ -1,6 +1,6 @@
 import Feed from '@pages/Feed'
 import mockData from '@data/mockdata/feed.json'
-import { ConfigProvider, Layout, Row } from 'antd'
+import { ConfigProvider, Layout } from 'antd'
 import { useEffect, useState } from 'react'
 import Header from '@Components/layout/Header'
 import { type feedInterface } from '@pages/Feed/interface'
@@ -52,17 +52,18 @@ export function AppLayoutRoute(): JSX.Element {
   return (
     <ProtectedRoute>
       <Layout>
-        <Row
+        <Layout.Header
           style={{
             position: 'fixed',
             top: '0',
-            padding: '10px',
             width: `${containerWidth}`,
             height: '60px',
+            lineHeight: '60px',
+            zIndex: 1,
           }}
         >
           <Header />
-        </Row>
+        </Layout.Header>
 
         <Content style={{ paddingBottom: '60px', paddingTop: '60px' }}>
           <Outlet />
