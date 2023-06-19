@@ -16,8 +16,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
 
-
-@ApiTags('user')
+@ApiTags('users')
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
@@ -34,14 +33,18 @@ export class UsersController {
     return this.usersService.findAll(pageOptionsDto)
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.usersService.findOne(id)
+  @Get(':id/search')
+  @UseInterceptors(PageMetaInterceptor)
+  async searchMany(
+    @Param('id') id: string,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ) {
+    return this.usersService.searchMany(id, pageOptionsDto)
   }
 
-  @Get('search')
-  searchMany(@Query() query: string) {
-    // TODO
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id)
   }
 
   // @Patch(':id')

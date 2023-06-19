@@ -32,7 +32,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       },
       "get": {
@@ -66,7 +66,51 @@
           }
         },
         "tags": [
-          "user"
+          "users"
+        ]
+      }
+    },
+    "/users/{id}/search": {
+      "get": {
+        "operationId": "UsersController_searchMany",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
         ]
       }
     },
@@ -89,7 +133,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       },
       "delete": {
@@ -110,21 +154,7 @@
           }
         },
         "tags": [
-          "user"
-        ]
-      }
-    },
-    "/users/search": {
-      "get": {
-        "operationId": "UsersController_searchMany",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "user"
+          "users"
         ]
       }
     },
@@ -155,7 +185,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       },
       "get": {
@@ -184,7 +214,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       }
     },
@@ -228,7 +258,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       }
     },
@@ -272,7 +302,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       }
     },
@@ -286,7 +316,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       }
     }

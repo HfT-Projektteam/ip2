@@ -120,9 +120,31 @@ describe('Pagination', () => {
       .send()
       .expect(200)
       .expect((res) => {
-        console.log(res.body)
         expect(res.body.meta.next).toMatch('/users?page=1&take=10')
         expect(res.body.meta.self).toMatch('/users?page=0&take=10')
+      })
+  })
+
+  it('should find a user by search query', async () => {
+    await request(app.getHttpServer())
+      .get('/users/ise1/search')
+      .query({ page: 0, take: 10 })
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.data).toMatchObject([
+          { spotify_uri: 'raise1' },
+          { spotify_uri: 'raise10' },
+          { spotify_uri: 'raise11' },
+          { spotify_uri: 'raise12' },
+          { spotify_uri: 'raise13' },
+          { spotify_uri: 'raise14' },
+          { spotify_uri: 'raise15' },
+          { spotify_uri: 'raise16' },
+          { spotify_uri: 'raise17' },
+          { spotify_uri: 'raise18' },
+        ])
+        expect(res.body.meta.itemCount).toBe(11)
       })
   })
 
