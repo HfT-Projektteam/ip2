@@ -32,6 +32,19 @@ export class UsersService {
     })
   }
 
+  async searchMany(nameQuery: string, pageOpt: PageOptionsDto) {
+    const query = Pagination.pageQueryBuilder(
+      this.userRepo
+        .createQueryBuilder('users')
+        .where('users.spotify_uri like :uri', { uri: `%${nameQuery}%` }),
+      pageOpt,
+    )
+
+    return query.getManyAndCount().then((res) => {
+      return new Page(res[0], res[1], pageOpt)
+    })
+  }
+
   async findOne(spotify_uri: string): Promise<User> {
     return await this.userRepo.findOneByOrFail({ spotify_uri: spotify_uri })
   }
