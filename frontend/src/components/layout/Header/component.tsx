@@ -6,11 +6,16 @@ import {
 } from '@ant-design/icons'
 import useAuth from '@hooks/useAuth'
 import { useTheme } from '@hooks/useTheme'
-import { Button, Col, Modal, Row, Space, Switch, Typography } from 'antd'
+import { Button, Col, Modal, Row, Space, Switch, Typography, Image } from 'antd'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import spotify_logo from '@assets/Spotify_Icon_RGB_Black.png'
 
 const { Text } = Typography
+
+const FeedHeader = (): JSX.Element => {
+  return <>Feed</>
+}
 
 const PostHeader = (): JSX.Element => {
   return <>Post</>
@@ -20,14 +25,15 @@ const SearchHeader = (): JSX.Element => {
   return <>Search</>
 }
 
-const FeedHeader = (): JSX.Element => {
-  return <>Feed</>
+const ProfileHeader = (): JSX.Element => {
+  return <>Profile</>
 }
 
 const headersContent: Array<{ path: string; node: JSX.Element }> = [
   { path: 'feed', node: <FeedHeader /> },
   { path: 'search', node: <SearchHeader /> },
-  { path: 'post', node: <PostHeader /> },
+  { path: 'plus', node: <PostHeader /> },
+  { path: 'profile', node: <ProfileHeader /> },
 ]
 
 const ModalContainer = ({ children }: any): JSX.Element => {
@@ -77,7 +83,15 @@ export const Header = (): JSX.Element => {
   const { handleLogout } = useAuth()
 
   return (
-    <Row>
+    <Row style={{ padding: '0 1em' }}>
+      <Col style={{ marginRight: '1em' }} flex={'30px'}>
+        <Image
+          src={spotify_logo}
+          alt={spotify_logo}
+          preview={false}
+          width={'100%'}
+        />
+      </Col>
       <Col flex={'auto'}>{HeaderContent}</Col>
       <Col flex={'0'}>
         <ModalContainer>

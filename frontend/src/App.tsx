@@ -59,6 +59,7 @@ export function AppLayoutRoute(): JSX.Element {
             width: `${containerWidth}`,
             height: '60px',
             lineHeight: '60px',
+            padding: 0,
             zIndex: 1,
           }}
         >
