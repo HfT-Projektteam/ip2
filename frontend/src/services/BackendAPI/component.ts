@@ -1,5 +1,6 @@
 import { type components as BackendComponents } from '@data/openapi'
 type User = BackendComponents['schemas']['UserDto']
+type GetPost = BackendComponents['schemas']['GetPostDto']
 
 const backendUri: string = process.env.REACT_APP_BACKEND_URI ?? ''
 
@@ -147,6 +148,41 @@ export async function searchUsers(
     })
     .catch((error) => {
       console.error('Error in searchUsers:', error)
+      return null
+    })
+}
+
+export async function getPosts(
+  genre: string = '',
+  followerFeed: boolean,
+  sort: string = 'newest',
+  page: number = 0,
+  take: number = 10,
+): Promise<GetPost[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/posts/?genre=${genre}&followerFeed=${String(
+      followerFeed,
+    )}&sort=${sort}&page=${page}&take=${take}`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPosts:', error)
       return null
     })
 }
