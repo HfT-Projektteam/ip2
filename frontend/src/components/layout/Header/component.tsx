@@ -20,35 +20,46 @@ import {
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Icon_RGB_Black.png'
-import {
-  type feedInterface,
-  type HandleFeedChange,
-} from '@pages/Feed/interface'
+import { type HandleFeedChange } from '@pages/Feed/interface'
+import { getPosts } from '@services/BackendAPI/component'
 
 const { Text } = Typography
 
 const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
-  const handleGenreChange = (value: string): void => {
-    const a: feedInterface = { posts: [{ id: 'a', spotifyId: '' }] }
-    handleFeedChange(a)
-    // GET API / Filter Feed by Genre
+  const [currentGenre, setCurrentGenre] = useState('')
+
+  const handleGenreChange = async (genre: string): Promise<void> => {
+    const allPosts = await getPosts(genre, true)
+    if (allPosts === null) return
+
+    const newFeed = allPosts?.map((post) => {
+      return { id: post.uuid, spotifyId: post.songId }
+    })
+    setCurrentGenre(genre)
+    handleFeedChange({ posts: newFeed })
   }
 
-  const handleSortingChange = (value: string): void => {
-    const a: feedInterface = { posts: [{ id: 'a', spotifyId: '' }] }
-    handleFeedChange(a)
-    // GET API / Change Feed
+  const handleSortingChange = async (sortValue: string): Promise<void> => {
+    const allPosts = await getPosts(currentGenre, true, sortValue)
+    if (allPosts === null) return
+    const newFeed = allPosts?.map((post) => {
+      return { id: post.uuid, spotifyId: post.songId }
+    })
+
+    handleFeedChange({ posts: newFeed })
   }
 
-  // ToDo: Fetch Endpoint, which Genres are available
   return (
     <>
+      {currentGenre}
       <Col>
         <Select
           allowClear
           placeholder={'Genre'}
           style={{ width: 120 }}
-          onChange={handleGenreChange}
+          onChange={(value) => {
+            void handleGenreChange(value)
+          }}
           options={[
             { value: 'genre1', label: 'Rap' },
             { value: 'genre2', label: 'Indie' },
@@ -62,7 +73,7 @@ const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
           allowClear
           placeholder={'Sort'}
           style={{ width: 120 }}
-          onChange={handleSortingChange}
+          onChange={() => handleSortingChange}
           options={[
             { value: 'liked', label: 'Liked' },
             { value: 'disliked', label: 'Disliked' },

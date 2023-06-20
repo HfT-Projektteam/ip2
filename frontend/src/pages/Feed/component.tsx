@@ -2,40 +2,45 @@
 
 import { Post } from '@pages/Feed/Post'
 import { type HandleFeedChange, type feedInterface } from './interface'
-import { useEffect } from 'react'
-
-// ToDo: Fetch Database
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-/* const [feedItems, setFeedItems] = useState(() => {
-  const localValue = localStorage.getItem('ITEMS')
-  if (localValue == null) return []
-
-  return JSON.parse(localValue)
-})
-
-useEffect(() => {
-  localStorage.setItem('ITEMS', JSON.stringify(feedItems))
-}, [feedItems])
-*/
+import { useEffect, useState } from 'react'
+import { getPosts } from '@services/BackendAPI/component'
+import { Button } from 'antd'
 
 interface FeedProps {
   feed: feedInterface
   handleFeedChange: HandleFeedChange['handleFeedChange']
 }
 
-const a: feedInterface = {
-  posts: [
-    { id: 'a', spotifyId: '' },
-    { id: 'b', spotifyId: '' },
-  ],
-}
-
 export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
+  const [isPrivateFeed, setIsPrivateFeed] = useState(true)
+  const [pagination, setPagination] = useState(0)
+
+  const switchFeed = (): void => {
+    setIsPrivateFeed(!isPrivateFeed)
+  }
+
   useEffect(() => {
-    handleFeedChange(a)
-  }, [])
+    void (async () => {
+      const allPosts = await getPosts('', isPrivateFeed, undefined, pagination)
+      if (allPosts === null) return
+
+      const newFeed = allPosts?.map((post) => {
+        return { id: post.uuid, spotifyId: post.songId }
+      })
+
+      handleFeedChange({ posts: newFeed })
+    })()
+  }, [handleFeedChange, pagination, isPrivateFeed])
   return (
     <>
+      <Button
+        onClick={() => {
+          setPagination(pagination + 1)
+        }}
+      >
+        Fetch next 10
+      </Button>
+      <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
       {feed.posts.map((post) => (
         <Post key={post.id} {...post}></Post>
       ))}
