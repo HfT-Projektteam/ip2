@@ -34,6 +34,17 @@ export interface paths {
   '/users/{id}/posts': {
     get: operations['UsersController_getPosts']
   }
+  '/posts/{id}/like': {
+    get: operations['PostsController_getLike']
+    put: operations['PostsController_like']
+  }
+  '/posts/{id}/dislike': {
+    get: operations['PostsController_getDislike']
+    put: operations['PostsController_dislike']
+  }
+  '/posts/genre': {
+    get: operations['PostsController_getTopGenre']
+  }
   '/posts': {
     get: operations['PostsController_findAll']
     post: operations['PostsController_create']
@@ -42,12 +53,6 @@ export interface paths {
     get: operations['PostsController_findOne']
     delete: operations['PostsController_remove']
     patch: operations['PostsController_update']
-  }
-  '/posts/{id}/like': {
-    put: operations['PostsController_like']
-  }
-  '/posts/{id}/dislike': {
-    put: operations['PostsController_dislike']
   }
 }
 
@@ -59,8 +64,14 @@ export interface components {
       /** @description The URI of a spotify user, which used this service */
       spotify_uri: string
     }
-    CreatePostDto: Record<string, never>
-    UpdatePostDto: Record<string, never>
+    CreatePostDto: {
+      song_id: string
+      description: string
+      genre: string
+    }
+    UpdatePostDto: {
+      description: string
+    }
   }
   responses: never
   parameters: never
@@ -192,7 +203,68 @@ export interface operations {
       200: never
     }
   }
+  PostsController_getLike: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      /** @description Returns true if the post is liked by the user, false if not */
+      default: never
+    }
+  }
+  PostsController_like: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      /** @description Returns true if the post was liked, false if the like was removed */
+      default: never
+    }
+  }
+  PostsController_getDislike: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      /** @description Returns true if the post is disliked by the user, false if not */
+      default: never
+    }
+  }
+  PostsController_dislike: {
+    parameters: {
+      path: {
+        id: string
+      }
+    }
+    responses: {
+      /** @description Returns true if the post was disliked, false if the dislike was removed */
+      default: never
+    }
+  }
+  PostsController_getTopGenre: {
+    responses: {
+      200: never
+    }
+  }
   PostsController_findAll: {
+    parameters: {
+      query?: {
+        /** @description comma seperated list of genres */
+        genre?: string
+        /** @description want to show only posts by users the requesting user follows? */
+        followerFeed?: boolean
+        /** @description comma seperated list of genres */
+        sort?: 'likes' | 'dislikes' | 'newest' | 'oldest'
+        page?: number
+        take?: number
+      }
+    }
     responses: {
       200: never
     }
@@ -236,26 +308,6 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdatePostDto']
-      }
-    }
-    responses: {
-      200: never
-    }
-  }
-  PostsController_like: {
-    parameters: {
-      path: {
-        id: string
-      }
-    }
-    responses: {
-      200: never
-    }
-  }
-  PostsController_dislike: {
-    parameters: {
-      path: {
-        id: string
       }
     }
     responses: {
