@@ -538,8 +538,15 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPostDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -644,6 +651,48 @@
           "song_id",
           "description",
           "genre"
+        ]
+      },
+      "GetPostDto": {
+        "type": "object",
+        "properties": {
+          "songId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserDto"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "uploaded": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Time uploaded in ISO 8601",
+            "example": "2023-06-19T17:42:46.358Z"
+          },
+          "likes": {
+            "type": "number"
+          },
+          "dislikes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "songId",
+          "description",
+          "genre",
+          "creator",
+          "uuid",
+          "uploaded",
+          "likes",
+          "dislikes"
         ]
       },
       "UpdatePostDto": {
