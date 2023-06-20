@@ -59,7 +59,7 @@ export class PostsController {
   }
   @Get('/genre')
   getTopGenre() {
-    //TODO hier top 5 genre zurück geben
+    return this.postsService.getTop5Genre()
   }
 
   //CRUD Operations

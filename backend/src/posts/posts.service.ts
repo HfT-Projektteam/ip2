@@ -1,4 +1,9 @@
-import { Inject, Injectable, Scope } from '@nestjs/common'
+import {
+  Inject,
+  Injectable,
+  Scope,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -45,8 +50,14 @@ export class PostsService {
     return this.postRepo.findOneByOrFail({ uuid: id })
   }
 
-  update(id: string, updatePostDto: UpdatePostDto) {
-    // TODO can only do if post creator
+  async update(id: string, updatePostDto: UpdatePostDto) {
+    await this.postRepo
+      .findOneOrFail({ where: { uuid: id }, relations: { creator: true } })
+      .then((post) => {
+        if (this.request['spotify_uri'] != post.creator.spotify_uri)
+          throw new UnauthorizedException('Only post creators can edit them')
+      })
+
     return this.postRepo
       .createQueryBuilder('post')
       .update(Post)
@@ -158,6 +169,18 @@ export class PostsService {
       .then((post) => {
         console.log(post)
         return post != undefined
+      })
+  }
+
+  getTop5Genre(): Promise<string[]> {
+    return this.postRepo
+      .query(
+        'Select genre FROM post GROUP BY genre ORDER BY Count(genre) DESC LIMIT 5',
+      )
+      .then((result) => {
+        return result.map((genre) => {
+          return genre.genre
+        })
       })
   }
 }
