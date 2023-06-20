@@ -70,7 +70,11 @@ export function ProfileComponent(): JSX.Element {
 
   return (
     <>
-      <Space direction='vertical' size='middle' style={{ display: 'flex' }}>
+      <Space
+        direction='vertical'
+        size='middle'
+        style={{ display: 'flex', padding: '10px' }}
+      >
         <Row justify='space-around' align='middle'>
           <Col flex={2}>
             <Avatar
