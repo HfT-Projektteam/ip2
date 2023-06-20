@@ -18,6 +18,7 @@ import { PostFilterQuery } from './entities/post-query.entity'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { PageOptionsDto } from '../util/pagination/page.dto'
 import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
+import { GetPostDto } from './dto/get-post.dto'
 
 @ApiTags('posts')
 @Controller('posts')
@@ -75,8 +76,11 @@ export class PostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(id)
+  @ApiResponse({ type: GetPostDto })
+  findOne(@Param('id') id: string): Promise<GetPostDto> {
+    return this.postsService.findOne(id).then((post) => {
+      return new GetPostDto(post)
+    })
   }
 
   // Maybe to update comment description
