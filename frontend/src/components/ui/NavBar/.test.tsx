@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react'
 import NavBar from '@Components/ui/NavBar'
-import { BrowserRouter, MemoryRouter, Route, Router } from 'react-router-dom'
+import { BrowserRouter, Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 
 describe('NavBar', () => {

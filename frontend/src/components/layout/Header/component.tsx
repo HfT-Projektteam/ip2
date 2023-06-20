@@ -28,8 +28,8 @@ const FeedHeader = (): JSX.Element => {
     // GET API / Filter Feed by Genre
   }
 
-  const handleFeedChange = (value: string): void => {
-    // GET API / Change Feed
+  const handleSort = (value: string): void => {
+    // GET API / Sort Feed
   }
 
   // ToDo: Fetch Endpoint, which Genres are available
@@ -51,12 +51,15 @@ const FeedHeader = (): JSX.Element => {
       </Col>
       <Col>
         <Select
-          defaultValue={'friends'}
-          style={{ width: 90 }}
-          onChange={handleFeedChange}
+          allowClear
+          placeholder={'Sort'}
+          style={{ width: 120 }}
+          onChange={handleSort}
           options={[
-            { value: 'friends', label: 'Friends' },
-            { value: 'global', label: 'Global' },
+            { value: 'liked', label: 'Liked' },
+            { value: 'disliked', label: 'Disliked' },
+            { value: 'newest', label: 'Newest' },
+            { value: 'oldest', label: 'Oldest' },
           ]}
         />
       </Col>
@@ -66,15 +69,27 @@ const FeedHeader = (): JSX.Element => {
 
 // If you remove Text, adapt the Tests ! Maybe like Post with a data-tedId
 const PostHeader = (): JSX.Element => {
-  return <Text data-testid={'post-header'}>Post</Text>
+  return (
+    <Col>
+      <Text data-testid={'post-header'}>Post</Text>
+    </Col>
+  )
 }
 
 const SearchHeader = (): JSX.Element => {
-  return <Text>Search</Text>
+  return (
+    <Col>
+      <Text>Search</Text>
+    </Col>
+  )
 }
 
 const ProfileHeader = (): JSX.Element => {
-  return <Text>Profile</Text>
+  return (
+    <Col>
+      <Text>Profile</Text>
+    </Col>
+  )
 }
 
 const headersContent: Array<{ path: string; node: JSX.Element }> = [
@@ -103,9 +118,6 @@ const ModalContainer = ({ children }: any): JSX.Element => {
       <Modal
         title='Settings'
         open={open}
-        onOk={() => {
-          setOpen(false)
-        }}
         onCancel={() => {
           setOpen(false)
         }}

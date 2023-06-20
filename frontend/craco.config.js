@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 const path = require('path')
 const CracoAlias = require('craco-alias')
