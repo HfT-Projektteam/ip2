@@ -70,10 +70,26 @@ export class PostsService {
         .of(this.request['spotify_uri'])
         .add(id)
     } catch (e) {
-      if (e.detail.includes('already exists')) return false
+      if (e.detail.includes('already exists')) {
+        //Case: User already liked
+        await this.userRepo
+          .createQueryBuilder('user')
+          .relation(User, 'likes')
+          .of(this.request['spotify_uri'])
+          .remove(id)
+        return this.postRepo
+          .createQueryBuilder('post')
+          .update(Post)
+          .where('uuid = :uuid', { uuid: id })
+          .set({ likes: () => 'likes - 1' })
+          .execute()
+          .then(() => {
+            return false
+          })
+      }
     }
 
-    this.postRepo
+    return this.postRepo
       .createQueryBuilder('post')
       .update(Post)
       .where('uuid = :uuid', { uuid: id })
@@ -84,5 +100,64 @@ export class PostsService {
       })
   }
 
-  dislike(id: string) {}
+  async dislike(id: string) {
+    try {
+      await this.userRepo
+        .createQueryBuilder('user')
+        .relation(User, 'dislikes')
+        .of(this.request['spotify_uri'])
+        .add(id)
+    } catch (e) {
+      if (e.detail.includes('already exists')) {
+        //Case: User already disliked
+        await this.userRepo
+          .createQueryBuilder('user')
+          .relation(User, 'dislikes')
+          .of(this.request['spotify_uri'])
+          .remove(id)
+        return this.postRepo
+          .createQueryBuilder('post')
+          .update(Post)
+          .where('uuid = :uuid', { uuid: id })
+          .set({ dislikes: () => 'dislikes - 1' })
+          .execute()
+          .then(() => {
+            return false
+          })
+      }
+    }
+
+    return this.postRepo
+      .createQueryBuilder('post')
+      .update(Post)
+      .where('uuid = :uuid', { uuid: id })
+      .set({ likes: () => 'dislikes + 1' })
+      .execute()
+      .then(() => {
+        return true
+      })
+  }
+
+  getLike(id: string) {
+    return this.userRepo
+      .createQueryBuilder('user')
+      .relation(User, 'likes')
+      .of(this.request['spotify_uri'])
+      .loadOne()
+      .then((post) => {
+        return post != undefined
+      })
+  }
+
+  getDislike(id: string) {
+    return this.userRepo
+      .createQueryBuilder('user')
+      .relation(User, 'dislikes')
+      .of(this.request['spotify_uri'])
+      .loadOne()
+      .then((post) => {
+        console.log(post)
+        return post != undefined
+      })
+  }
 }

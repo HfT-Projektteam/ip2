@@ -25,6 +25,44 @@ import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  //Likes
+  @ApiResponse({
+    description:
+      'Returns true if the post was liked, false if the like was removed',
+  })
+  @Put(':id/like')
+  like(@Param('id') id: string) {
+    return this.postsService.like(id)
+  }
+  @ApiResponse({
+    description: 'Returns true if the post is liked by the user, false if not',
+  })
+  @Get(':id/like')
+  getLike(@Param('id') id: string) {
+    return this.postsService.getLike(id)
+  }
+  @ApiResponse({
+    description:
+      'Returns true if the post was disliked, false if the dislike was removed',
+  })
+  @Put(':id/dislike')
+  dislike(@Param('id') id: string) {
+    return this.postsService.dislike(id)
+  }
+  @ApiResponse({
+    description:
+      'Returns true if the post is disliked by the user, false if not',
+  })
+  @Get(':id/dislike')
+  getDislike(@Param('id') id: string) {
+    return this.postsService.getDislike(id)
+  }
+  @Get('/genre')
+  getTopGenre() {
+    //TODO hier top 5 genre zurück geben
+  }
+
+  //CRUD Operations
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
     return this.postsService.create(createPostDto)
@@ -50,29 +88,5 @@ export class PostsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(id)
-  }
-
-  //Likes
-  @ApiResponse({
-    description: 'Returns true if the post was liked successfully ',
-  })
-  @Put(':id/like')
-  like(@Param('id') id: string) {
-    return this.postsService.like(id)
-  }
-  @Get(':id/like')
-  getLike(@Param('id') id: string) {
-    //return this.postsService.like(id)
-  }
-  @ApiResponse({
-    description: 'Returns true if the post was disliked successfully ',
-  })
-  @Put(':id/dislike')
-  dislike(@Param('id') id: string) {
-    return this.postsService.dislike(id)
-  }
-  @Get('/genre')
-  getTopGenre() {
-    //TODO hier top 5 genre zurück geben
   }
 }
