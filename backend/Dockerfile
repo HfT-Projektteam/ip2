@@ -1,5 +1,5 @@
 # Building layer
-FROM node:18.15.0-alpine as development
+FROM node:18.15.0-alpine as deployment
 
 WORKDIR /app
 
@@ -7,33 +7,20 @@ WORKDIR /app
 COPY tsconfig*.json ./
 COPY package.json ./
 COPY yarn.lock ./
-
-# Install dependencies
-RUN yarn install
-
-# Copy application sources (.ts, .tsx, js)
 COPY src/ src/
 
-# Build application (produces dist/ folder)
+# Install dependencies
+RUN npm i -g @nestjs/cli
+RUN yarn install --devDependencies
+
 RUN yarn build
 
-# Runtime (production) layer
-FROM node:18.15.0-alpine as production
-
-WORKDIR /app
-
-# Copy dependencies files
-COPY package.json ./
-COPY yarn.lock ./
-
-# Install runtime dependecies (without dev/test dependecies)
-RUN yarn install --dev
-
-# Copy production build
-COPY --from=development /app/dist/ ./dist/
+COPY src/config/.env src/config/.env.prod dist/config/
 
 # Expose application port
 EXPOSE 3000
+
+RUN ls -alh ./dist/config
 
 # Start application
 CMD [ "node", "dist/main.js" ]
