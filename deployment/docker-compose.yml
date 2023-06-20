@@ -3,14 +3,32 @@ version: "3"
 networks:
   proxy_friendify:
     external: true
+  backend:
 
 services:
   frontend:
-    image: ghcr.io/hft-projektteam/friendify_frontend:sha-5eeab6f
+    image: ghcr.io/hft-projektteam/friendify_frontend:latest
     networks:
       - proxy_friendify
 
   backend:
-    image: ghcr.io/hft-projektteam/friendify_backend:sha-5eeab6f
+    image: ghcr.io/hft-projektteam/friendify_backend:latest
     networks:
       - proxy_friendify
+      - backend
+
+  database:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=friendify
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - backend
+volumes:
+  db:
+    driver: local
+
