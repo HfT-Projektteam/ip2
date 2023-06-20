@@ -69,6 +69,21 @@ export interface components {
       description: string
       genre: string
     }
+    GetPostDto: {
+      songId: string
+      description: string
+      genre: string
+      creator: components['schemas']['UserDto']
+      uuid: string
+      /**
+       * Format: date-time
+       * @description Time uploaded in ISO 8601
+       * @example 2023-06-19T17:42:46.358Z
+       */
+      uploaded: string
+      likes: number
+      dislikes: number
+    }
     UpdatePostDto: {
       description: string
     }
@@ -286,7 +301,11 @@ export interface operations {
       }
     }
     responses: {
-      200: never
+      default: {
+        content: {
+          'application/json': components['schemas']['GetPostDto']
+        }
+      }
     }
   }
   PostsController_remove: {
