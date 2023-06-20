@@ -6,8 +6,9 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=friendify
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
       - ./data.sql:/docker-entrypoint-initdb.d/create_tables.sql
