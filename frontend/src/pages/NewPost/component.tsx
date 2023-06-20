@@ -3,7 +3,7 @@ import {
   searchSong,
   searchSongByLink,
 } from '@services/SpotifyAPI'
-import { Input, Space, Avatar, List, Button, Col } from 'antd'
+import { Input, Space, Avatar, List, Button, Col, theme } from 'antd'
 import { useEffect, useState } from 'react'
 import { type components } from '@data/spotify-types'
 import TextArea from 'antd/es/input/TextArea'
@@ -11,6 +11,7 @@ import useWindowDimensions from '@hooks/useWindowDimensions'
 
 const { Search } = Input
 type trackObject = components['schemas']['TrackObject']
+const { useToken } = theme
 
 export function NewPost(): JSX.Element {
   const [songs, setSongs] = useState<trackObject[]>([])
@@ -78,13 +79,15 @@ export function NewPost(): JSX.Element {
     width <= 768 ? setContainerWidth('100%') : setContainerWidth('500px')
   }, [width])
 
+  const { token } = useToken()
+
   return (
     <>
       <span
         style={{
           position: 'fixed',
           width: `${containerWidth}`,
-          background: '#f5f5f5',
+          background: `${token.colorBgLayout}`,
           height: '42px',
           zIndex: 2,
           marginBottom: '10px',
@@ -124,7 +127,13 @@ export function NewPost(): JSX.Element {
             )}
           />
         ) : (
-          ''
+          <span
+            style={{
+              minHeight: '80vh',
+              width: `${containerWidth}`,
+              background: `${token.colorBgLayout}`,
+            }}
+          />
         )}
 
         {songs.length === 1 ? (
