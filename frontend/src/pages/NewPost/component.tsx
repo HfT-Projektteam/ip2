@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { type components } from '@data/spotify-types'
 import TextArea from 'antd/es/input/TextArea'
 import useWindowDimensions from '@hooks/useWindowDimensions'
+import ScrollToTop from '@services/ScrollToTop'
 
 const { Search } = Input
 type trackObject = components['schemas']['TrackObject']
@@ -138,6 +139,7 @@ export function NewPost(): JSX.Element {
 
         {songs.length === 1 ? (
           <>
+            <ScrollToTop />
             <TextArea
               rows={4}
               placeholder='Say something'

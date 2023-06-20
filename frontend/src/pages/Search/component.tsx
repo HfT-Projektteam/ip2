@@ -121,7 +121,11 @@ export function SearchPage(): JSX.Element {
         scrollableTarget='scrollableDiv'
       >
         <List
-          style={{ minHeight: '80vh' }}
+          style={{
+            paddingTop: '32px',
+            paddingBottom: '50px',
+            minHeight: '80vh',
+          }}
           key='follower.list'
           itemLayout='horizontal'
           dataSource={userSpotify}
