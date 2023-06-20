@@ -25,7 +25,7 @@ export class User {
   })
   following: User[]
 
-  @OneToMany(() => Post, (post) => post.creator)
+  @OneToMany(() => Post, (post) => post.creator, { cascade: ['remove'] })
   posts: Post[]
   constructor(spotify_uri?: string) {
     this.spotify_uri = spotify_uri
