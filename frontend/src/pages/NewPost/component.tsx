@@ -105,7 +105,7 @@ export function NewPost(): JSX.Element {
 
         {songs.length > 0 ? (
           <List
-            style={{ paddingTop: '32px' }}
+            style={{ paddingTop: '32px', paddingBottom: '50px' }}
             key='search.list'
             itemLayout='horizontal'
             dataSource={songs}
