@@ -1,5 +1,6 @@
 import { type components as BackendComponents } from '@data/openapi'
 type User = BackendComponents['schemas']['UserDto']
+type GetPost = BackendComponents['schemas']['GetPostDto']
 
 const backendUri: string = process.env.REACT_APP_BACKEND_URI ?? ''
 
@@ -157,7 +158,7 @@ export async function getPosts(
   sort: string = 'newest',
   page: number = 0,
   take: number = 10,
-): Promise<any[] | null> {
+): Promise<GetPost[] | null> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
   if (accessToken === '') {

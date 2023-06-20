@@ -4,6 +4,7 @@ import {
   getFollowersNum,
   searchUsers,
   setFollower,
+  getPosts,
 } from './component'
 
 export {
@@ -12,4 +13,5 @@ export {
   getFollowersNum,
   searchUsers,
   setFollower,
+  getPosts,
 }
