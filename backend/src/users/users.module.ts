@@ -5,8 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { User } from './entities/user.entity'
 import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter'
 import { APP_FILTER } from '@nestjs/core'
-import { AuthService } from '../auth/auth.service'
-import { HttpService } from '@nestjs/axios'
 import { AuthModule } from '../auth/auth.module'
 
 @Module({

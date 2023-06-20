@@ -356,7 +356,62 @@
       },
       "get": {
         "operationId": "PostsController_findAll",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "genre",
+            "required": false,
+            "in": "query",
+            "description": "comma seperated list of genres",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "followerFeed",
+            "required": false,
+            "in": "query",
+            "description": "want to show only posts by users the requesting user follows?",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "comma seperated list of genres",
+            "schema": {
+              "enum": [
+                "likes",
+                "dislikes",
+                "newest",
+                "oldest"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -456,6 +511,27 @@
           }
         ],
         "responses": {
+          "default": {
+            "description": "Returns true if the post was liked successfully "
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      },
+      "get": {
+        "operationId": "PostsController_getLike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
           "200": {
             "description": ""
           }
@@ -478,6 +554,20 @@
             }
           }
         ],
+        "responses": {
+          "default": {
+            "description": "Returns true if the post was disliked successfully "
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/posts/genre": {
+      "get": {
+        "operationId": "PostsController_getTopGenre",
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""

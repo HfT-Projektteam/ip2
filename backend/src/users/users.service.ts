@@ -7,6 +7,7 @@ import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { UserDto } from './dto/user.dto'
 import { Pagination } from '../util/pagination/pagination'
 import { REQUEST } from '@nestjs/core'
+import { PostFilterQuery } from '../posts/entities/post-query.entity'
 
 @Injectable({ scope: Scope.REQUEST })
 export class UsersService {
@@ -53,7 +54,7 @@ export class UsersService {
   }
 
   async findOne(spotify_uri: string): Promise<User> {
-    return await this.userRepo.findOneByOrFail({ spotify_uri: spotify_uri })
+    return this.userRepo.findOneByOrFail({ spotify_uri: spotify_uri })
   }
 
   async remove(spotify_uri: string) {

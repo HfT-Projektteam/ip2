@@ -14,8 +14,10 @@ import {
 import { PostsService } from './posts.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
-import { PostQuery } from './entities/post-query.entity'
-import { ApiTags } from '@nestjs/swagger'
+import { PostFilterQuery } from './entities/post-query.entity'
+import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import { PageOptionsDto } from '../util/pagination/page.dto'
+import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
 
 @ApiTags('posts')
 @Controller('posts')
@@ -29,33 +31,48 @@ export class PostsController {
   }
 
   @Get()
-  findAll(@Query() query: PostQuery) {
-    return this.postsService.findAll()
+  @UseInterceptors(PageMetaInterceptor)
+  findAll(@Query() query: PostFilterQuery, @Query() pageOpts: PageOptionsDto) {
+    return this.postsService.findAll(pageOpts, query)
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id)
+    return this.postsService.findOne(id)
   }
 
   // Maybe to update comment description
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto)
+    return this.postsService.update(id, updatePostDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.postsService.remove(+id)
+    return this.postsService.remove(id)
   }
 
   //Likes
+  @ApiResponse({
+    description: 'Returns true if the post was liked successfully ',
+  })
   @Put(':id/like')
   like(@Param('id') id: string) {
-    // TODO Hier auch entscheiden, ob like hinzugefügt wird oder nicht
+    return this.postsService.like(id)
   }
+  @Get(':id/like')
+  getLike(@Param('id') id: string) {
+    //return this.postsService.like(id)
+  }
+  @ApiResponse({
+    description: 'Returns true if the post was disliked successfully ',
+  })
   @Put(':id/dislike')
   dislike(@Param('id') id: string) {
-    // TODO Hier auch entscheiden, ob like hinzugefügt wird oder nicht
+    return this.postsService.dislike(id)
+  }
+  @Get('/genre')
+  getTopGenre() {
+    //TODO hier top 5 genre zurück geben
   }
 }
