@@ -151,6 +151,41 @@ export async function searchUsers(
     })
 }
 
+export async function getPosts(
+  genre: string = '',
+  followerFeed: boolean,
+  sort: string = 'newest',
+  page: number = 0,
+  take: number = 10,
+): Promise<any[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/posts/?genre=${genre}&followerFeed=${String(
+      followerFeed,
+    )}&sort=${sort}&page=${page}&take=${take}`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPosts:', error)
+      return null
+    })
+}
+
 async function request<T>(url: string, options: RequestInit): Promise<T> {
   const response = await fetch(url, options)
   if (!response.ok) {
