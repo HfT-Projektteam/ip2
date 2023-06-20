@@ -629,11 +629,33 @@
       },
       "CreatePostDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "song_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "song_id",
+          "description",
+          "genre"
+        ]
       },
       "UpdatePostDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ]
       }
     }
   }
