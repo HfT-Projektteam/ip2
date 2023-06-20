@@ -20,7 +20,7 @@ const typography = {
 }
 
 const header = {
-  backgorundLight: '#c8c09e',
+  backgorundLight: '#ede8e6',
   backgroundDark: '#60694e',
 }
 
