@@ -28,8 +28,8 @@ const FeedHeader = (): JSX.Element => {
     // GET API / Filter Feed by Genre
   }
 
-  const handleFeedChange = (value: string): void => {
-    // GET API / Change Feed
+  const handleSort = (value: string): void => {
+    // GET API / Sort Feed
   }
 
   // ToDo: Fetch Endpoint, which Genres are available
@@ -51,12 +51,15 @@ const FeedHeader = (): JSX.Element => {
       </Col>
       <Col>
         <Select
-          defaultValue={'friends'}
-          style={{ width: 90 }}
-          onChange={handleFeedChange}
+          allowClear
+          placeholder={'Sort'}
+          style={{ width: 120 }}
+          onChange={handleSort}
           options={[
-            { value: 'friends', label: 'Friends' },
-            { value: 'global', label: 'Global' },
+            { value: 'liked', label: 'Liked' },
+            { value: 'disliked', label: 'Disliked' },
+            { value: 'newest', label: 'Newest' },
+            { value: 'oldest', label: 'Oldest' },
           ]}
         />
       </Col>
