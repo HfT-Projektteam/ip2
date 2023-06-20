@@ -20,7 +20,7 @@ export function NavBar(): JSX.Element {
   const navigate = useNavigate()
 
   return (
-    <Row justify='space-evenly' align='middle'>
+    <Row justify='space-evenly' align='middle' style={{ height: 'inherit' }}>
       {menuItems.map((item) => {
         return (
           <Col

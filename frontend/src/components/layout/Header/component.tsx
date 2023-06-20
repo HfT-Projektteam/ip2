@@ -64,10 +64,10 @@ const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
           style={{ width: 120 }}
           onChange={handleSortingChange}
           options={[
-            { value: 'liked', label: 'Rap' },
-            { value: 'disliked', label: 'Indie' },
-            { value: 'newest', label: 'Pop' },
-            { value: 'oldest', label: 'Singsang' },
+            { value: 'liked', label: 'Liked' },
+            { value: 'disliked', label: 'Disliked' },
+            { value: 'newest', label: 'Newest' },
+            { value: 'oldest', label: 'Oldest' },
           ]}
         />
       </Col>
@@ -77,15 +77,27 @@ const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
 
 // If you remove Text, adapt the Tests ! Maybe like Post with a data-tedId
 const PostHeader = (): JSX.Element => {
-  return <Text data-testid={'post-header'}>Post</Text>
+  return (
+    <Col>
+      <Text data-testid={'post-header'}>Post</Text>
+    </Col>
+  )
 }
 
 const SearchHeader = (): JSX.Element => {
-  return <Text>Search</Text>
+  return (
+    <Col>
+      <Text>Search</Text>
+    </Col>
+  )
 }
 
 const ProfileHeader = (): JSX.Element => {
-  return <Text>Profile</Text>
+  return (
+    <Col>
+      <Text>Profile</Text>
+    </Col>
+  )
 }
 
 const ModalContainer = ({ children }: any): JSX.Element => {
@@ -107,9 +119,6 @@ const ModalContainer = ({ children }: any): JSX.Element => {
       <Modal
         title='Settings'
         open={open}
-        onOk={() => {
-          setOpen(false)
-        }}
         onCancel={() => {
           setOpen(false)
         }}

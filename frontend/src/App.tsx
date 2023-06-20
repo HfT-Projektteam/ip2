@@ -69,7 +69,7 @@ export function AppLayoutRoute({
         <Layout.Header
           style={{
             position: 'fixed',
-            top: '0',
+            top: 0,
             width: `${containerWidth}`,
             height: '60px',
             lineHeight: '60px',
@@ -86,15 +86,17 @@ export function AppLayoutRoute({
         <Footer
           style={{
             position: 'fixed',
-            bottom: '0',
-            padding: '10px',
+            bottom: 0,
+            padding: 0,
             width: `${containerWidth}`,
             height: '60px',
           }}
         >
-          <Layout>
+          <Layout.Header
+            style={{ lineHeight: '60px', padding: 0, height: '60px' }}
+          >
             <NavBar />
-          </Layout>
+          </Layout.Header>
         </Footer>
       </Layout>
     </ProtectedRoute>

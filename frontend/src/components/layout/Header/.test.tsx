@@ -1,8 +1,7 @@
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { Header } from './component'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
-import { debug } from 'console'
 
 describe('Header', () => {
   it('should render Header Layout with logo', () => {
@@ -57,16 +56,22 @@ describe('Header', () => {
     expect(getByTestId('post-header')).toBeInTheDocument()
   })
 
-  it('should open an already closed modal', () => {
-    const { container } = render(<Header />, {
+  it('should open and close the modal', () => {
+    const { queryByRole, getByTestId } = render(<Header />, {
       wrapper: BrowserRouter,
     })
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(queryByRole('dialog')).not.toBeInTheDocument()
 
-    const modalButton = screen.getByTestId('modal-button')
+    const modalButton = getByTestId('modal-button')
     modalButton && userEvent.click(modalButton)
 
-    expect(screen.queryByRole('dialog')).toBeInTheDocument()
+    const dialog = queryByRole('dialog')
+    expect(dialog).toBeInTheDocument()
+
+    const closeDialog = dialog?.getElementsByClassName('ant-modal-close')[0]
+    closeDialog && userEvent.click(closeDialog)
+
+    expect(queryByRole('dialog')).not.toBeInTheDocument()
   })
 })

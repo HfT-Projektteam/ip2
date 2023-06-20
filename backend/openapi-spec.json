@@ -331,6 +331,108 @@
         ]
       }
     },
+    "/posts/{id}/like": {
+      "put": {
+        "operationId": "PostsController_like",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Returns true if the post was liked, false if the like was removed"
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      },
+      "get": {
+        "operationId": "PostsController_getLike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Returns true if the post is liked by the user, false if not"
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/posts/{id}/dislike": {
+      "put": {
+        "operationId": "PostsController_dislike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Returns true if the post was disliked, false if the dislike was removed"
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      },
+      "get": {
+        "operationId": "PostsController_getDislike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Returns true if the post is disliked by the user, false if not"
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/posts/genre": {
+      "get": {
+        "operationId": "PostsController_getTopGenre",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      }
+    },
     "/posts": {
       "post": {
         "operationId": "PostsController_create",
@@ -496,87 +598,6 @@
           "posts"
         ]
       }
-    },
-    "/posts/{id}/like": {
-      "put": {
-        "operationId": "PostsController_like",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Returns true if the post was liked successfully "
-          }
-        },
-        "tags": [
-          "posts"
-        ]
-      },
-      "get": {
-        "operationId": "PostsController_getLike",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "posts"
-        ]
-      }
-    },
-    "/posts/{id}/dislike": {
-      "put": {
-        "operationId": "PostsController_dislike",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "Returns true if the post was disliked successfully "
-          }
-        },
-        "tags": [
-          "posts"
-        ]
-      }
-    },
-    "/posts/genre": {
-      "get": {
-        "operationId": "PostsController_getTopGenre",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "posts"
-        ]
-      }
     }
   },
   "info": {
@@ -608,11 +629,33 @@
       },
       "CreatePostDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "song_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "song_id",
+          "description",
+          "genre"
+        ]
       },
       "UpdatePostDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ]
       }
     }
   }
