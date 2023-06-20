@@ -17,6 +17,7 @@ const MobileWrapper = styled.div`
 const MobileContainer = styled.div`
   @media (min-width: 768px) {
     max-width: 500px;
+    width: 100%;
   }
 `
 
