@@ -1,4 +1,4 @@
-import Feed from '@pages/Feed'
+import { ProfileFeed } from '@pages/Feed'
 import { Avatar, Col, Divider, Popover, Row, Space, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import mockDataFeed from '@data/mockdata/feed.json'
@@ -133,7 +133,7 @@ export function ProfileComponent(): JSX.Element {
         <Text strong>{profileName}</Text>
       </Space>
       <Divider />
-      <Feed {...feed}></Feed>
+      <ProfileFeed {...feed}></ProfileFeed>
     </>
   )
 }

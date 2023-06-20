@@ -37,7 +37,10 @@ function App(): JSX.Element {
       <Routes>
         <Route path='/' element={<Login />} />
         <Route element={<AppLayoutRoute handleFeedChange={handleFeedChange} />}>
-          <Route path='/feed' element={<Feed {...feed}></Feed>} />
+          <Route
+            path='/feed'
+            element={<Feed feed={feed} handleFeedChange={handleFeedChange} />}
+          />
           <Route path='/plus' element={<NewPost />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/profile' element={<Profile />} />
