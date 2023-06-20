@@ -20,16 +20,24 @@ import {
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Icon_RGB_Black.png'
+import {
+  type feedInterface,
+  type HandleFeedChange,
+} from '@pages/Feed/interface'
 
 const { Text } = Typography
 
-const FeedHeader = (): JSX.Element => {
+const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
   const handleGenreChange = (value: string): void => {
+    const a: feedInterface = { posts: [{ id: 'a', spotifyId: '' }] }
+    handleFeedChange(a)
     // GET API / Filter Feed by Genre
   }
 
-  const handleSort = (value: string): void => {
-    // GET API / Sort Feed
+  const handleSortingChange = (value: string): void => {
+    const a: feedInterface = { posts: [{ id: 'a', spotifyId: '' }] }
+    handleFeedChange(a)
+    // GET API / Change Feed
   }
 
   // ToDo: Fetch Endpoint, which Genres are available
@@ -54,7 +62,7 @@ const FeedHeader = (): JSX.Element => {
           allowClear
           placeholder={'Sort'}
           style={{ width: 120 }}
-          onChange={handleSort}
+          onChange={handleSortingChange}
           options={[
             { value: 'liked', label: 'Liked' },
             { value: 'disliked', label: 'Disliked' },
@@ -92,13 +100,6 @@ const ProfileHeader = (): JSX.Element => {
   )
 }
 
-const headersContent: Array<{ path: string; node: JSX.Element }> = [
-  { path: 'feed', node: <FeedHeader /> },
-  { path: 'search', node: <SearchHeader /> },
-  { path: 'plus', node: <PostHeader /> },
-  { path: 'profile', node: <ProfileHeader /> },
-]
-
 const ModalContainer = ({ children }: any): JSX.Element => {
   const [open, setOpen] = useState(false)
 
@@ -131,8 +132,16 @@ const ModalContainer = ({ children }: any): JSX.Element => {
   )
 }
 
-export const Header = (): JSX.Element => {
+export const Header = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
   const location = useLocation()
+
+  const headersContent: Array<{ path: string; node: JSX.Element }> = [
+    { path: 'feed', node: <FeedHeader handleFeedChange={handleFeedChange} /> },
+    { path: 'search', node: <SearchHeader /> },
+    { path: 'plus', node: <PostHeader /> },
+    { path: 'profile', node: <ProfileHeader /> },
+  ]
+
   const headerContentObject = headersContent.find(
     (item) => '/' + item.path === location.pathname,
   )

@@ -1,7 +1,8 @@
 // import { useEffect, useState } from 'react'
 
 import { Post } from '@pages/Feed/Post'
-import { type feedInterface } from './interface'
+import { type HandleFeedChange, type feedInterface } from './interface'
+import { useEffect } from 'react'
 
 // ToDo: Fetch Database
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,12 +18,35 @@ useEffect(() => {
 }, [feedItems])
 */
 
-// const posts = postMock;
+interface FeedProps {
+  feed: feedInterface
+  handleFeedChange: HandleFeedChange['handleFeedChange']
+}
 
-export function Feed(props: feedInterface): JSX.Element {
+const a: feedInterface = {
+  posts: [
+    { id: 'a', spotifyId: '' },
+    { id: 'b', spotifyId: '' },
+  ],
+}
+
+export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
+  useEffect(() => {
+    handleFeedChange(a)
+  }, [])
   return (
     <>
-      {props.posts.map((post) => (
+      {feed.posts.map((post) => (
+        <Post key={post.id} {...post}></Post>
+      ))}
+    </>
+  )
+}
+
+export function ProfileFeed(feed: feedInterface): JSX.Element {
+  return (
+    <>
+      {feed.posts.map((post) => (
         <Post key={post.id} {...post}></Post>
       ))}
     </>
