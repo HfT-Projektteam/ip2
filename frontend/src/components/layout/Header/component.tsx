@@ -20,15 +20,23 @@ import {
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Icon_RGB_Black.png'
+import {
+  type feedInterface,
+  type HandleFeedChange,
+} from '@pages/Feed/interface'
 
 const { Text } = Typography
 
-const FeedHeader = (): JSX.Element => {
+const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
   const handleGenreChange = (value: string): void => {
+    const a: feedInterface = { posts: [{ id: 'a', spotifyId: '' }] }
+    handleFeedChange(a)
     // GET API / Filter Feed by Genre
   }
 
-  const handleFeedChange = (value: string): void => {
+  const handleSortingChange = (value: string): void => {
+    const a: feedInterface = { posts: [{ id: 'a', spotifyId: '' }] }
+    handleFeedChange(a)
     // GET API / Change Feed
   }
 
@@ -51,12 +59,15 @@ const FeedHeader = (): JSX.Element => {
       </Col>
       <Col>
         <Select
-          defaultValue={'friends'}
-          style={{ width: 90 }}
-          onChange={handleFeedChange}
+          allowClear
+          placeholder={'Sort'}
+          style={{ width: 120 }}
+          onChange={handleSortingChange}
           options={[
-            { value: 'friends', label: 'Friends' },
-            { value: 'global', label: 'Global' },
+            { value: 'liked', label: 'Rap' },
+            { value: 'disliked', label: 'Indie' },
+            { value: 'newest', label: 'Pop' },
+            { value: 'oldest', label: 'Singsang' },
           ]}
         />
       </Col>
@@ -76,13 +87,6 @@ const SearchHeader = (): JSX.Element => {
 const ProfileHeader = (): JSX.Element => {
   return <Text>Profile</Text>
 }
-
-const headersContent: Array<{ path: string; node: JSX.Element }> = [
-  { path: 'feed', node: <FeedHeader /> },
-  { path: 'search', node: <SearchHeader /> },
-  { path: 'plus', node: <PostHeader /> },
-  { path: 'profile', node: <ProfileHeader /> },
-]
 
 const ModalContainer = ({ children }: any): JSX.Element => {
   const [open, setOpen] = useState(false)
@@ -119,8 +123,16 @@ const ModalContainer = ({ children }: any): JSX.Element => {
   )
 }
 
-export const Header = (): JSX.Element => {
+export const Header = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
   const location = useLocation()
+
+  const headersContent: Array<{ path: string; node: JSX.Element }> = [
+    { path: 'feed', node: <FeedHeader handleFeedChange={handleFeedChange} /> },
+    { path: 'search', node: <SearchHeader /> },
+    { path: 'plus', node: <PostHeader /> },
+    { path: 'profile', node: <ProfileHeader /> },
+  ]
+
   const headerContentObject = headersContent.find(
     (item) => '/' + item.path === location.pathname,
   )

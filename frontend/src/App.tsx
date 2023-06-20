@@ -3,7 +3,10 @@ import mockData from '@data/mockdata/feed.json'
 import { ConfigProvider, Layout } from 'antd'
 import { useEffect, useState } from 'react'
 import Header from '@Components/layout/Header'
-import { type feedInterface } from '@pages/Feed/interface'
+import {
+  type HandleFeedChange,
+  type feedInterface,
+} from '@pages/Feed/interface'
 import { Outlet, Route, Routes } from 'react-router-dom'
 import Profile from '@pages/Profile'
 import NavBar from '@Components/ui/NavBar'
@@ -18,15 +21,22 @@ import SearchPage from '@pages/Search'
 const { Content, Footer } = Layout
 
 function App(): JSX.Element {
-  const [feed] = useState<feedInterface>(mockData)
   const { theme } = useTheme()
+
+  const [feed, setFeed] = useState<feedInterface>(mockData)
+
+  const handleFeedChange: HandleFeedChange['handleFeedChange'] = (
+    newFeed: feedInterface,
+  ): void => {
+    setFeed(newFeed)
+  }
 
   return (
     <ConfigProvider theme={theme}>
       <ScrollToTop />
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route element={<AppLayoutRoute />}>
+        <Route element={<AppLayoutRoute handleFeedChange={handleFeedChange} />}>
           <Route path='/feed' element={<Feed {...feed}></Feed>} />
           <Route path='/plus' element={<NewPost />} />
           <Route path='/search' element={<SearchPage />} />
@@ -38,7 +48,9 @@ function App(): JSX.Element {
   )
 }
 
-export function AppLayoutRoute(): JSX.Element {
+export function AppLayoutRoute({
+  handleFeedChange,
+}: HandleFeedChange): JSX.Element {
   /*
   weird concept to implement general Layout to multiple react routes
   https://reactrouter.com/en/main/start/concepts#layout-route
@@ -65,7 +77,7 @@ export function AppLayoutRoute(): JSX.Element {
             zIndex: 1,
           }}
         >
-          <Header />
+          <Header handleFeedChange={handleFeedChange} />
         </Layout.Header>
 
         <Content style={{ paddingBottom: '60px', paddingTop: '60px' }}>
