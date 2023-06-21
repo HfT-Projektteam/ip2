@@ -160,9 +160,9 @@ export class PostsService {
           .then(() => {
             return false
           })
+      } else {
+        return false
       }
-      console.log(e)
-      return false
     }
 
     return this.postRepo
@@ -200,6 +200,8 @@ export class PostsService {
           .then(() => {
             return false
           })
+      } else {
+        return false
       }
     }
 
@@ -207,7 +209,7 @@ export class PostsService {
       .createQueryBuilder('post')
       .update(Post)
       .where('uuid = :uuid', { uuid: id })
-      .set({ likes: () => 'dislikes + 1' })
+      .set({ dislikes: () => 'dislikes + 1' })
       .execute()
       .then(() => {
         return true
@@ -228,26 +230,21 @@ export class PostsService {
         console.log(e)
         return false
       })
-
-    // return this.userRepo
-    //   .createQueryBuilder('user')
-    //   .relation(User, 'likes')
-    //   .of(this.request['spotify_uri'])
-    //   .loadOne()
-    //   .then((post) => {
-    //     return post != undefined
-    //   })
   }
 
   getDislike(id: string) {
     return this.userRepo
       .createQueryBuilder('user')
-      .relation(User, 'dislikes')
-      .of(this.request['spotify_uri'])
-      .loadOne()
-      .then((post) => {
-        console.log(post)
-        return post != undefined
+      .where('user.spotify_uri = :uri', { uri: this.request['spotify_uri'] })
+      .leftJoinAndSelect('user.dislikes', 'dislikes')
+      .where('dislikes.uuid = :uuid', { uuid: id })
+      .getMany()
+      .then((result) => {
+        return result.length > 0
+      })
+      .catch((e) => {
+        console.log(e)
+        return false
       })
   }
 
