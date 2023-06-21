@@ -20,7 +20,7 @@ export class AuthService {
     const api_url = 'https://api.spotify.com/v1/me'
     return firstValueFrom(
       this.httpService.get<SpotifyApi.CurrentUsersProfileResponse>(api_url, {
-        headers: { Authorization: access_token },
+        headers: { Authorization: 'Bearer ' + access_token },
       }),
     )
       .then((response) => {
