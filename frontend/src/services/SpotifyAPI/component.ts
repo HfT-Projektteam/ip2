@@ -104,7 +104,7 @@ export async function searchSong(value: string): Promise<trackObject[] | null> {
   }
 
   return await request<any>(
-    `https://api.spotify.com/v1/search?q=${value}&type=track&limit=10`,
+    `https://api.spotify.com/v1/search?q=${value}&type=track&limit=30`,
     options,
   )
     .then((searchItems) => {

@@ -248,6 +248,130 @@ export async function signIn(): Promise<void> {
   })
 }
 
+/**
+ *
+ * @param uuid
+ * @returns true if the post was liked, false if the like was removed
+ */
+export async function likePost(uuid: string): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || uuid == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${uuid}/like`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in likePost:', error)
+      return undefined
+    })
+}
+
+/**
+ * Returns
+ * @param uuid
+ * @returns true if the post was disliked, false if the dislike was removed
+ */
+export async function dislikePost(uuid: string): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || uuid == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${uuid}/dislike`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in dislikePost:', error)
+      return undefined
+    })
+}
+
+/**
+ *
+ * @param uuid
+ * @returns true if the post is liked by the user, false if not
+ */
+export async function getLikePost(uuid: string): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || uuid == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${uuid}/like`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in getLikePost:', error)
+      return undefined
+    })
+}
+
+/**
+ *
+ * @param uuid
+ * @returns true if the post is liked by the user, false if not
+ */
+export async function getDislikePost(
+  uuid: string,
+): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || uuid == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${uuid}/dislike`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in getDislikePost:', error)
+      return undefined
+    })
+}
+
+/**
+ * Babo Function
+ * @param url
+ * @param options
+ * @returns
+ */
 async function request<T>(url: string, options: RequestInit): Promise<T> {
   const response = await fetch(url, options)
   if (!response.ok) {
