@@ -63,7 +63,6 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
       >
         <List
           style={{
-            padding: '32px 10px 0px 10px',
             minHeight: '80vh',
           }}
           key='feed.list'
