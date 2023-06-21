@@ -39,16 +39,21 @@ beforeAll(async () => {
 })
 
 describe('Test basic DB connectivity', () => {
-  beforeEach(async () => {
+  it('should create and save a post', async () => {
     await request(app.getHttpServer())
       .post('/posts')
-      .send({ songId: '6rqhFgbbKwnb9MLmUQDhG6' })
+      .send({ songId: 'test1', description: 'test1', genre: 'test1' })
       .expect(201)
-  })
-  it('should create and save a user', async () => {
-    expect(
-      await repository.exist({ where: { spotify_uri: 'test1' } }),
-    ).toBeTruthy()
+      .expect({
+        songId: 'test1',
+        description: 'test1',
+        genre: 'test1',
+        creator: 'local-user',
+        uuid: '90c21b93-cc5c-42de-96fc-d1d85b06786f',
+        uploaded: '2023-06-21T11:41:00.732Z',
+        likes: 0,
+        dislikes: 0,
+      })
   })
 })
 
