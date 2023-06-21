@@ -1,4 +1,4 @@
-import { render, waitFor, screen, act } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import { Post } from '@pages/Feed/Post'
 import feedMock from '@data/mockdata/feed.json'
 
@@ -6,7 +6,7 @@ jest.mock('@services/SpotifyAPI')
 
 describe('Post component', () => {
   it('should render Profile correctly', async () => {
-    act(() => render(<Post {...feedMock.posts[0]} />))
+    act(() => render(<Post postObject={feedMock.posts[0]} isFeed={true} />))
 
     await act(async () => {
       // Wait for the update in Post to complete

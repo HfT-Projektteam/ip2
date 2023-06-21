@@ -24,11 +24,11 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
       const allPosts = await getPosts('', isPrivateFeed, undefined, pagination)
       if (allPosts === null) return
 
-      const newFeed = allPosts?.map((post) => {
+      /* const newFeed = allPosts?.map((post) => {
         return { id: post.uuid, spotifyId: post.songId }
-      })
+      }) */
 
-      handleFeedChange({ posts: newFeed })
+      handleFeedChange({ posts: allPosts })
     })()
   }, [handleFeedChange, pagination, isPrivateFeed])
   return (
@@ -42,7 +42,7 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
       </Button>
       <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
       {feed.posts.map((post) => (
-        <Post key={post.id} {...post}></Post>
+        <Post key={post.uuid} isFeed={true} postObject={post}></Post>
       ))}
     </>
   )
@@ -52,7 +52,7 @@ export function ProfileFeed(feed: feedInterface): JSX.Element {
   return (
     <>
       {feed.posts.map((post) => (
-        <Post key={post.id} {...post}></Post>
+        <Post key={post.uuid} isFeed={false} postObject={post}></Post>
       ))}
     </>
   )
