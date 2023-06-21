@@ -1,8 +1,16 @@
 import { type randomUID } from '@services/IdGenertor'
 
 export interface postInterface {
-  id: randomUID
-  spotifyId: string
+  songId: string
+  description: string
+  genre?: string
+  creator: {
+    spotify_uri: string
+  }
+  uuid: string
+  uploaded: string
+  likes: number
+  dislikes: number
 }
 
 export interface trackInterface {

@@ -1,20 +1,25 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { DislikeOutlined, LikeOutlined, PlusOutlined } from '@ant-design/icons'
 import {
   type trackInterface,
   type postInterface,
 } from '@pages/Feed/Post/interface'
 import { addSongToPlaylist, getTrack } from '@services/SpotifyAPI'
-import { Button, Card, Typography } from 'antd'
+import { Button, Card, Col, Row, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 
 const { Meta } = Card
 const { Link } = Typography
 
-export function Post(props: postInterface): JSX.Element {
+interface PostProps {
+  postObject: postInterface
+  isFeed: boolean
+}
+
+export function Post({ postObject, isFeed }: PostProps): JSX.Element {
   const [post, setPost] = useState<trackInterface>()
 
   useEffect(() => {
-    getTrack(`${props.spotifyId}`)
+    getTrack(`${postObject.songId}`)
       .then((res) => {
         setPost(res)
       })
@@ -23,26 +28,57 @@ export function Post(props: postInterface): JSX.Element {
       })
   }, [])
 
+  const likeSong = async (): Promise<void> => {}
+  const dislikeSong = async (): Promise<void> => {}
+
   return (
     <Card
-      id={props.id}
+      id={postObject.uuid}
       cover={<img alt='example' src={post?.imgUrl} />}
-      actions={[
-        <>
-          <Button
-            type='primary'
-            shape='circle'
-            icon={<PlusOutlined rev='AddSongToPlaylist' />}
-            onClick={() => {
-              void addSongToPlaylist(post?.spotifyId ?? '')
-            }}
-          />
-        </>,
-      ]}
+      actions={
+        isFeed
+          ? [
+              <>
+                <Row justify={'space-around'}>
+                  <Col>
+                    <Button
+                      type='primary'
+                      shape='circle'
+                      icon={<LikeOutlined rev='LikeSong' />}
+                      onClick={() => {
+                        void likeSong()
+                      }}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      type='primary'
+                      shape='circle'
+                      icon={<PlusOutlined rev='AddSongToPlaylist' />}
+                      onClick={() => {
+                        void addSongToPlaylist(post?.spotifyId ?? '')
+                      }}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      type='primary'
+                      shape='circle'
+                      icon={<DislikeOutlined rev='DislikeSong' />}
+                      onClick={() => {
+                        void dislikeSong()
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </>,
+            ]
+          : undefined
+      }
     >
       <Meta
         title={
-          <Link href={'spotify:track:' + String(props.spotifyId ?? '')}>
+          <Link href={'spotify:track:' + String(postObject.songId ?? '')}>
             {post?.title}
           </Link>
         }

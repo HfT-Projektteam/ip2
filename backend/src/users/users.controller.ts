@@ -15,12 +15,16 @@ import { User } from './entities/user.entity'
 import { ApiTags } from '@nestjs/swagger'
 import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { PageMetaInterceptor } from '../util/pagination/pagination.interceptor'
+import { PostsService } from '../posts/posts.service'
 
 @ApiTags('users')
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly postsService: PostsService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: UserDto) {
@@ -94,7 +98,8 @@ export class UsersController {
   }
 
   @Get(':id/posts')
-  getPosts() {
-    //TODO
+  @UseInterceptors(PageMetaInterceptor)
+  getPosts(@Param('id') id: string, @Query() pageOptionsDto: PageOptionsDto) {
+    return this.postsService.getPostsByUser(id, pageOptionsDto)
   }
 }

@@ -35,11 +35,7 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
       const allPosts = await getPosts('', isPrivateFeed, undefined, pagination)
       if (allPosts === null) return
 
-      const newPosts = allPosts?.map((post) => {
-        return { id: post.uuid, spotifyId: post.songId }
-      })
-
-      const newFeed = feed.posts.concat(newPosts)
+      const newFeed = feed.posts.concat(allPosts)
 
       handleFeedChange({ posts: newFeed })
       setLoading(false)
@@ -76,7 +72,7 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
           locale={{ emptyText: ' ' }}
           renderItem={(post) => (
             <List.Item>
-              <Post key={post.id} {...post} />
+              <Post key={post.uuid} isFeed={true} postObject={post} />
             </List.Item>
           )}
         />
@@ -89,7 +85,7 @@ export function ProfileFeed(feed: feedInterface): JSX.Element {
   return (
     <>
       {feed.posts.map((post) => (
-        <Post key={post.id} {...post}></Post>
+        <Post key={post.uuid} isFeed={false} postObject={post}></Post>
       ))}
     </>
   )

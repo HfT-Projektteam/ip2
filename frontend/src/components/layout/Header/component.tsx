@@ -32,21 +32,21 @@ const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
     const allPosts = await getPosts(genre, true)
     if (allPosts === null) return
 
-    const newFeed = allPosts?.map((post) => {
+    /* const newFeed = allPosts?.map((post) => {
       return { id: post.uuid, spotifyId: post.songId }
-    })
+    }) */
     setCurrentGenre(genre)
-    handleFeedChange({ posts: newFeed })
+    handleFeedChange({ posts: allPosts })
   }
 
   const handleSortingChange = async (sortValue: string): Promise<void> => {
     const allPosts = await getPosts(currentGenre, true, sortValue)
     if (allPosts === null) return
-    const newFeed = allPosts?.map((post) => {
+    /* const newFeed = allPosts?.map((post) => {
       return { id: post.uuid, spotifyId: post.songId }
-    })
+    }) */
 
-    handleFeedChange({ posts: newFeed })
+    handleFeedChange({ posts: allPosts })
   }
 
   return (

@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 
 jest.mock('@services/SpotifyAPI/Authorization')
+jest.mock('@services/BackendAPI')
 
 describe('Login', () => {
   const history = createMemoryHistory()
@@ -50,8 +51,5 @@ describe('Login', () => {
   })
 
   // ToDo: Mock localStorage for test and set the access token valid
-  it.skip('should route to feed page if there is an access token set', async () => {
-    // window.localStorage.setItem('access_token', '02kshl2')
-    expect(screen.getByText('Switch Theme')).toBeInTheDocument()
-  })
+  it.todo('should route to feed page if there is an access token set')
 })

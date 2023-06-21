@@ -7,7 +7,7 @@ import { Page, PageOptionsDto } from '../util/pagination/page.dto'
 import { UserDto } from './dto/user.dto'
 import { Pagination } from '../util/pagination/pagination'
 import { REQUEST } from '@nestjs/core'
-import { PostFilterQuery } from '../posts/entities/post-query.entity'
+import { Request } from 'express'
 
 @Injectable({ scope: Scope.REQUEST })
 export class UsersService {
