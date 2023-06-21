@@ -151,7 +151,7 @@ describe('test basic CRUD operations', () => {
       .delete(`/posts/${strangePostId}`)
       .expect(401)
       .expect(
-        '{"statusCode":401,"message":"Only post creators can delete them","error":"Unauthorized"}',
+        '{"statusCode":401,"message":"Only post creators can edit them","error":"Unauthorized"}',
       )
   })
 
@@ -163,6 +163,8 @@ describe('test basic CRUD operations', () => {
     await userRepository.delete({ spotify_uri: 'second-user' })
   })
 })
+
+// describe('test like/dislike operations', () => {})
 
 afterAll(async () => {
   await app.close()
