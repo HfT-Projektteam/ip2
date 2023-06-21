@@ -35,7 +35,7 @@ beforeAll(async () => {
         port: 5432,
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_TEST_SCHEMA,
+        database: 'e2e_post',
         entities: ['./**/*.entity.ts'],
         synchronize: true,
       }),
