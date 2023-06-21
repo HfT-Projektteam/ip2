@@ -51,11 +51,5 @@ describe('Login', () => {
   })
 
   // ToDo: Mock localStorage for test and set the access token valid
-  it.todo(
-    'should route to feed page if there is an access token set',
-    async () => {
-      // window.localStorage.setItem('access_token', '02kshl2')
-      expect(screen.getByText('Switch Theme')).toBeInTheDocument()
-    },
-  )
+  it.todo('should route to feed page if there is an access token set')
 })
