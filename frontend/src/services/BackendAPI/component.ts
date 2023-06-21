@@ -248,6 +248,134 @@ export async function signIn(): Promise<void> {
   })
 }
 
+/**
+ *
+ * @param songId
+ * @returns true if the post was liked, false if the like was removed
+ */
+export async function likePost(songId: string): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || songId == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${songId}/like`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in likePost:', error)
+      return undefined
+    })
+}
+
+/**
+ * Returns
+ * @param songId
+ * @returns true if the post was disliked, false if the dislike was removed
+ */
+export async function dislikePost(
+  songId: string,
+): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || songId == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${songId}/dislike`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in dislikePost:', error)
+      return undefined
+    })
+}
+
+/**
+ *
+ * @param songId
+ * @returns true if the post is liked by the user, false if not
+ */
+export async function getLikePost(
+  songId: string,
+): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || songId == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${songId}/like`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in getLikePost:', error)
+      return undefined
+    })
+}
+
+/**
+ *
+ * @param songId
+ * @returns true if the post is liked by the user, false if not
+ */
+export async function getDislikePost(
+  songId: string,
+): Promise<boolean | undefined> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || songId == null) {
+    return undefined
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(`${backendUri}/posts/${songId}/dislike`, options)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error in getDislikePost:', error)
+      return undefined
+    })
+}
+
+/**
+ * Babo Function
+ * @param url
+ * @param options
+ * @returns
+ */
 async function request<T>(url: string, options: RequestInit): Promise<T> {
   const response = await fetch(url, options)
   if (!response.ok) {
