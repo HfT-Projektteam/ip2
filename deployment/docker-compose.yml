@@ -28,8 +28,6 @@ services:
       - db:/var/lib/postgresql/data
     networks:
       - backend
-    ports:
-      - 10.10.10.1:5432:5432
 
 volumes:
   db:
