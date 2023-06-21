@@ -14,12 +14,6 @@ export class PostFilterQuery {
   })
   genre?: string
   @ApiPropertyOptional({
-    type: 'boolean',
-    description:
-      'want to show only posts by users the requesting user follows?',
-  })
-  followerFeed?: boolean
-  @ApiPropertyOptional({
     description: 'comma seperated list of genres',
     enum: PostSort,
   })
@@ -27,7 +21,6 @@ export class PostFilterQuery {
 
   constructor(genre?: string, followerFeed?: boolean, sort?: PostSort) {
     this.genre = genre
-    this.followerFeed = followerFeed
     this.sort = sort
   }
 }

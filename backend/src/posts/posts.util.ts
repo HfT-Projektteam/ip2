@@ -1,4 +1,4 @@
-import { SelectQueryBuilder } from 'typeorm'
+import { Repository, SelectQueryBuilder } from 'typeorm'
 import { Post } from './entities/post.entity'
 import { PostFilterQuery, PostSort } from './entities/post-query.entity'
 
@@ -7,7 +7,7 @@ export function addFilterToQuery(
   filterQueryParams: PostFilterQuery,
 ): SelectQueryBuilder<Post> {
   if (filterQueryParams.genre) {
-    postQuery.where('post.genre IN (:...genre)', {
+    postQuery.where('posts.genre IN (:...genre)', {
       genre: filterQueryParams.genre.split(','),
     })
   }
@@ -15,22 +15,18 @@ export function addFilterToQuery(
   if (filterQueryParams.sort) {
     switch (filterQueryParams.sort) {
       case PostSort.likes:
-        postQuery.orderBy('likes', 'ASC')
+        postQuery.orderBy('posts.likes', 'ASC')
         break
       case PostSort.dislikes:
-        postQuery.orderBy('dislikes', 'ASC')
+        postQuery.orderBy('posts.dislikes', 'ASC')
         break
       case PostSort.newest:
-        postQuery.orderBy('post.uploaded', 'DESC')
+        postQuery.orderBy('posts.uploaded', 'DESC')
         break
       case PostSort.oldest:
-        postQuery.orderBy('post.uploaded', 'ASC')
+        postQuery.orderBy('posts.uploaded', 'ASC')
         break
     }
-  }
-
-  if (filterQueryParams.followerFeed) {
-    // TODO, set where with users the other follows
   }
 
   return postQuery

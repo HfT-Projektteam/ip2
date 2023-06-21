@@ -34,12 +34,54 @@ export class PostsService {
   async findAll(pageOpt: PageOptionsDto, filterQueryParams: PostFilterQuery) {
     const query = Pagination.pageQueryBuilder(
       this.postRepo
-        .createQueryBuilder('post')
-        .leftJoinAndSelect('post.creator', 'creator'),
+        .createQueryBuilder('posts')
+        .leftJoinAndSelect('posts.creator', 'creator'),
       pageOpt,
     )
 
     const filteredQuery = addFilterToQuery(query, filterQueryParams)
+
+    return filteredQuery.getManyAndCount().then((res) => {
+      return new Page(res[0], res[1], pageOpt)
+    })
+  }
+
+  async findAllFollowerFeed(
+    pageOpt: PageOptionsDto,
+    filterQueryParams: PostFilterQuery,
+  ) {
+    // const query = await this.userRepo
+    //   .createQueryBuilder('user')
+    //   .where('user.spotify_uri = :id', { id: this.request['spotify_uri'] })
+    //   .leftJoinAndSelect('user.following', 'following')
+    //   .leftJoinAndSelect('following.posts', 'posts')
+    //   .leftJoinAndSelect('posts.creator', 'creator')
+    // .select('posts.*')
+
+    const followings: string[] = await this.userRepo
+      .createQueryBuilder('user')
+      .where('user.spotify_uri = :id', { id: this.request['spotify_uri'] })
+      .leftJoinAndSelect('user.following', 'following')
+      .select('following.*')
+      .getRawMany()
+      .then((res) => {
+        return res.map((user) => {
+          return user.spotify_uri
+        })
+      })
+    followings.push(this.request['spotify_uri'])
+
+    const postQuery = Pagination.pageQueryBuilder(
+      this.postRepo
+        .createQueryBuilder('posts')
+        .leftJoinAndSelect('posts.creator', 'creator')
+        .where('posts.creator IN (:...followings)', {
+          followings: followings,
+        }),
+      pageOpt,
+    )
+
+    const filteredQuery = addFilterToQuery(postQuery, filterQueryParams)
 
     return filteredQuery.getManyAndCount().then((res) => {
       return new Page(res[0], res[1], pageOpt)
