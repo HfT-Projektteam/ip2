@@ -1,6 +1,8 @@
 import { NewPost } from './component'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { prototype } from 'dayjs'
+import { BrowserRouter } from 'react-router-dom'
 
 jest.mock('@services/SpotifyAPI')
 
@@ -16,8 +18,8 @@ describe('Render Create NewPost Page', () => {
     const buttons = await screen.findAllByRole('button')
     const textarea = await screen.findAllByRole('textbox')
 
-    expect(buttons).toHaveLength(2)
-    expect(textarea).toHaveLength(2)
+    expect(buttons).toHaveLength(1)
+    expect(textarea).toHaveLength(1)
   })
 
   it('should have all recent played songs', async () => {
@@ -33,12 +35,16 @@ describe('Render Create NewPost Page', () => {
   })
 
   it('Input should be in the Input value', async () => {
-    act(() => render(<NewPost />))
+    act(() => render(<NewPost />, { wrapper: BrowserRouter }))
 
     await act(async () => {
       // Wait for the update in NewPost to complete
       await new Promise((resolve) => setTimeout(resolve, 0))
     })
+
+    const item = (await screen.findAllByRole('listitem')).at(0)
+
+    item && userEvent.click(item)
 
     const searchBox = await screen.findByPlaceholderText('Search Song')
     const commentBox = await screen.findByPlaceholderText('Say something')
@@ -71,6 +77,6 @@ describe('Render Create NewPost Page', () => {
     await new Promise((resolve) => setTimeout(resolve, 0))
 
     const songList = screen.queryAllByRole('listitem')
-    expect(songList).toHaveLength(3)
+    expect(songList).toHaveLength(10)
   })
 })
