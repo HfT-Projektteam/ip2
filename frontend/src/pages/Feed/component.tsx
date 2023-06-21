@@ -49,7 +49,6 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
   }
   return (
     <>
-      {feed.posts.length}
       <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
 
       <InfiniteScroll
