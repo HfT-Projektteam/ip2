@@ -54,3 +54,16 @@ jobs:
         run: yarn lint
       - name: Yarn test
         run: yarn test:ci_cd --coverage
+
+      - name: Generate JaCoCo Badge
+        #      if: ${{ github.ref == 'refs/heads/master' }}
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+          badges-directory: build/reports/jacoco/test/html/badges
+
+      - name: Publish coverage report to GitHub Pages
+        #      if: ${{ github.ref == 'refs/heads/master' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/reports/jacoco/test/html
