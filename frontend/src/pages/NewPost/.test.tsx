@@ -77,6 +77,6 @@ describe('Render Create NewPost Page', () => {
     await new Promise((resolve) => setTimeout(resolve, 0))
 
     const songList = screen.queryAllByRole('listitem')
-    expect(songList).toHaveLength(10)
+    expect(songList).toHaveLength(3)
   })
 })

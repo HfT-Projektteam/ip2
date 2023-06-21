@@ -100,12 +100,17 @@ export function NewPost(): JSX.Element {
             zIndex: 2,
           }}
         >
-          <Search placeholder='Search Song' onSearch={() => onSearch} />
+          <Search
+            placeholder='Search Song'
+            onSearch={(value) => {
+              void onSearch(value)
+            }}
+          />
         </Space>
 
         {songs.length > 0 ? (
           <List
-            style={{ paddingTop: '32px', paddingBottom: '50px' }}
+            style={{ paddingTop: '32px' }}
             key='search.list'
             itemLayout='horizontal'
             dataSource={songs}
