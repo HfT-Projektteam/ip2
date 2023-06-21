@@ -1,8 +1,20 @@
-import { DislikeOutlined, LikeOutlined, PlusOutlined } from '@ant-design/icons'
+import {
+  DislikeFilled,
+  DislikeOutlined,
+  HeartFilled,
+  HeartOutlined,
+  PlusOutlined,
+} from '@ant-design/icons'
 import {
   type trackInterface,
   type postInterface,
 } from '@pages/Feed/Post/interface'
+import {
+  dislikePost,
+  getDislikePost,
+  getLikePost,
+  likePost,
+} from '@services/BackendAPI/component'
 import { addSongToPlaylist, getTrack } from '@services/SpotifyAPI'
 import { Button, Card, Col, Row, Typography } from 'antd'
 import { useEffect, useState } from 'react'
@@ -17,6 +29,8 @@ interface PostProps {
 
 export function Post({ postObject, isFeed }: PostProps): JSX.Element {
   const [post, setPost] = useState<trackInterface>()
+  const [like, setLike] = useState(false)
+  const [dislike, setDislike] = useState(false)
 
   useEffect(() => {
     getTrack(`${postObject.songId}`)
@@ -26,10 +40,32 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
       .catch((err) => {
         console.error(err)
       })
+
+    getLikePost(postObject.songId)
+      .then((res) => {
+        res === undefined ? setLike(false) : setLike(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+
+    getDislikePost(postObject.songId)
+      .then((res) => {
+        res === undefined ? setDislike(false) : setDislike(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }, [])
 
-  const likeSong = async (): Promise<void> => {}
-  const dislikeSong = async (): Promise<void> => {}
+  const likeSong = (): void => {
+    setLike(!like)
+    void likePost(postObject.songId)
+  }
+  const dislikeSong = (): void => {
+    setDislike(!dislike)
+    void dislikePost(postObject.songId)
+  }
 
   return (
     <Card
@@ -39,18 +75,39 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
         isFeed
           ? [
               <>
-                <Row justify={'space-around'}>
-                  <Col>
+                <Row justify={'space-around'} align={'middle'}>
+                  <Col
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Button
+                      size={like ? 'large' : 'middle'}
                       type='primary'
                       shape='circle'
-                      icon={<LikeOutlined rev='LikeSong' />}
-                      onClick={() => {
-                        void likeSong()
-                      }}
+                      icon={
+                        like ? (
+                          <HeartFilled rev='LikeSongFill' />
+                        ) : (
+                          <HeartOutlined rev='LikeSong' />
+                        )
+                      }
+                      onClick={likeSong}
                     />
                   </Col>
-                  <Col>
+                  <Col
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Button
                       type='primary'
                       shape='circle'
@@ -60,14 +117,27 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
                       }}
                     />
                   </Col>
-                  <Col>
+                  <Col
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Button
+                      size={dislike ? 'large' : 'middle'}
                       type='primary'
                       shape='circle'
-                      icon={<DislikeOutlined rev='DislikeSong' />}
-                      onClick={() => {
-                        void dislikeSong()
-                      }}
+                      icon={
+                        dislike ? (
+                          <DislikeFilled rev='DislikeSong' />
+                        ) : (
+                          <DislikeOutlined rev='DislikeSong' />
+                        )
+                      }
+                      onClick={dislikeSong}
                     />
                   </Col>
                 </Row>
