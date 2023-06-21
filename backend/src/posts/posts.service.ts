@@ -15,6 +15,7 @@ import { Pagination } from '../util/pagination/pagination'
 import { PostFilterQuery } from './entities/post-query.entity'
 import { addFilterToQuery } from './posts.util'
 import { User } from '../users/entities/user.entity'
+import { Request } from 'express'
 
 @Injectable({ scope: Scope.REQUEST })
 export class PostsService {
@@ -85,6 +86,19 @@ export class PostsService {
 
     return filteredQuery.getManyAndCount().then((res) => {
       return new Page(res[0], res[1], pageOpt)
+    })
+  }
+
+  getPostsByUser(user_id: string, pageOptionsDto: PageOptionsDto) {
+    const pageQuery = Pagination.pageQueryBuilder(
+      this.postRepo
+        .createQueryBuilder('posts')
+        .where('posts.creator = :user_id', { user_id: user_id }),
+      pageOptionsDto,
+    )
+
+    return pageQuery.getManyAndCount().then((res) => {
+      return new Page(res[0], res[1], pageOptionsDto)
     })
   }
 
