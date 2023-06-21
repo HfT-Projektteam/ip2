@@ -200,6 +200,34 @@ export async function getPosts(
     })
 }
 
+export async function getUserPosts(): Promise<GetPost[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+  const spotifyId = localStorage.getItem('spotifyId') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/posts/?page=0&take=50`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPosts:', error)
+      return null
+    })
+}
+
 export async function postPost(
   songId: string = '',
   description: string = '',
