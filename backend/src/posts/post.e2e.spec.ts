@@ -166,6 +166,71 @@ describe('test basic CRUD operations', () => {
   })
 })
 
+describe('test like/dislike operations', () => {
+  let myPostId: string
+
+  beforeEach(async () => {
+    const localUser = new User('local-user')
+    await userRepository.save(localUser)
+
+    await postRepository.save(
+      new Post(
+        { song_id: 'test1', description: 'test1', genre: 'test1' },
+        localUser,
+      ),
+    )
+
+    myPostId = await postRepository
+      .findOneByOrFail({ songId: 'test1' })
+      .then((post) => post.uuid)
+  })
+
+  it('should like a post and remove like on second like', async () => {
+    await request(app.getHttpServer())
+      .put(`/posts/${myPostId}/like`)
+      .expect(200)
+      .expect('true')
+
+    await postRepository.findOneByOrFail({ uuid: myPostId }).then((res) => {
+      expect(res.likes).toEqual(1)
+    })
+
+    await request(app.getHttpServer())
+      .put(`/posts/${myPostId}/like`)
+      .expect(200)
+      .expect('false')
+
+    await postRepository.findOneByOrFail({ uuid: myPostId }).then((res) => {
+      expect(res.likes).toEqual(0)
+    })
+  })
+
+  it('should dislike a post and remove dislike on second dislike', async () => {
+    await request(app.getHttpServer())
+      .put(`/posts/${myPostId}/dislike`)
+      .expect(200)
+      .expect('true')
+
+    await postRepository.findOneByOrFail({ uuid: myPostId }).then((res) => {
+      expect(res.dislikes).toEqual(1)
+    })
+
+    await request(app.getHttpServer())
+      .put(`/posts/${myPostId}/dislike`)
+      .expect(200)
+      .expect('false')
+
+    await postRepository.findOneByOrFail({ uuid: myPostId }).then((res) => {
+      expect(res.dislikes).toEqual(0)
+    })
+  })
+
+  afterEach(async () => {
+    await postRepository.delete({ uuid: myPostId })
+    await userRepository.delete({ spotify_uri: 'local-user' })
+  })
+})
+
 afterAll(async () => {
   await app.close()
 })
