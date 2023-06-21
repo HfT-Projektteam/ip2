@@ -160,9 +160,9 @@ export class PostsService {
           .then(() => {
             return false
           })
+      } else {
+        return false
       }
-      console.log(e)
-      return false
     }
 
     return this.postRepo
@@ -200,6 +200,8 @@ export class PostsService {
           .then(() => {
             return false
           })
+      } else {
+        return false
       }
     }
 
@@ -207,7 +209,7 @@ export class PostsService {
       .createQueryBuilder('post')
       .update(Post)
       .where('uuid = :uuid', { uuid: id })
-      .set({ likes: () => 'dislikes + 1' })
+      .set({ dislikes: () => 'dislikes + 1' })
       .execute()
       .then(() => {
         return true
