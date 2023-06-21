@@ -13,6 +13,7 @@ import configOptions from './config/config'
 import { PostsModule } from './posts/posts.module'
 import { Post } from './posts/entities/post.entity'
 import { User } from './users/entities/user.entity'
+import { PostsService } from './posts/posts.service'
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { User } from './users/entities/user.entity'
   providers: [
     AppService,
     UsersService,
+    PostsService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
