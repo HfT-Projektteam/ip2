@@ -1,0 +1,34 @@
+version: "3"
+
+networks:
+  backend:
+
+services:
+  frontend:
+    # image: ghcr.io/hft-projektteam/friendify_frontend:latest
+    image: friendify_frontend:latest
+    ports:
+      - '127.0.0.1:3000:80'
+
+  backend:
+    # image: ghcr.io/hft-projektteam/friendify_backend:latest
+    image: friendify_backend:latest
+    networks:
+      - backend
+
+  database:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=friendify
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - backend
+    ports:
+      - '127.0.0.1:3001:3000'
+volumes:
+  db:
+    driver: local

@@ -9,6 +9,7 @@ import { type components } from '@data/spotify-types'
 import TextArea from 'antd/es/input/TextArea'
 import useWindowDimensions from '@hooks/useWindowDimensions'
 import ScrollToTop from '@services/ScrollToTop'
+import { postPost } from '@services/BackendAPI'
 
 const { Search } = Input
 type trackObject = components['schemas']['TrackObject']
@@ -16,7 +17,7 @@ const { useToken } = theme
 
 export function NewPost(): JSX.Element {
   const [songs, setSongs] = useState<trackObject[]>([])
-  const [songId, setSongId] = useState<string>('')
+  const [song, setSong] = useState<trackObject>()
   const [comment, setComment] = useState<string>('')
 
   useEffect(() => {
@@ -40,7 +41,6 @@ export function NewPost(): JSX.Element {
           }
 
           setSongs(song != null ? [song] : [])
-          setSongId(song.id ?? '')
         })
         .catch((err) => {
           console.error(err)
@@ -58,7 +58,7 @@ export function NewPost(): JSX.Element {
 
   const onSongClick = (song: trackObject): void => {
     setSongs([song])
-    setSongId(song.id ?? '')
+    setSong(song)
   }
 
   const onCommentChange = (comment: string): void => {
@@ -66,11 +66,7 @@ export function NewPost(): JSX.Element {
   }
 
   const onPostClick = (): void => {
-    alert(
-      `POST to backend not implemented yet\n` +
-        ` Spotify songID: ${songId} comment: ${comment}`,
-    )
-    // todo: Send all Data to the backend
+    void postPost(song?.id, comment, '')
   }
 
   const { width } = useWindowDimensions()

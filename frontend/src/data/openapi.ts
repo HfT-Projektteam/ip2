@@ -49,6 +49,9 @@ export interface paths {
     get: operations['PostsController_findAll']
     post: operations['PostsController_create']
   }
+  '/posts/follower': {
+    get: operations['PostsController_findAllFollowerFeed']
+  }
   '/posts/{id}': {
     get: operations['PostsController_findOne']
     delete: operations['PostsController_remove']
@@ -272,8 +275,6 @@ export interface operations {
       query?: {
         /** @description comma seperated list of genres */
         genre?: string
-        /** @description want to show only posts by users the requesting user follows? */
-        followerFeed?: boolean
         /** @description comma seperated list of genres */
         sort?: 'likes' | 'dislikes' | 'newest' | 'oldest'
         page?: number
@@ -292,6 +293,21 @@ export interface operations {
     }
     responses: {
       201: never
+    }
+  }
+  PostsController_findAllFollowerFeed: {
+    parameters: {
+      query?: {
+        /** @description comma seperated list of genres */
+        genre?: string
+        /** @description comma seperated list of genres */
+        sort?: 'likes' | 'dislikes' | 'newest' | 'oldest'
+        page?: number
+        take?: number
+      }
+    }
+    responses: {
+      200: never
     }
   }
   PostsController_findOne: {

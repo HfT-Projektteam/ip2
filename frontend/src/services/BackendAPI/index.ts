@@ -4,6 +4,8 @@ import {
   getFollowingsNum,
   searchUsers,
   setFollower,
+  postPost,
+  signIn,
 } from './component'
 
 export {
@@ -12,4 +14,6 @@ export {
   getFollowingsNum,
   searchUsers,
   setFollower,
+  postPost,
+  signIn,
 }

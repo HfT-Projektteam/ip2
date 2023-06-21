@@ -69,6 +69,15 @@ export class PostsController {
     return this.postsService.create(createPostDto)
   }
 
+  @Get('/follower')
+  @UseInterceptors(PageMetaInterceptor)
+  findAllFollowerFeed(
+    @Query() query: PostFilterQuery,
+    @Query() pageOpts: PageOptionsDto,
+  ) {
+    return this.postsService.findAllFollowerFeed(pageOpts, query)
+  }
+
   @Get()
   @UseInterceptors(PageMetaInterceptor)
   findAll(@Query() query: PostFilterQuery, @Query() pageOpts: PageOptionsDto) {
@@ -83,7 +92,6 @@ export class PostsController {
     })
   }
 
-  // Maybe to update comment description
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(id, updatePostDto)

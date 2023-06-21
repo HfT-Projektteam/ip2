@@ -10,13 +10,13 @@ const webpack = require('webpack')
 
 // https://raviolicode.hashnode.dev/how-to-load-custom-env-variables-in-webpack-with-craco
 const ENV = process.env.REACT_APP_DEPLOY_ENV || 'dev'
-const result = DotEnv.config({ path: `./.env.${ENV}` })
+const result = DotEnv.config({ path: `src/config/.env.${ENV}` })
 
 if (result.error) {
   throw result.error
 }
 
-const env = DotEnv.config({ path: `./.env.${ENV}` }).parsed
+const env = DotEnv.config({ path: `src/config/.env.${ENV}` }).parsed
 // const envLocal = DotEnv.config({ path: './.env.local' }).parsed || {}
 
 // collect all .env keys and values
