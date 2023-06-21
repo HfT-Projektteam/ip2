@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 
 jest.mock('@services/SpotifyAPI')
+jest.spyOn(window, 'scrollTo')
 
 describe('Render Create NewPost Page', () => {
   it('should have all Components', async () => {
