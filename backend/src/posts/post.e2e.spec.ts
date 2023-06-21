@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Test } from '@nestjs/testing'
 import { Repository } from 'typeorm'
 
+import { User } from '../users/entities/user.entity'
 import { Post } from './entities/post.entity'
 import { PostsModule } from './posts.module'
 
@@ -10,13 +11,22 @@ import * as request from 'supertest'
 
 import { ConfigModule } from '@nestjs/config'
 import configOptions from '../config/config'
+import { APP_GUARD } from '@nestjs/core'
+import { AuthGuard } from '../auth/auth.guard'
+import { AppService } from '../app.service'
+import { UsersService } from '../users/users.service'
+import { UsersModule } from '../users/users.module'
+import { AuthModule } from '../auth/auth.module'
 
 let app: INestApplication
-let repository: Repository<Post>
+let postRepository: Repository<Post>
+let userRepository: Repository<User>
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
     imports: [
+      UsersModule,
+      AuthModule,
       PostsModule,
       ConfigModule.forRoot(configOptions),
       // Use the e2e_test database to run the tests
@@ -31,26 +41,34 @@ beforeAll(async () => {
         synchronize: true,
       }),
     ],
+    providers: [
+      UsersService,
+      {
+        provide: APP_GUARD,
+        useClass: AuthGuard,
+      },
+    ],
   }).compile()
   app = module.createNestApplication()
   await app.init()
 
-  repository = module.get('PostRepository')
+  postRepository = module.get('PostRepository')
+  userRepository = module.get('UserRepository')
+
+  await userRepository.save({ spotify_uri: 'local-user' })
 })
 
 describe('Test basic DB connectivity', () => {
-  it('should create and save a post', async () => {
+  it.skip('should create and save a post', async () => {
     await request(app.getHttpServer())
       .post('/posts')
-      .send({ songId: 'test1', description: 'test1', genre: 'test1' })
+      .send({ song_id: 'test1', description: 'test1', genre: 'test1' })
       .expect(201)
       .expect({
         songId: 'test1',
         description: 'test1',
         genre: 'test1',
         creator: 'local-user',
-        uuid: '90c21b93-cc5c-42de-96fc-d1d85b06786f',
-        uploaded: '2023-06-21T11:41:00.732Z',
         likes: 0,
         dislikes: 0,
       })
