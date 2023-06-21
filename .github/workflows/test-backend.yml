@@ -40,6 +40,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Apply SQL Base
+        run: |
+          ls ${{ github.workspace }}
+          psql -h localhost -U postgres -d e2e_test -f ${{ github.workspace }}/backend/data.sql
+        env:
+          PGPASSWORD: postgres
       - name: Use Node.js ${{ matrix.node-version }} with yarn cache
         uses: actions/setup-node@v3
         with:
