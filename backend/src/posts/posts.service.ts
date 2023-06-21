@@ -125,7 +125,14 @@ export class PostsService {
       })
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.postRepo
+      .findOneOrFail({ where: { uuid: id }, relations: { creator: true } })
+      .then((post) => {
+        if (this.request['spotify_uri'] != post.creator.spotify_uri)
+          throw new UnauthorizedException('Only post creators can edit them')
+      })
+
     return this.postRepo.delete({ uuid: id })
   }
 
@@ -154,6 +161,8 @@ export class PostsService {
             return false
           })
       }
+      console.log(e)
+      return false
     }
 
     return this.postRepo
@@ -205,15 +214,29 @@ export class PostsService {
       })
   }
 
-  getLike(id: string) {
+  getLike(id: string): Promise<boolean> {
     return this.userRepo
       .createQueryBuilder('user')
-      .relation(User, 'likes')
-      .of(this.request['spotify_uri'])
-      .loadOne()
-      .then((post) => {
-        return post != undefined
+      .where('user.spotify_uri = :uri', { uri: this.request['spotify_uri'] })
+      .leftJoinAndSelect('user.likes', 'likes')
+      .where('likes.uuid = :uuid', { uuid: id })
+      .getMany()
+      .then((result) => {
+        return result.length > 0
       })
+      .catch((e) => {
+        console.log(e)
+        return false
+      })
+
+    // return this.userRepo
+    //   .createQueryBuilder('user')
+    //   .relation(User, 'likes')
+    //   .of(this.request['spotify_uri'])
+    //   .loadOne()
+    //   .then((post) => {
+    //     return post != undefined
+    //   })
   }
 
   getDislike(id: string) {
