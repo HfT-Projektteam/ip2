@@ -1,7 +1,6 @@
 import { NewPost } from './component'
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { prototype } from 'dayjs'
 import { BrowserRouter } from 'react-router-dom'
 
 jest.mock('@services/SpotifyAPI')
