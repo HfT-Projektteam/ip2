@@ -130,7 +130,7 @@ export class PostsService {
       .findOneOrFail({ where: { uuid: id }, relations: { creator: true } })
       .then((post) => {
         if (this.request['spotify_uri'] != post.creator.spotify_uri)
-          throw new UnauthorizedException('Only post creators can edit them')
+          throw new UnauthorizedException('Only post creators can delete them')
       })
 
     return this.postRepo.delete({ uuid: id })
@@ -160,9 +160,9 @@ export class PostsService {
           .then(() => {
             return false
           })
+      } else {
+        return false
       }
-      console.log(e)
-      return false
     }
 
     return this.postRepo
@@ -200,6 +200,8 @@ export class PostsService {
           .then(() => {
             return false
           })
+      } else {
+        return false
       }
     }
 
@@ -207,7 +209,7 @@ export class PostsService {
       .createQueryBuilder('post')
       .update(Post)
       .where('uuid = :uuid', { uuid: id })
-      .set({ likes: () => 'dislikes + 1' })
+      .set({ dislikes: () => 'dislikes + 1' })
       .execute()
       .then(() => {
         return true
