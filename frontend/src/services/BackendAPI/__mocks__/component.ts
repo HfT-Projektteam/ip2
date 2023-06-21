@@ -76,3 +76,11 @@ export async function getPosts(
     },
   ]
 }
+
+export async function postPost(
+  songId: string = '',
+  description: string = '',
+  genre: string = '',
+): Promise<void> {}
+
+export async function signIn(): Promise<void> {}

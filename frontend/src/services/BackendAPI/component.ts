@@ -187,6 +187,54 @@ export async function getPosts(
     })
 }
 
+export async function postPost(
+  songId: string = '',
+  description: string = '',
+  genre: string = '',
+): Promise<void> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || songId === '') {
+    return
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      song_id: songId,
+      description,
+      genre,
+    }),
+  }
+
+  return await request<any>(`${backendUri}/posts`, options).catch((error) => {
+    console.error('Error in postPosts:', error)
+  })
+}
+
+export async function signIn(): Promise<void> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  await request<any>(`${backendUri}/signIn`, options).catch((error) => {
+    console.error('Error in signIn:', error)
+  })
+}
+
 async function request<T>(url: string, options: RequestInit): Promise<T> {
   const response = await fetch(url, options)
   if (!response.ok) {
