@@ -1,16 +1,38 @@
 {
   "posts": [
     {
-      "id": "32424324",
-      "spotifyId": "03jhnLcIT8C4DhXnNecOZv"
+      "uuid": "32424324",
+      "songId": "03jhnLcIT8C4DhXnNecOZv",
+
+      "description": "",
+      "creator": {
+        "spotify_uri": "strin"
+      },
+      "uploaded": "",
+      "likes": 3,
+      "dislikes": 10
     },
     {
-      "id": "535242312",
-      "spotifyId": "1OOtq8tRnDM8kG2gqUPjAj"
+      "uuid": "535242312",
+      "songId": "1OOtq8tRnDM8kG2gqUPjAj",
+      "description": "",
+      "creator": {
+        "spotify_uri": "strin"
+      },
+      "uploaded": "",
+      "likes": 100,
+      "dislikes": 0
     },
     {
-      "id": "43245464",
-      "spotifyId": "49FYlytm3dAAraYgpoJZux"
+      "uuid": "43245464",
+      "songId": "49FYlytm3dAAraYgpoJZux",
+      "description": "",
+      "creator": {
+        "spotify_uri": "strin"
+      },
+      "uploaded": "",
+      "likes": 10,
+      "dislikes": 1
     }
   ]
 }
