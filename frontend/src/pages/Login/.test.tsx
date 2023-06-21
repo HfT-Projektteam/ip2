@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 
 jest.mock('@services/SpotifyAPI/Authorization')
+jest.mock('@services/BackendAPI')
 
 describe('Login', () => {
   const history = createMemoryHistory()
