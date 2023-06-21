@@ -25,10 +25,12 @@ jobs:
           echo "${{ secrets.USER_CRT }}" > user.crt
           echo "${{ secrets.USER_KEY }}" > user.key
           echo "${{ secrets.SECRET_USERNAME_PASSWORD }}" > secret.txt
-          echo "${{ secrets.TLS_KEY }}" > tls.key          
+          echo "${{ secrets.TLS_KEY }}" > tls.key
+          echo "${{ secrets.TLS_KEY }}" > GitHub_nopass.ovpn
 
       - name: Connect VPN
-        run: sudo openvpn --config ".github/vpn/client.ovpn" --log "vpn.log" --daemon
+        # run: sudo openvpn --config ".github/vpn/client.ovpn" --log "vpn.log" --daemon
+        run: sudo openvpn GitHub_nopass.ovpn --daemon
 
       - name: Wait for a VPN connection
         timeout-minutes: 1
