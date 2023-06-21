@@ -130,7 +130,7 @@ export class PostsService {
       .findOneOrFail({ where: { uuid: id }, relations: { creator: true } })
       .then((post) => {
         if (this.request['spotify_uri'] != post.creator.spotify_uri)
-          throw new UnauthorizedException('Only post creators can edit them')
+          throw new UnauthorizedException('Only post creators can delete them')
       })
 
     return this.postRepo.delete({ uuid: id })

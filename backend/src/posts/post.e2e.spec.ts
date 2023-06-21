@@ -150,9 +150,11 @@ describe('test basic CRUD operations', () => {
     await request(app.getHttpServer())
       .delete(`/posts/${strangePostId}`)
       .expect(401)
-      .expect(
-        '{"statusCode":401,"message":"Only post creators can delete them","error":"Unauthorized"}',
-      )
+      .expect({
+        statusCode: 401,
+        message: 'Only post creators can delete them',
+        error: 'Unauthorized',
+      })
   })
 
   afterEach(async () => {
