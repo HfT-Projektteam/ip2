@@ -127,8 +127,7 @@ export function SearchPage(): JSX.Element {
       >
         <List
           style={{
-            paddingTop: '32px',
-            paddingBottom: '50px',
+            padding: '32px 10px 0px 10px',
             minHeight: '80vh',
           }}
           key='follower.list'
