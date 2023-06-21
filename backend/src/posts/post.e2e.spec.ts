@@ -163,3 +163,7 @@ describe('test basic CRUD operations', () => {
     await userRepository.delete({ spotify_uri: 'second-user' })
   })
 })
+
+afterAll(async () => {
+  await app.close()
+})
