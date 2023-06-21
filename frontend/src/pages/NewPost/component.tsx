@@ -3,14 +3,17 @@ import {
   searchSong,
   searchSongByLink,
 } from '@services/SpotifyAPI'
-import { Input, Space, Avatar, List, Button } from 'antd'
+import { Input, Space, Avatar, List, Button, Col, theme } from 'antd'
 import { useEffect, useState } from 'react'
 import { type components } from '@data/spotify-types'
 import TextArea from 'antd/es/input/TextArea'
+import useWindowDimensions from '@hooks/useWindowDimensions'
+import ScrollToTop from '@services/ScrollToTop'
 import { postPost } from '@services/BackendAPI'
 
 const { Search } = Input
 type trackObject = components['schemas']['TrackObject']
+const { useToken } = theme
 
 export function NewPost(): JSX.Element {
   const [songs, setSongs] = useState<trackObject[]>([])
@@ -66,52 +69,93 @@ export function NewPost(): JSX.Element {
     void postPost(song?.id, comment, '')
   }
 
+  const { width } = useWindowDimensions()
+  const [containerWidth, setContainerWidth] = useState('100%')
+
+  useEffect(() => {
+    width <= 768 ? setContainerWidth('100%') : setContainerWidth('500px')
+  }, [width])
+
+  const { token } = useToken()
+
   return (
     <>
-      <Space direction='vertical' style={{ width: '100%' }}>
-        <Search
-          placeholder='Search Song'
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSearch={onSearch}
-        />
-      </Space>
-      {songs.length > 0 ? (
-        <List
-          key='search.list'
-          itemLayout='horizontal'
-          dataSource={songs}
-          renderItem={(song, index) => (
-            <List.Item
-              onClick={() => {
-                onSongClick(song)
-              }}
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={song?.album?.images.at(0)?.url} />}
-                title={song?.name}
-                description={song?.artists?.at(0)?.name}
-              />
-            </List.Item>
-          )}
-        />
-      ) : (
-        ''
-      )}
-
-      <TextArea
-        rows={4}
-        placeholder='Say something'
-        onChange={(e) => {
-          onCommentChange(e.target.value)
+      <span
+        style={{
+          position: 'fixed',
+          width: `${containerWidth}`,
+          background: `${token.colorBgLayout}`,
+          height: '42px',
+          zIndex: 2,
+          marginBottom: '10px',
         }}
-      />
-      <Button
-        type='primary'
-        onClick={onPostClick}
-        style={{ margin: '0 0 500px 0' }}
-      >
-        POST
-      </Button>
+      ></span>
+      <Col style={{ padding: '10px' }}>
+        <Space
+          direction='vertical'
+          style={{
+            position: 'fixed',
+            width: `${containerWidth}`,
+            paddingRight: '20px',
+            zIndex: 2,
+          }}
+        >
+          <Search placeholder='Search Song' onSearch={() => onSearch} />
+        </Space>
+
+        {songs.length > 0 ? (
+          <List
+            style={{ paddingTop: '32px', paddingBottom: '50px' }}
+            key='search.list'
+            itemLayout='horizontal'
+            dataSource={songs}
+            renderItem={(song, index) => (
+              <List.Item
+                onClick={() => {
+                  onSongClick(song)
+                }}
+              >
+                <List.Item.Meta
+                  avatar={<Avatar src={song?.album?.images.at(0)?.url} />}
+                  title={song?.name}
+                  description={song?.artists?.at(0)?.name}
+                />
+              </List.Item>
+            )}
+          />
+        ) : (
+          <span
+            style={{
+              minHeight: '80vh',
+              width: `${containerWidth}`,
+              background: `${token.colorBgLayout}`,
+            }}
+          />
+        )}
+
+        {songs.length === 1 ? (
+          <>
+            <ScrollToTop />
+            <TextArea
+              rows={4}
+              placeholder='Say something'
+              onChange={(e) => {
+                onCommentChange(e.target.value)
+              }}
+            />
+            <Button
+              type='primary'
+              onClick={onPostClick}
+              style={{ margin: '0 0 500px 0' }}
+              block
+            >
+              POST
+            </Button>
+          </>
+        ) : (
+          ''
+        )}
+      </Col>
     </>
   )
 }

@@ -1,4 +1,5 @@
 import { type components as BackendComponents } from '@data/openapi'
+
 type User = BackendComponents['schemas']['UserDto']
 type GetPost = BackendComponents['schemas']['GetPostDto']
 
@@ -151,6 +152,18 @@ export async function searchUsers(
       return null
     })
 }
+
+// interface Sort  {a: operations['PostsController_findAll']['parameters']['query']}
+
+/**
+ *
+ * @param genre = []
+ * @param followerFeed = boolean (true: private, false: global)
+ * @param sort = enum [newest, oldest, dislikes, likes]
+ * @param page = pagination (0 for first take)
+ * @param take = number of objects returned
+ * @returns
+ */
 
 export async function getPosts(
   genre: string = '',

@@ -1,13 +1,15 @@
-import { Avatar, Button, Input, List } from 'antd'
+import { Avatar, Button, Input, List, Space, theme } from 'antd'
 import { type components as BackendComponents } from '@data/openapi'
 import { type components as SpotifyComponents } from '@data/spotify-types'
 import { searchUsers, setFollower } from '@services/BackendAPI'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getUser } from '@services/SpotifyAPI'
+import useWindowDimensions from '@hooks/useWindowDimensions'
 type UserBackend = BackendComponents['schemas']['UserDto']
 type UserSpotify = SpotifyComponents['schemas']['PublicUserObject']
 
+const { useToken } = theme
 const { Search } = Input
 
 export function SearchPage(): JSX.Element {
@@ -75,13 +77,44 @@ export function SearchPage(): JSX.Element {
     await setFollower(currentUserId, user.id)
   }
 
+  const { width } = useWindowDimensions()
+  const [containerWidth, setContainerWidth] = useState('100%')
+
+  useEffect(() => {
+    width <= 768 ? setContainerWidth('100%') : setContainerWidth('500px')
+  }, [width])
+
+  const { token } = useToken()
+
   return (
     <>
-      <Search
-        placeholder='Search User'
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        onSearch={onSearch}
-      />
+      <span
+        style={{
+          position: 'fixed',
+          width: `${containerWidth}`,
+          background: `${token.colorBgLayout}`,
+          height: '42px',
+          zIndex: 2,
+          marginBottom: '10px',
+        }}
+      ></span>
+      <Space
+        direction='vertical'
+        style={{
+          position: 'fixed',
+          width: `${containerWidth}`,
+          padding: '10px',
+          zIndex: 2,
+        }}
+      >
+        <Search
+          placeholder='Search User'
+          onSearch={(value) => {
+            void onSearch(value)
+          }}
+        />
+      </Space>
+
       <InfiniteScroll
         dataLength={userSpotify.length}
         next={() => {
@@ -93,6 +126,10 @@ export function SearchPage(): JSX.Element {
         scrollableTarget='scrollableDiv'
       >
         <List
+          style={{
+            padding: '32px 10px 0px 10px',
+            minHeight: '80vh',
+          }}
           key='follower.list'
           itemLayout='horizontal'
           dataSource={userSpotify}

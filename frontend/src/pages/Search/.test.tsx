@@ -28,6 +28,7 @@ describe('Search', () => {
     })
 
     const searchBox = await screen.findByPlaceholderText('Search User')
+    expect(searchBox).toBeInTheDocument()
 
     await act(async () => {
       userEvent.type(searchBox, 'User Name{enter}')
