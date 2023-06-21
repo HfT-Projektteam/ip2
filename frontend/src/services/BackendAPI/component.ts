@@ -250,13 +250,13 @@ export async function signIn(): Promise<void> {
 
 /**
  *
- * @param songId
+ * @param uuid
  * @returns true if the post was liked, false if the like was removed
  */
-export async function likePost(songId: string): Promise<boolean | undefined> {
+export async function likePost(uuid: string): Promise<boolean | undefined> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
-  if (accessToken === '' || songId == null) {
+  if (accessToken === '' || uuid == null) {
     return undefined
   }
 
@@ -267,7 +267,7 @@ export async function likePost(songId: string): Promise<boolean | undefined> {
     },
   }
 
-  return await request<any>(`${backendUri}/posts/${songId}/like`, options)
+  return await request<any>(`${backendUri}/posts/${uuid}/like`, options)
     .then((response) => {
       return response
     })
@@ -279,15 +279,13 @@ export async function likePost(songId: string): Promise<boolean | undefined> {
 
 /**
  * Returns
- * @param songId
+ * @param uuid
  * @returns true if the post was disliked, false if the dislike was removed
  */
-export async function dislikePost(
-  songId: string,
-): Promise<boolean | undefined> {
+export async function dislikePost(uuid: string): Promise<boolean | undefined> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
-  if (accessToken === '' || songId == null) {
+  if (accessToken === '' || uuid == null) {
     return undefined
   }
 
@@ -298,7 +296,7 @@ export async function dislikePost(
     },
   }
 
-  return await request<any>(`${backendUri}/posts/${songId}/dislike`, options)
+  return await request<any>(`${backendUri}/posts/${uuid}/dislike`, options)
     .then((response) => {
       return response
     })
@@ -310,15 +308,13 @@ export async function dislikePost(
 
 /**
  *
- * @param songId
+ * @param uuid
  * @returns true if the post is liked by the user, false if not
  */
-export async function getLikePost(
-  songId: string,
-): Promise<boolean | undefined> {
+export async function getLikePost(uuid: string): Promise<boolean | undefined> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
-  if (accessToken === '' || songId == null) {
+  if (accessToken === '' || uuid == null) {
     return undefined
   }
 
@@ -329,7 +325,7 @@ export async function getLikePost(
     },
   }
 
-  return await request<any>(`${backendUri}/posts/${songId}/like`, options)
+  return await request<any>(`${backendUri}/posts/${uuid}/like`, options)
     .then((response) => {
       return response
     })
@@ -341,15 +337,15 @@ export async function getLikePost(
 
 /**
  *
- * @param songId
+ * @param uuid
  * @returns true if the post is liked by the user, false if not
  */
 export async function getDislikePost(
-  songId: string,
+  uuid: string,
 ): Promise<boolean | undefined> {
   const accessToken = localStorage.getItem('access_token') ?? ''
 
-  if (accessToken === '' || songId == null) {
+  if (accessToken === '' || uuid == null) {
     return undefined
   }
 
@@ -360,7 +356,7 @@ export async function getDislikePost(
     },
   }
 
-  return await request<any>(`${backendUri}/posts/${songId}/dislike`, options)
+  return await request<any>(`${backendUri}/posts/${uuid}/dislike`, options)
     .then((response) => {
       return response
     })

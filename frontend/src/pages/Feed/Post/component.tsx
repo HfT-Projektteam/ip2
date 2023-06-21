@@ -60,11 +60,11 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
 
   const likeSong = (): void => {
     setLike(!like)
-    void likePost(postObject.songId)
+    void likePost(postObject.uuid)
   }
   const dislikeSong = (): void => {
     setDislike(!dislike)
-    void dislikePost(postObject.songId)
+    void dislikePost(postObject.uuid)
   }
 
   return (
