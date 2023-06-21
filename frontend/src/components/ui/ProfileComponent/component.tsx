@@ -133,7 +133,7 @@ export function ProfileComponent(): JSX.Element {
         <Text strong>{profileName}</Text>
       </Space>
       <Divider />
-      <ProfileFeed {...feed}></ProfileFeed>
+      <ProfileFeed posts={feed.posts}></ProfileFeed>
     </>
   )
 }
