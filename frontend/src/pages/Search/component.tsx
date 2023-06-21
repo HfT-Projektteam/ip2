@@ -107,7 +107,12 @@ export function SearchPage(): JSX.Element {
           zIndex: 2,
         }}
       >
-        <Search placeholder='Search User' onSearch={() => onSearch} />
+        <Search
+          placeholder='Search User'
+          onSearch={(value) => {
+            void onSearch(value)
+          }}
+        />
       </Space>
 
       <InfiniteScroll
