@@ -469,12 +469,63 @@
             }
           },
           {
-            "name": "followerFeed",
+            "name": "sort",
             "required": false,
             "in": "query",
-            "description": "want to show only posts by users the requesting user follows?",
+            "description": "comma seperated list of genres",
             "schema": {
-              "type": "boolean"
+              "enum": [
+                "likes",
+                "dislikes",
+                "newest",
+                "oldest"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/posts/follower": {
+      "get": {
+        "operationId": "PostsController_findAllFollowerFeed",
+        "parameters": [
+          {
+            "name": "genre",
+            "required": false,
+            "in": "query",
+            "description": "comma seperated list of genres",
+            "schema": {
+              "type": "string"
             }
           },
           {
