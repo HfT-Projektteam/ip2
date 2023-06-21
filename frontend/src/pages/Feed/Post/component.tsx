@@ -33,7 +33,7 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
   const [dislike, setDislike] = useState(false)
 
   useEffect(() => {
-    getTrack(`${postObject.songId}`)
+    getTrack(postObject.songId)
       .then((res) => {
         setPost(res)
       })
@@ -161,6 +161,8 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
             <Link href={'spotify:artist:' + String(post?.artistId ?? '')}>
               {post?.artist}
             </Link>
+            like {String(like)}
+            dislike {String(dislike)}
           </>
         }
       />
