@@ -163,9 +163,3 @@ describe('test basic CRUD operations', () => {
     await userRepository.delete({ spotify_uri: 'second-user' })
   })
 })
-
-// describe('test like/dislike operations', () => {})
-
-afterAll(async () => {
-  await app.close()
-})
