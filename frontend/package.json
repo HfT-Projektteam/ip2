@@ -94,7 +94,7 @@
       "/services/IdGenerator/*",
       "/services/SpotifyAPI/component.ts"
     ],
-    "coverageReporters": ["clover", "json", "lcov", "text"]
+    "coverageReporters": ["clover", "json-summary", "lcov", "text"]
 
   }
 }
