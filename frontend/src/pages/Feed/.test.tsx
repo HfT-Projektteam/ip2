@@ -3,6 +3,7 @@ import { act, render, screen } from '@testing-library/react'
 import feedMock from '@data/mockdata/feed.json'
 
 jest.mock('@services/SpotifyAPI')
+jest.mock('@services/BackendAPI')
 
 describe('Feed', () => {
   it('should render Feed correctly', async () => {

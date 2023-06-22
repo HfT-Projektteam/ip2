@@ -3,6 +3,7 @@ import { Post } from '@pages/Feed/Post'
 import feedMock from '@data/mockdata/feed.json'
 
 jest.mock('@services/SpotifyAPI')
+jest.mock('@services/BackendAPI')
 
 describe('Post component', () => {
   it('should render Post for Feed correctly', async () => {

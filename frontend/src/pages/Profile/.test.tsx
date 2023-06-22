@@ -5,7 +5,7 @@ jest.mock('@services/SpotifyAPI')
 jest.mock('@services/BackendAPI')
 
 describe('Profile', () => {
-  it('should render Profile correctly', async () => {
+  it('should have 1 Posted Song in the Profile', async () => {
     act(() => render(<Profile />))
 
     await act(async () => {
@@ -13,6 +13,6 @@ describe('Profile', () => {
       await new Promise((resolve) => setTimeout(resolve, 0))
     })
 
-    expect(await screen.getAllByText('Test Name')).toHaveLength(4)
+    expect(await screen.getAllByText('Test Name')).toHaveLength(1)
   })
 })
