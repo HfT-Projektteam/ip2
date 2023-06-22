@@ -22,8 +22,8 @@ export function Login(): JSX.Element {
         setLoginToken(token)
 
         if (token !== '') {
+          void signIn()
           void setCurrentUser().then((user) => {
-            void signIn()
             void postUser(user?.id ?? '')
           })
 
