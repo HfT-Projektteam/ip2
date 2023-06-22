@@ -104,7 +104,10 @@ export class PostsService {
   }
 
   findOne(id: string) {
-    return this.postRepo.findOneByOrFail({ uuid: id })
+    return this.postRepo.findOneOrFail({
+      relations: { creator: true },
+      where: { uuid: id },
+    })
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
