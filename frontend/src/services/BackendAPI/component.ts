@@ -200,6 +200,41 @@ export async function getPosts(
     })
 }
 
+export async function getPrivatePosts(
+  genre: string = '',
+  followerFeed: boolean,
+  sort: string = 'newest',
+  page: number = 0,
+  take: number = 10,
+): Promise<GetPost[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/posts/follower/?genre=${genre}&followerFeed=${String(
+      followerFeed,
+    )}&sort=${sort}&page=${page}&take=${take}`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPrivatePosts:', error)
+      return null
+    })
+}
+
 export async function getUserPosts(): Promise<GetPost[] | null> {
   const accessToken = localStorage.getItem('access_token') ?? ''
   const spotifyId = localStorage.getItem('spotifyId') ?? ''

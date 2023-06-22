@@ -3,7 +3,11 @@
 import { Post } from '@pages/Feed/Post'
 import { type HandleFeedChange, type feedInterface } from './interface'
 import { useEffect, useState } from 'react'
-import { getPosts, getUserPosts } from '@services/BackendAPI/component'
+import {
+  getPosts,
+  getPrivatePosts,
+  getUserPosts,
+} from '@services/BackendAPI/component'
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ScrollToTop from '@services/ScrollToTop'
@@ -40,8 +44,31 @@ export function Feed({
   }, [])
 
   useEffect(() => {
+    // ONLY FOR GLOBAL FEED
+    if (isPrivateFeed) return
     void (async () => {
       const allPosts = await getPosts(genre, isPrivateFeed, sort, pagination)
+      if (allPosts === null) {
+        return
+      }
+
+      const newFeed = feed.posts.concat(allPosts)
+
+      handleFeedChange({ posts: newFeed })
+      setLoading(false)
+    })()
+  }, [sortGenreChanged, pagination, isPrivateFeed])
+
+  useEffect(() => {
+    // ONLY FOR PRIVATE FEED
+    if (!isPrivateFeed) return
+    void (async () => {
+      const allPosts = await getPrivatePosts(
+        genre,
+        isPrivateFeed,
+        sort,
+        pagination,
+      )
       if (allPosts === null) {
         return
       }
@@ -67,8 +94,8 @@ export function Feed({
   return (
     <>
       <ScrollToTop />
+      isPrivateFeed: {isPrivateFeed}
       <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
-
       <InfiniteScroll
         dataLength={feed.posts.length}
         next={() => {

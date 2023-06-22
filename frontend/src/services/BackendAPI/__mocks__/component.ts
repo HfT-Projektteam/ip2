@@ -77,6 +77,27 @@ export async function getPosts(
   ]
 }
 
+export async function getPrivatePosts(
+  genre: string = '',
+  followerFeed: boolean,
+  sort: string = 'newest',
+  page: number = 0,
+  take: number = 10,
+): Promise<GetPost[] | null> {
+  return [
+    {
+      creator: { spotify_uri: 'spotify.user' },
+      songId: '03jhnLcIT8C4DhXnNecOZv',
+      description: 'Description',
+      dislikes: 0,
+      likes: 1,
+      genre: 'rock',
+      uploaded: '01.01.2023',
+      uuid: '1234567890',
+    },
+  ]
+}
+
 export async function postPost(
   songId: string = '',
   description: string = '',
