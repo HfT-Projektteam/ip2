@@ -20,9 +20,3 @@ export class Pagination {
     return `${query} LIMIT ${options.take} OFFSET ${this.getSkip(options)}`
   }
 }
-
-export class PagingError extends Error {
-  constructor(message: string) {
-    super(message)
-  }
-}

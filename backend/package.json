@@ -85,7 +85,8 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "main.ts"
+      "main.ts",
+      ".dto.ts"
     ],
     "coverageReporters": ["json-summary"]
   }

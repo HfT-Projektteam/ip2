@@ -44,9 +44,9 @@ export class PageOptionsDto {
   @IsOptional()
   readonly take?: number = 10
 
-  get skip(): number {
-    return (this.page - 1) * this.take
-  }
+  // get skip(): number {
+  //   return (this.page - 1) * this.take
+  // }
 }
 
 export class Page<T> {
