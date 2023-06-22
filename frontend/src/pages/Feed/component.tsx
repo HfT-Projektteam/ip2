@@ -6,13 +6,21 @@ import { useEffect, useState } from 'react'
 import { getPosts } from '@services/BackendAPI/component'
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import mockData from '@data/mockdata/feed_extended.json'
 
 interface FeedProps {
   feed: feedInterface
   handleFeedChange: HandleFeedChange['handleFeedChange']
+  sort: string
+  genre: string
 }
 
-export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
+export function Feed({
+  feed,
+  handleFeedChange,
+  sort,
+  genre,
+}: FeedProps): JSX.Element {
   const [isPrivateFeed, setIsPrivateFeed] = useState(true)
   const [pagination, setPagination] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -26,13 +34,13 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
   useEffect(() => {
     setPagination(0)
     return (): void => {
-      handleFeedChange({ posts: [] })
+      handleFeedChange(mockData)
     }
-  }, [])
+  }, [sort, genre])
 
   useEffect(() => {
     void (async () => {
-      const allPosts = await getPosts('', isPrivateFeed, undefined, pagination)
+      const allPosts = await getPosts(genre, isPrivateFeed, sort, pagination)
       if (allPosts === null) return
 
       const newFeed = feed.posts.concat(allPosts)

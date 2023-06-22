@@ -20,46 +20,46 @@ import {
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Icon_RGB_Black.png'
-import { type HandleFeedChange } from '@pages/Feed/interface'
-import { getPosts } from '@services/BackendAPI/component'
+import { type HandleSortGenreChange } from '@pages/Feed/interface'
 
 const { Text } = Typography
 
-const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
-  const [currentGenre, setCurrentGenre] = useState('')
-
-  const handleGenreChange = async (genre: string): Promise<void> => {
-    const allPosts = await getPosts(genre, true)
+interface FeedHeaderProps {
+  handleSortGenreChange: HandleSortGenreChange['handleSortGenreChange']
+}
+const FeedHeader = ({
+  handleSortGenreChange,
+}: FeedHeaderProps): JSX.Element => {
+  const handleGenreChange = (genre: string): void => {
+    /* const allPosts = await getPosts(genre, true)
     if (allPosts === null) return
 
-    /* const newFeed = allPosts?.map((post) => {
+    const newFeed = allPosts?.map((post) => {
       return { id: post.uuid, spotifyId: post.songId }
     }) */
-    setCurrentGenre(genre)
-    handleFeedChange({ posts: allPosts })
+
+    handleSortGenreChange(false, genre)
   }
 
-  const handleSortingChange = async (sortValue: string): Promise<void> => {
-    const allPosts = await getPosts(currentGenre, true, sortValue)
+  const handleSortingChange = (sortValue: string): void => {
+    /* const allPosts = await getPosts(currentGenre, true, sortValue)
     if (allPosts === null) return
-    /* const newFeed = allPosts?.map((post) => {
+    const newFeed = allPosts?.map((post) => {
       return { id: post.uuid, spotifyId: post.songId }
-    }) */
+    })
 
-    handleFeedChange({ posts: allPosts })
+    handleFeedChange({ posts: allPosts }) */
+    handleSortGenreChange(true, sortValue)
   }
 
   return (
     <>
-      {currentGenre}
       <Col>
         <Select
           allowClear
           placeholder={'Genre'}
           style={{ width: 120 }}
-          onChange={(value) => {
-            void handleGenreChange(value)
-          }}
+          onChange={handleGenreChange}
           options={[
             { value: 'genre1', label: 'Rap' },
             { value: 'genre2', label: 'Indie' },
@@ -73,7 +73,7 @@ const FeedHeader = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
           allowClear
           placeholder={'Sort'}
           style={{ width: 120 }}
-          onChange={() => handleSortingChange}
+          onChange={handleSortingChange}
           options={[
             { value: 'liked', label: 'Liked' },
             { value: 'disliked', label: 'Disliked' },
@@ -143,11 +143,16 @@ const ModalContainer = ({ children }: any): JSX.Element => {
   )
 }
 
-export const Header = ({ handleFeedChange }: HandleFeedChange): JSX.Element => {
+export const Header = ({
+  handleSortGenreChange,
+}: FeedHeaderProps): JSX.Element => {
   const location = useLocation()
 
   const headersContent: Array<{ path: string; node: JSX.Element }> = [
-    { path: 'feed', node: <FeedHeader handleFeedChange={handleFeedChange} /> },
+    {
+      path: 'feed',
+      node: <FeedHeader handleSortGenreChange={handleSortGenreChange} />,
+    },
     { path: 'search', node: <SearchHeader /> },
     { path: 'plus', node: <PostHeader /> },
     { path: 'profile', node: <ProfileHeader /> },
