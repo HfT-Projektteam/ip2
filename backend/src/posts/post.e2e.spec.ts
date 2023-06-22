@@ -293,6 +293,7 @@ describe('Multiple posts with filter', () => {
   let posts = []
   let localUser
   let secondUser
+  let onePostUuid
 
   beforeAll(async () => {
     localUser = new User('local-user')
@@ -329,6 +330,11 @@ describe('Multiple posts with filter', () => {
     }
     await postRepository.save(olderPost)
     posts = posts.concat(olderPost)
+    onePostUuid = await postRepository
+      .findOneBy({ songId: 'test3' })
+      .then((res) => {
+        return res.uuid
+      })
   })
 
   it('should sort by oldest', async () => {
@@ -366,6 +372,21 @@ describe('Multiple posts with filter', () => {
         res.body.data.forEach((post) => {
           expect(post.genre).toMatch('darkest acid underground techno')
         })
+      })
+  })
+
+  it.skip('should sort by likes', async () => {
+    const localUser = new User('local-user')
+    await userRepository.save(localUser)
+    await request(app.getHttpServer()).put(`/posts/${onePostUuid}/like`)
+
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, sort: 'likes' })
+      .expect(200)
+      .expect((res) => {
+        console.log(res.body.data)
+        expect(res.body.data[0].uuid).toMatch(onePostUuid)
       })
   })
 
