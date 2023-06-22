@@ -73,3 +73,4 @@ jobs:
         with:
           branches: main, devops/**
           coverage-summary-path: /home/runner/work/ip2/ip2/backend/coverage/coverage-summary.json
+          target-branch: badges
