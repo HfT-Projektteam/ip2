@@ -152,7 +152,7 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
                       <Col style={colStyle}>
                         <Text>{postObject.likes}</Text>
                       </Col>
-                      <Col style={colStyle}></Col>
+                      <Col style={colStyle}>{postObject.genre}</Col>
                       <Col style={colStyle}>
                         <Text>{postObject.dislikes}</Text>
                       </Col>

@@ -31,24 +31,11 @@ const FeedHeader = ({
   handleSortGenreChange,
 }: FeedHeaderProps): JSX.Element => {
   const handleGenreChange = (genre: string): void => {
-    /* const allPosts = await getPosts(genre, true)
-    if (allPosts === null) return
-
-    const newFeed = allPosts?.map((post) => {
-      return { id: post.uuid, spotifyId: post.songId }
-    }) */
     if (genre === undefined) genre = ''
     handleSortGenreChange(false, genre)
   }
 
   const handleSortingChange = (sortValue: string): void => {
-    /* const allPosts = await getPosts(currentGenre, true, sortValue)
-    if (allPosts === null) return
-    const newFeed = allPosts?.map((post) => {
-      return { id: post.uuid, spotifyId: post.songId }
-    })
-
-    handleFeedChange({ posts: allPosts }) */
     if (sortValue === undefined) sortValue = ''
     handleSortGenreChange(true, sortValue)
   }
@@ -62,17 +49,17 @@ const FeedHeader = ({
           style={{ width: 120 }}
           onChange={handleGenreChange}
           options={[
-            { value: 'genre1', label: 'Rap' },
-            { value: 'genre2', label: 'Indie' },
-            { value: 'genre3', label: 'Pop' },
-            { value: 'genre4', label: 'Singsang' },
+            { value: 'rock', label: 'Rock' },
+            { value: 'rap', label: 'Rap' },
+            { value: 'indie', label: 'Indie' },
+            { value: 'pop', label: 'Pop' },
+            { value: 'singsang', label: 'Singsang' },
           ]}
         />
       </Col>
       <Col>
         <Select
-          allowClear
-          placeholder={'Sort'}
+          defaultValue={'newest'}
           style={{ width: 120 }}
           onChange={handleSortingChange}
           options={[
