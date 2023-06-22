@@ -9,12 +9,12 @@
 - [x] 01. As a user I want to be able to login with Spotify oauth
 - [x] 02. As a user I want to be able to **log out** from the website 
 - [x] 03. As a user I want to be able to view a global feed of shared songs
-- [ ] 04. As a user I want to be able to view a feed of songs shared by my friends
+- [x] 04. As a user I want to be able to view a feed of songs shared by my friends
 - [x] 05. As a user I want to be able to like/dislike a shared song
 - [x] 06. As a user I want to be able to remove a previously made like/dislike
 - [x] 07. As a user I want to be able to see song metainformation (genre, title, artist)
 - [x] 08. As a user I want to be able to save a shared song to a designated (later: selected playlist) Spotify playlist
-- [ ] 09. As a user I want to be able to post songs to the feed by song link
+- [x] 09. As a user I want to be able to post songs to the feed by song link
 - [x] 10. As a user I want to be able to open a posted song (artist/album of song) in Spotify
 - [x] 11. As a user I want to be able to filter my feed by different criteria (i.e. songs of friends/groups, most hated/liked, ...)
 - [x] 12. As a user I want to be able to post songs to the feed by searching their name, artist name
@@ -26,6 +26,7 @@
 - [x] 18. As a user I want to be able to see who follows me and whom I´m following
 - [x] 19. As a user I want to be able to see my posting history
 - [x] 20. As a user I want to be able to paginate queries with commonly more than 30 queries
+- [x] 21. As a user I want to use the service through a well documented web API
 
 Extra:
 
