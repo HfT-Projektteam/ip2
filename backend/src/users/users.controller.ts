@@ -26,11 +26,6 @@ export class UsersController {
     private readonly postsService: PostsService,
   ) {}
 
-  @Post()
-  create(@Body() createUserDto: UserDto) {
-    return this.usersService.create(createUserDto)
-  }
-
   @Get()
   @UseInterceptors(PageMetaInterceptor)
   findAll(@Query() pageOptionsDto: PageOptionsDto) {
