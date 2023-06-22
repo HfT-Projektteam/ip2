@@ -1,8 +1,8 @@
 # Internet Programmierung SS23 (Spotify Social-Media)
 
 ## Coverage
-![Frontend](https://github.com/HfT-Projektteam/ip2/blob/frontend/badges/badges/coverage-lines.svg)
-![Backend](https://github.com/HfT-Projektteam/ip2/blob/backend/badges/badges/coverage-lines.svg)
+Frontend ![Frontend](https://github.com/HfT-Projektteam/ip2/blob/frontend/badges/badges/coverage-lines.svg)
+Backend ![Backend](https://github.com/HfT-Projektteam/ip2/blob/backend/badges/badges/coverage-lines.svg)
 
 ## User stories
 
