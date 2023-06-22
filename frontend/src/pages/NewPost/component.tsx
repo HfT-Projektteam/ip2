@@ -72,6 +72,8 @@ export function NewPost(): JSX.Element {
 
   const onPostClick = (): void => {
     void postPost(song?.id, comment, genre)
+    setSongs([])
+    setSong({})
   }
 
   const { width } = useWindowDimensions()
