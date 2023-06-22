@@ -55,6 +55,12 @@ jobs:
       - name: Yarn test
         run: yarn test:ci_cd --coverage
 
+      - name: validate path
+        run: |
+          ls -alh /
+          ls -alh .
+          pwd
+
       - name: Generating coverage badges
         uses: jpb06/jest-badges-action@latest
         with:
