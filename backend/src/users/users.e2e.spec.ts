@@ -109,7 +109,6 @@ describe('Pagination', () => {
         .send()
         .expect(200)
         .expect((res) => {
-          console.log(res.body)
           expect(res.body.data).toHaveLength(expectedLength)
         })
     },
@@ -157,11 +156,11 @@ describe('Pagination', () => {
 
 describe('Exception stuff', () => {
   beforeAll(async () => {
-    await repository.save({ spotify_uri: 'test1' })
+    await repository.save({ spotify_uri: 'exp_test1' })
   })
   it('should throw a 400 error if users tries to follow himself', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test1')
+      .post('/users/exp_test1/followings/exp_test1')
       .send()
       .expect(400)
       .expect((res) => {
@@ -195,82 +194,82 @@ describe('Exception stuff', () => {
   })
 
   afterAll(async () => {
-    await repository.delete(['test1', 'test2'])
+    await repository.delete(['exp_test1', 'exp_test1'])
   })
 })
 
 describe('Follower Stuff', () => {
   beforeEach(async () => {
-    await repository.save({ spotify_uri: 'test1' })
-    await repository.save({ spotify_uri: 'test2' })
+    await repository.save({ spotify_uri: 'followertest1' })
+    await repository.save({ spotify_uri: 'followertest2' })
   })
 
   it('should make one user follow another (only once)', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test2')
+      .post('/users/followertest1/followings/followertest2')
       .expect((res) => {
         expect(res.body).toMatchObject({
-          spotify_uri: 'test1',
-          following: [{ spotify_uri: 'test2' }],
+          spotify_uri: 'followertest1',
+          following: [{ spotify_uri: 'followertest2' }],
         })
       })
 
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test2')
+      .post('/users/followertest1/followings/followertest2')
       .expect((res) => {
         expect(res.body).toMatchObject({
-          spotify_uri: 'test1',
-          following: [{ spotify_uri: 'test2' }],
+          spotify_uri: 'followertest1',
+          following: [{ spotify_uri: 'followertest2' }],
         })
       })
   })
 
   it('should check if one user is following another', async () => {
-    const follwedUser = new User('test2')
-    follwedUser.following = [new User('test1')]
+    const follwedUser = new User('followertest2')
+    follwedUser.following = [new User('followertest1')]
     await repository.save(follwedUser)
 
     await request(app.getHttpServer())
-      .get('/users/test2/followings/test1')
+      .get('/users/followertest2/followings/followertest1')
       .expect((res) => {
         expect(res.body.doesUserFollowUser).toBeTruthy()
       })
 
     await request(app.getHttpServer())
-      .get('/users/test2/followings/test2')
+      .get('/users/followertest2/followings/followertest2')
       .expect((res) => {
         expect(res.body.doesUserFollowUser).toBeFalsy()
       })
   })
 
   it('should return all users a given user follows', async () => {
-    const followedUser = new User('test2')
-    followedUser.following = [new User('test1')]
+    const followedUser = new User('followertest2')
+    followedUser.following = [new User('followertest1')]
     await repository.save(followedUser)
 
     await request(app.getHttpServer())
-      .get('/users/test2/followings')
+      .get('/users/followertest2/followings')
       .query({ page: 0, take: 10 })
       .expect((res) => {
-        expect(res.body.data[0].spotify_uri).toMatch('test1')
+        expect(res.body.data[0].spotify_uri).toMatch('followertest1')
       })
   })
 
   it('should return all users a given user is followed by', async () => {
-    const followedUser = new User('test2')
-    followedUser.following = [new User('test1')]
+    const followedUser = new User('followertest2')
+    followedUser.following = [new User('followertest1')]
     await repository.save(followedUser)
 
     await request(app.getHttpServer())
-      .get('/users/test1/follower')
+      .get('/users/followertest1/follower')
       .query({ page: 0, take: 10 })
       .expect((res) => {
-        expect(res.body.data[0].spotify_uri).toMatch('test2')
+        expect(res.body.data[0].spotify_uri).toMatch('followertest2')
       })
   })
 
   afterEach(async () => {
-    await repository.delete(['test1', 'test2'])
+    await repository.delete(['followertest1', 'followertest2'])
   })
 })
 
@@ -306,8 +305,8 @@ describe('Posts of User', () => {
       })
   })
   afterAll(async () => {
-    await repository.delete(['test1', 'test2'])
     await postRepository.delete({ uuid: myPostId })
+    await repository.delete(['test1', 'test2'])
   })
 })
 
