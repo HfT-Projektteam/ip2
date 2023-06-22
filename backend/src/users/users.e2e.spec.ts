@@ -52,34 +52,37 @@ beforeAll(async () => {
 
 describe('Test basic DB connectivity', () => {
   beforeEach(async () => {
-    await repository.save({ spotify_uri: 'test1' })
+    await repository.save({ spotify_uri: 'uff_test1' })
   })
   it('should create and save a user', async () => {
     expect(
-      await repository.exist({ where: { spotify_uri: 'test1' } }),
+      await repository.exist({ where: { spotify_uri: 'uff_test1' } }),
     ).toBeTruthy()
   })
 
   it('should delete a user', async () => {
-    await request(app.getHttpServer()).delete('/users/test1').send().expect(200)
+    await request(app.getHttpServer())
+      .delete('/users/uff_test1')
+      .send()
+      .expect(200)
     expect(
-      await repository.exist({ where: { spotify_uri: 'test1' } }),
+      await repository.exist({ where: { spotify_uri: 'uff_test1' } }),
     ).toBeFalsy()
   })
 
   it('should return a user by id', async () => {
     await request(app.getHttpServer())
-      .get('/users/test1')
+      .get('/users/uff_test1')
       .send()
       .expect(200)
-      .expect('{"spotify_uri":"test1"}')
+      .expect('{"spotify_uri":"uff_test1"}')
   })
 
   it('should only return a user, if id matches exactly', async () => {
     await request(app.getHttpServer()).get('/users/test2').send().expect(404)
   })
   afterEach(async () => {
-    await repository.delete({ spotify_uri: 'test1' })
+    await repository.delete({ spotify_uri: 'uff_test1' })
   })
 })
 

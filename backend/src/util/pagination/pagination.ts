@@ -1,7 +1,6 @@
 import { SelectQueryBuilder } from 'typeorm'
 import { PageOptionsDto } from './page.dto'
 import { Injectable } from '@nestjs/common'
-import { User } from '../../users/entities/user.entity'
 
 @Injectable()
 export class Pagination {
@@ -18,11 +17,5 @@ export class Pagination {
 
   static pageQuery(query: String, options: PageOptionsDto): string {
     return `${query} LIMIT ${options.take} OFFSET ${this.getSkip(options)}`
-  }
-}
-
-export class PagingError extends Error {
-  constructor(message: string) {
-    super(message)
   }
 }
