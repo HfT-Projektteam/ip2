@@ -16,6 +16,7 @@ import { AuthGuard } from '../auth/auth.guard'
 import { UsersService } from '../users/users.service'
 import { UsersModule } from '../users/users.module'
 import { AuthModule } from '../auth/auth.module'
+import { PostsService } from './posts.service'
 
 let app: INestApplication
 let postRepository: Repository<Post>
@@ -35,13 +36,14 @@ beforeAll(async () => {
         port: 5432,
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_TEST_SCHEMA,
+        database: 'e2e_post',
         entities: ['./**/*.entity.ts'],
         synchronize: true,
       }),
     ],
     providers: [
       UsersService,
+      PostsService,
       {
         provide: APP_GUARD,
         useClass: AuthGuard,
@@ -89,6 +91,28 @@ describe('test basic CRUD operations', () => {
     strangePostId = await postRepository
       .findOneByOrFail({ songId: 'test2' })
       .then((post) => post.uuid)
+  })
+
+  it('should get one post by id', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            songId: 'test1',
+            description: 'test1',
+            genre: 'test1',
+            likes: 0,
+            dislikes: 0,
+            uuid: expect.any(String),
+            uploaded: expect.any(String),
+            creator: {
+              spotify_uri: 'local-user',
+            },
+          }),
+        )
+      })
   })
 
   it('should create and save a post', async () => {
@@ -225,12 +249,152 @@ describe('test like/dislike operations', () => {
     })
   })
 
+  it('should get true if a post is liked', async () => {
+    // await postsService.like(myPostId)
+    await request(app.getHttpServer()).put(`/posts/${myPostId}/like`)
+
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/like`)
+      .expect(200)
+      .expect('true')
+  })
+
+  it('should get true if a post is disliked', async () => {
+    // await postsService.dislike(myPostId)
+    await request(app.getHttpServer()).put(`/posts/${myPostId}/dislike`)
+
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/dislike`)
+      .expect(200)
+      .expect('true')
+  })
+
+  it('should get false if a post is not liked', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/like`)
+      .expect(200)
+      .expect('false')
+  })
+
+  it('should get false if a post is not disliked', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/dislike`)
+      .expect(200)
+      .expect('false')
+  })
+
   afterEach(async () => {
     await postRepository.delete({ uuid: myPostId })
     await userRepository.delete({ spotify_uri: 'local-user' })
   })
 })
 
+describe('Multiple posts with filter', () => {
+  let posts = []
+  let localUser
+  let secondUser
+  let onePostUuid
+
+  beforeAll(async () => {
+    localUser = new User('local-user')
+    secondUser = new User('second-user')
+
+    await userRepository.save([localUser, secondUser])
+
+    for (let i = 0; i < 5; i++) {
+      posts.push(
+        new Post(
+          {
+            song_id: `test${i}`,
+            description: `test${i}`,
+            genre: `new wave flick flack hip hop`,
+          },
+          i % 2 === 0 ? localUser : secondUser,
+        ),
+      )
+    }
+    await postRepository.save(posts)
+    await new Promise((r) => setTimeout(r, 500))
+    let olderPost = []
+    for (let i = 5; i < 10; i++) {
+      olderPost.push(
+        new Post(
+          {
+            song_id: `test${i}`,
+            description: `test${i}`,
+            genre: `darkest acid underground techno`,
+          },
+          i % 2 === 0 ? localUser : secondUser,
+        ),
+      )
+    }
+    await postRepository.save(olderPost)
+    posts = posts.concat(olderPost)
+    onePostUuid = await postRepository
+      .findOneBy({ songId: 'test3' })
+      .then((res) => {
+        return res.uuid
+      })
+  })
+
+  it('should sort by oldest', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, sort: 'oldest' })
+      .expect(200)
+      .expect((res) => {
+        expect(
+          new Date(res.body.data[0].uploaded) <
+            new Date(res.body.data[9].uploaded),
+        ).toBeTruthy()
+      })
+  })
+
+  it('should sort by newest', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, sort: 'newest' })
+      .expect(200)
+      .expect((res) => {
+        expect(
+          new Date(res.body.data[0].uploaded) <
+            new Date(res.body.data[9].uploaded),
+        ).toBeFalsy()
+      })
+  })
+
+  it('should filter by genre', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, genre: 'darkest acid underground techno' })
+      .expect(200)
+      .expect((res) => {
+        res.body.data.forEach((post) => {
+          expect(post.genre).toMatch('darkest acid underground techno')
+        })
+      })
+  })
+
+  it.skip('should sort by likes', async () => {
+    const localUser = new User('local-user')
+    await userRepository.save(localUser)
+    await request(app.getHttpServer()).put(`/posts/${onePostUuid}/like`)
+
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, sort: 'likes' })
+      .expect(200)
+      .expect((res) => {
+        console.log(res.body.data)
+        expect(res.body.data[0].uuid).toMatch(onePostUuid)
+      })
+  })
+
+  afterAll(async () => {
+    await postRepository.delete(posts)
+    await userRepository.delete([localUser, secondUser])
+  })
+})
 afterAll(async () => {
   await app.close()
 })

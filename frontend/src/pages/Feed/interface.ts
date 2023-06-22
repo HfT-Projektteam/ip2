@@ -7,3 +7,7 @@ export interface feedInterface {
 export interface HandleFeedChange {
   handleFeedChange: (newFeed: feedInterface) => void
 }
+
+export interface HandleSortGenreChange {
+  handleSortGenreChange: (isSort: boolean, newValue: string) => void
+}

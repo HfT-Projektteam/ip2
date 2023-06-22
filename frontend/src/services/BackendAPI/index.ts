@@ -6,6 +6,10 @@ import {
   setFollower,
   postPost,
   signIn,
+  getUserPosts,
+  postUser,
+  getPrivatePosts,
+  getPostsById,
 } from './component'
 
 export {
@@ -16,4 +20,8 @@ export {
   setFollower,
   postPost,
   signIn,
+  getUserPosts,
+  postUser,
+  getPrivatePosts,
+  getPostsById,
 }

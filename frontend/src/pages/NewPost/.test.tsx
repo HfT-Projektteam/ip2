@@ -34,7 +34,26 @@ describe('Render Create NewPost Page', () => {
     expect(songList).toHaveLength(10)
   })
 
-  it('Input should be in the Input value', async () => {
+  it('Song Input should be in the Input value', async () => {
+    act(() => render(<NewPost />, { wrapper: BrowserRouter }))
+
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    })
+
+    const searchBox = await screen.findByPlaceholderText('Search Song')
+
+    await act(async () => {
+      userEvent.type(searchBox, 'Casper{enter}')
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    expect(searchBox).toHaveValue('Casper')
+  })
+
+  it('Comment Input should be in the Input value', async () => {
     act(() => render(<NewPost />, { wrapper: BrowserRouter }))
 
     await act(async () => {
@@ -44,19 +63,18 @@ describe('Render Create NewPost Page', () => {
 
     const item = (await screen.findAllByRole('listitem')).at(0)
 
-    item && userEvent.click(item)
+    await act(async () => {
+      item && userEvent.click(item)
+    })
 
-    const searchBox = await screen.findByPlaceholderText('Search Song')
     const commentBox = await screen.findByPlaceholderText('Say something')
 
     await act(async () => {
-      userEvent.type(searchBox, 'Casper{enter}')
       userEvent.type(commentBox, 'The song is cool')
     })
 
     await new Promise((resolve) => setTimeout(resolve, 0))
 
-    expect(searchBox).toHaveValue('Casper')
     expect(commentBox).toHaveValue('The song is cool')
   })
 
@@ -78,5 +96,28 @@ describe('Render Create NewPost Page', () => {
 
     const songList = screen.queryAllByRole('listitem')
     expect(songList).toHaveLength(3)
+  })
+
+  it('it should search for the song on spotify by url', async () => {
+    act(() => render(<NewPost />))
+
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    })
+
+    const searchBox = await screen.findByPlaceholderText('Search Song')
+
+    await act(async () => {
+      userEvent.type(
+        searchBox,
+        'open.spotify.com/intl-de/track/7zsbXuBCvVmYMlav9OWdYv',
+      )
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    const songList = screen.queryAllByRole('listitem')
+    expect(songList).toHaveLength(10)
   })
 })

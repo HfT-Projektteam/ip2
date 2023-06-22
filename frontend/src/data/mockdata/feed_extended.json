@@ -1,0 +1,60 @@
+{
+  "posts": [
+    {
+      "uuid": "32424324",
+      "songId": "03jhnLcIT8C4DhXnNecOZv",
+
+      "description": "Check out this nice Song!",
+      "creator": {
+        "spotify_uri": "link_to_spotify_uri"
+      },
+      "uploaded": "018273",
+      "likes": 3,
+      "dislikes": 10
+    },
+    {
+      "uuid": "535242312",
+      "songId": "1OOtq8tRnDM8kG2gqUPjAj",
+      "description": "I love trains",
+      "creator": {
+        "spotify_uri": "link_to_spotify_uri"
+      },
+      "uploaded": "12:00",
+      "likes": 100,
+      "dislikes": 0
+    },
+    {
+      "uuid": "43245464",
+      "songId": "49FYlytm3dAAraYgpoJZux",
+      "description": "Wow, that's sooo nice",
+      "creator": {
+        "spotify_uri": "link_to_spotify_uri"
+      },
+      "uploaded": "1234345",
+      "likes": 10,
+      "dislikes": 1
+    },
+    {
+      "uuid": "1",
+      "songId": "03jhnLcIT8C4DhXnNecOZv",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
+      "creator": {
+        "spotify_uri": "link_to_spotify_uri"
+      },
+      "uploaded": "019730",
+      "likes": 201,
+      "dislikes": 70
+    },
+    {
+      "uuid": "82730",
+      "songId": "49FYlytm3dAAraYgpoJZux",
+      "description": "Flop of the week",
+      "creator": {
+        "spotify_uri": "link_to_spotify_uri"
+      },
+      "uploaded": "1234345",
+      "likes": 22,
+      "dislikes": 930
+    }
+  ]
+}

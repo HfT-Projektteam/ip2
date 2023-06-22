@@ -10,7 +10,7 @@ export class AuthService {
 
   async getURIfromAccessCode(access_token) {
     return this.getSpotifyUserObject(access_token).then((user) => {
-      return user?.uri
+      return user?.id
     })
   }
 
@@ -20,7 +20,7 @@ export class AuthService {
     const api_url = 'https://api.spotify.com/v1/me'
     return firstValueFrom(
       this.httpService.get<SpotifyApi.CurrentUsersProfileResponse>(api_url, {
-        headers: { Authorization: access_token },
+        headers: { Authorization: 'Bearer ' + access_token },
       }),
     )
       .then((response) => {

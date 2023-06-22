@@ -82,6 +82,19 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!antd|@ant-design|rc-.+?|@babel/runtime).+(js|jsx)$"
     ],
-    "coverageReporters": ["json-summary"]
+    "coveragePathIgnorePatterns": [
+      "/node_modules/*",
+      "app.tsx",
+      "index.tsx",
+      "reportWebVitals.ts",
+      "/assets/*",
+      "/components/layout/OldHeader/*",
+      "/data/*",
+      "/services/BackendAPI/*",
+      "/services/IdGenerator/*",
+      "/services/SpotifyAPI/component.ts"
+    ],
+    "coverageReporters": ["clover", "json", "lcov", "text"]
+
   }
 }

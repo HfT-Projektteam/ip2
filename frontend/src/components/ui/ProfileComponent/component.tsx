@@ -1,8 +1,6 @@
 import { ProfileFeed } from '@pages/Feed'
 import { Avatar, Col, Divider, Popover, Row, Space, Typography } from 'antd'
 import { useEffect, useState } from 'react'
-import mockDataFeed from '@data/mockdata/feed.json'
-import { type feedInterface } from '@pages/Feed/interface'
 import Follower from '@Components/ui/Follower'
 import { getFollowersNum, getFollowingsNum } from '@services/BackendAPI'
 import { getProfile, getUser } from '@services/SpotifyAPI'
@@ -13,7 +11,6 @@ export function ProfileComponent(): JSX.Element {
   const [numPosts] = useState<number>(0)
   const [numFollowers, setNumFollowers] = useState<number>(0)
   const [numFollowings, setNumFollowings] = useState<number>(0)
-  const [feed] = useState<feedInterface>(mockDataFeed)
   const [profileUrl, setProfileUrl] = useState<string>(
     'https://ionicframework.com/docs/img/demos/avatar.svg',
   )
@@ -133,7 +130,7 @@ export function ProfileComponent(): JSX.Element {
         <Text strong>{profileName}</Text>
       </Space>
       <Divider />
-      <ProfileFeed posts={feed.posts}></ProfileFeed>
+      <ProfileFeed spotifyId={spotifyId}></ProfileFeed>
     </>
   )
 }

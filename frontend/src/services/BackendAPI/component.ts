@@ -200,6 +200,98 @@ export async function getPosts(
     })
 }
 
+export async function getPrivatePosts(
+  genre: string = '',
+  followerFeed: boolean,
+  sort: string = 'newest',
+  page: number = 0,
+  take: number = 10,
+): Promise<GetPost[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/posts/follower/?genre=${genre}&followerFeed=${String(
+      followerFeed,
+    )}&sort=${sort}&page=${page}&take=${take}`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPrivatePosts:', error)
+      return null
+    })
+}
+
+export async function getUserPosts(): Promise<GetPost[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+  const spotifyId = localStorage.getItem('spotifyId') ?? ''
+
+  if (accessToken === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/posts/?page=0&take=50`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPosts:', error)
+      return null
+    })
+}
+
+export async function getPostsById(
+  spotifyId: string,
+): Promise<GetPost[] | null> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '' || spotifyId === '') {
+    return null
+  }
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  }
+
+  return await request<any>(
+    `${backendUri}/users/${spotifyId}/posts/?page=0&take=50`,
+    options,
+  )
+    .then((posts) => {
+      return posts.data
+    })
+    .catch((error) => {
+      console.error('Error in getPostsById:', error)
+      return null
+    })
+}
+
 export async function postPost(
   songId: string = '',
   description: string = '',
@@ -245,6 +337,28 @@ export async function signIn(): Promise<void> {
 
   await request<any>(`${backendUri}/signIn`, options).catch((error) => {
     console.error('Error in signIn:', error)
+  })
+}
+
+export async function postUser(spotifyId: string): Promise<void> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+    body: JSON.stringify({
+      spotify_uri: spotifyId,
+    }),
+  }
+
+  await request<any>(`${backendUri}/users`, options).catch((error) => {
+    console.error('Error in postUser:', error)
   })
 }
 

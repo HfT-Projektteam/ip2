@@ -10,9 +10,10 @@ import { EntityNotFoundExceptionFilter } from '../filters/entity-not-found-excep
 import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter'
 import { ConfigModule } from '@nestjs/config'
 import configOptions from '../config/config'
+import { Post } from '../posts/entities/post.entity'
 
 let app: INestApplication
-let repository: Repository<User>
+let repository: Repository<User>, postRepository: Repository<Post>
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -26,7 +27,7 @@ beforeAll(async () => {
         port: 5432,
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_TEST_SCHEMA,
+        database: 'e2e_user',
         entities: ['./**/*.entity.ts'],
         synchronize: true,
       }),
@@ -46,41 +47,42 @@ beforeAll(async () => {
   await app.init()
 
   repository = module.get('UserRepository')
+  postRepository = module.get('PostRepository')
 })
 
 describe('Test basic DB connectivity', () => {
   beforeEach(async () => {
-    await request(app.getHttpServer())
-      .post('/users')
-      .send({ spotify_uri: 'test1' })
-      .expect(201)
+    await repository.save({ spotify_uri: 'uff_test1' })
   })
   it('should create and save a user', async () => {
     expect(
-      await repository.exist({ where: { spotify_uri: 'test1' } }),
+      await repository.exist({ where: { spotify_uri: 'uff_test1' } }),
     ).toBeTruthy()
   })
 
   it('should delete a user', async () => {
-    await request(app.getHttpServer()).delete('/users/test1').send().expect(200)
+    await request(app.getHttpServer())
+      .delete('/users/uff_test1')
+      .send()
+      .expect(200)
     expect(
-      await repository.exist({ where: { spotify_uri: 'test1' } }),
+      await repository.exist({ where: { spotify_uri: 'uff_test1' } }),
     ).toBeFalsy()
   })
 
   it('should return a user by id', async () => {
     await request(app.getHttpServer())
-      .get('/users/test1')
+      .get('/users/uff_test1')
       .send()
       .expect(200)
-      .expect('{"spotify_uri":"test1"}')
+      .expect('{"spotify_uri":"uff_test1"}')
   })
 
   it('should only return a user, if id matches exactly', async () => {
     await request(app.getHttpServer()).get('/users/test2').send().expect(404)
   })
   afterEach(async () => {
-    await repository.delete({ spotify_uri: 'test1' })
+    await repository.delete({ spotify_uri: 'uff_test1' })
   })
 })
 
@@ -107,7 +109,6 @@ describe('Pagination', () => {
         .send()
         .expect(200)
         .expect((res) => {
-          console.log(res.body)
           expect(res.body.data).toHaveLength(expectedLength)
         })
     },
@@ -155,11 +156,11 @@ describe('Pagination', () => {
 
 describe('Exception stuff', () => {
   beforeAll(async () => {
-    await repository.save({ spotify_uri: 'test1' })
+    await repository.save({ spotify_uri: 'exp_test1' })
   })
   it('should throw a 400 error if users tries to follow himself', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test1')
+      .post('/users/exp_test1/followings/exp_test1')
       .send()
       .expect(400)
       .expect((res) => {
@@ -193,68 +194,118 @@ describe('Exception stuff', () => {
   })
 
   afterAll(async () => {
-    await repository.delete(['test1', 'test2'])
+    await repository.delete(['exp_test1', 'exp_test1'])
   })
 })
 
 describe('Follower Stuff', () => {
   beforeEach(async () => {
-    await repository.save({ spotify_uri: 'test1' })
-    await repository.save({ spotify_uri: 'test2' })
+    await repository.save({ spotify_uri: 'followertest1' })
+    await repository.save({ spotify_uri: 'followertest2' })
   })
 
   it('should make one user follow another (only once)', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test2')
+      .post('/users/followertest1/followings/followertest2')
       .expect((res) => {
         expect(res.body).toMatchObject({
-          spotify_uri: 'test1',
-          following: [{ spotify_uri: 'test2' }],
+          spotify_uri: 'followertest1',
+          following: [{ spotify_uri: 'followertest2' }],
         })
       })
 
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test2')
+      .post('/users/followertest1/followings/followertest2')
       .expect((res) => {
         expect(res.body).toMatchObject({
-          spotify_uri: 'test1',
-          following: [{ spotify_uri: 'test2' }],
+          spotify_uri: 'followertest1',
+          following: [{ spotify_uri: 'followertest2' }],
         })
       })
   })
 
   it('should check if one user is following another', async () => {
-    const follwedUser = new User('test2')
-    follwedUser.following = [new User('test1')]
+    const follwedUser = new User('followertest2')
+    follwedUser.following = [new User('followertest1')]
     await repository.save(follwedUser)
 
     await request(app.getHttpServer())
-      .get('/users/test2/followings/test1')
+      .get('/users/followertest2/followings/followertest1')
       .expect((res) => {
         expect(res.body.doesUserFollowUser).toBeTruthy()
       })
 
     await request(app.getHttpServer())
-      .get('/users/test2/followings/test2')
+      .get('/users/followertest2/followings/followertest2')
       .expect((res) => {
         expect(res.body.doesUserFollowUser).toBeFalsy()
       })
   })
 
   it('should return all users a given user follows', async () => {
-    const follwedUser = new User('test2')
-    follwedUser.following = [new User('test1')]
-    await repository.save(follwedUser)
+    const followedUser = new User('followertest2')
+    followedUser.following = [new User('followertest1')]
+    await repository.save(followedUser)
 
     await request(app.getHttpServer())
-      .get('/users/test2/followings')
+      .get('/users/followertest2/followings')
       .query({ page: 0, take: 10 })
       .expect((res) => {
-        expect(res.body.data[0].spotify_uri).toMatch('test1')
+        expect(res.body.data[0].spotify_uri).toMatch('followertest1')
+      })
+  })
+
+  it('should return all users a given user is followed by', async () => {
+    const followedUser = new User('followertest2')
+    followedUser.following = [new User('followertest1')]
+    await repository.save(followedUser)
+
+    await request(app.getHttpServer())
+      .get('/users/followertest1/follower')
+      .query({ page: 0, take: 10 })
+      .expect((res) => {
+        expect(res.body.data[0].spotify_uri).toMatch('followertest2')
       })
   })
 
   afterEach(async () => {
+    await repository.delete(['followertest1', 'followertest2'])
+  })
+})
+
+describe('Posts of User', () => {
+  let myPostId
+
+  beforeAll(async () => {
+    const localUser = new User('test1')
+    await repository.save(localUser)
+    await repository.save(new User('test2'))
+    await postRepository.save(
+      new Post(
+        { song_id: 'test1', description: 'test1', genre: 'test1' },
+        localUser,
+      ),
+    )
+    myPostId = await postRepository
+      .findOneByOrFail({ songId: 'test1' })
+      .then((post) => post.uuid)
+  })
+  it('should return posts of a user', async () => {
+    await request(app.getHttpServer())
+      .get('/users/test1/posts')
+      .query({ page: 0, take: 10 })
+      .expect((res) => {
+        expect(res.body.data[0].songId).toMatch('test1')
+      })
+    await request(app.getHttpServer())
+      .get('/users/test2/posts')
+      .query({ page: 0, take: 10 })
+      .expect((res) => {
+        expect(res.body.data).toHaveLength(0)
+      })
+  })
+  afterAll(async () => {
+    await postRepository.delete({ uuid: myPostId })
     await repository.delete(['test1', 'test2'])
   })
 })

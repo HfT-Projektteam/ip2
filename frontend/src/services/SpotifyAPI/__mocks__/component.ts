@@ -77,6 +77,63 @@ export async function searchSong(value: string): Promise<trackObject[] | null> {
   return await Promise.resolve(mockedResponse)
 }
 
+export async function searchSongByLink(
+  value: string,
+): Promise<trackObject[] | null> {
+  const mockedResponse: trackObject[] = [
+    {
+      id: 'testId1',
+      name: 'testName',
+      artists: [
+        {
+          name: 'testArtist',
+          images: [
+            {
+              url: 'testUrl',
+              height: 1,
+              width: 1,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'testId2',
+      name: 'testName',
+      artists: [
+        {
+          name: 'testArtist',
+          images: [
+            {
+              url: 'testUrl',
+              height: 1,
+              width: 1,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'testId3',
+      name: 'testName',
+      artists: [
+        {
+          name: 'testArtist',
+          images: [
+            {
+              url: 'testUrl',
+              height: 1,
+              width: 1,
+            },
+          ],
+        },
+      ],
+    },
+  ]
+
+  return await Promise.resolve(mockedResponse)
+}
+
 export async function getRecentPlayedTracks(): Promise<trackObject[] | null> {
   const mockedResponse: trackObject[] = [
     {

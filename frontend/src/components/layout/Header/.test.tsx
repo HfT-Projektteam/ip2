@@ -5,9 +5,14 @@ import userEvent from '@testing-library/user-event'
 
 describe('Header', () => {
   it('should render Header Layout with logo', () => {
-    const { getByAltText, getByTestId } = render(<Header />, {
-      wrapper: BrowserRouter,
-    })
+    const { getByAltText, getByTestId } = render(
+      <Header
+        handleSortGenreChange={(isSort: boolean, newValue: string): void => {}}
+      />,
+      {
+        wrapper: BrowserRouter,
+      },
+    )
     expect(getByAltText('Spotify_Icon_RGB_Black.png')).toBeInTheDocument()
     expect(getByTestId('modal-button')).toBeInTheDocument()
   })
@@ -15,7 +20,12 @@ describe('Header', () => {
   it('should render different header content based on the route', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter initialEntries={['/profile']}>
-        <Header />
+        <Header
+          handleSortGenreChange={(
+            isSort: boolean,
+            newValue: string,
+          ): void => {}}
+        />
       </MemoryRouter>,
     )
 
@@ -26,7 +36,12 @@ describe('Header', () => {
   it('should render different header content based on the route | reverse', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter initialEntries={['/search']}>
-        <Header />
+        <Header
+          handleSortGenreChange={(
+            isSort: boolean,
+            newValue: string,
+          ): void => {}}
+        />
       </MemoryRouter>,
     )
 
@@ -37,7 +52,12 @@ describe('Header', () => {
   it('should render feed header on feed route', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/feed']}>
-        <Header />
+        <Header
+          handleSortGenreChange={(
+            isSort: boolean,
+            newValue: string,
+          ): void => {}}
+        />
       </MemoryRouter>,
     )
 
@@ -49,7 +69,12 @@ describe('Header', () => {
   it('should render post (route plus) header on feed route', () => {
     const { getByTestId } = render(
       <MemoryRouter initialEntries={['/plus']}>
-        <Header />
+        <Header
+          handleSortGenreChange={(
+            isSort: boolean,
+            newValue: string,
+          ): void => {}}
+        />
       </MemoryRouter>,
     )
 
@@ -57,9 +82,14 @@ describe('Header', () => {
   })
 
   it('should open and close the modal', () => {
-    const { queryByRole, getByTestId } = render(<Header />, {
-      wrapper: BrowserRouter,
-    })
+    const { queryByRole, getByTestId } = render(
+      <Header
+        handleSortGenreChange={(isSort: boolean, newValue: string): void => {}}
+      />,
+      {
+        wrapper: BrowserRouter,
+      },
+    )
 
     expect(queryByRole('dialog')).not.toBeInTheDocument()
 
