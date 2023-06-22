@@ -24,28 +24,6 @@
       }
     },
     "/users": {
-      "post": {
-        "operationId": "UsersController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "users"
-        ]
-      },
       "get": {
         "operationId": "UsersController_findAll",
         "parameters": [
@@ -703,18 +681,6 @@
   "servers": [],
   "components": {
     "schemas": {
-      "UserDto": {
-        "type": "object",
-        "properties": {
-          "spotify_uri": {
-            "type": "string",
-            "description": "The URI of a spotify user, which used this service"
-          }
-        },
-        "required": [
-          "spotify_uri"
-        ]
-      },
       "CreatePostDto": {
         "type": "object",
         "properties": {
@@ -732,6 +698,18 @@
           "song_id",
           "description",
           "genre"
+        ]
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "spotify_uri": {
+            "type": "string",
+            "description": "The URI of a spotify user, which used this service"
+          }
+        },
+        "required": [
+          "spotify_uri"
         ]
       },
       "GetPostDto": {

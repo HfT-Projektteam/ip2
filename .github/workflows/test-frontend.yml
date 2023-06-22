@@ -8,6 +8,9 @@ on:
     paths:
       - 'frontend/**'
 
+env:
+  BADGE_BRANCH: frontend/badges
+
 jobs:
   test-frontend:
     name: Check frontend source code
@@ -37,4 +40,20 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Yarn test
-        run: yarn test
+        run: yarn test --coverage
+
+      - name: Delete remote badges branch
+        run: git push origin --delete $BADGE_BRANCH
+
+      - name: Create badges branch
+        run: git checkout -b $BADGE_BRANCH
+
+      - name: Generating coverage badges
+        uses: jpb06/jest-badges-action@latest
+        with:
+          branches: '*'
+          coverage-summary-path: /home/runner/work/ip2/ip2/frontend/coverage/coverage-summary.json
+          target-branch: frontend/badges
+
+      - name: Push badges branch
+        run: git push origin $BADGE_BRANCH

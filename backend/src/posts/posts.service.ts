@@ -93,6 +93,7 @@ export class PostsService {
     const pageQuery = Pagination.pageQueryBuilder(
       this.postRepo
         .createQueryBuilder('posts')
+        .leftJoinAndSelect('posts.creator', 'creator')
         .where('posts.creator = :user_id', { user_id: user_id }),
       pageOptionsDto,
     )
@@ -103,7 +104,10 @@ export class PostsService {
   }
 
   findOne(id: string) {
-    return this.postRepo.findOneByOrFail({ uuid: id })
+    return this.postRepo.findOneOrFail({
+      relations: { creator: true },
+      where: { uuid: id },
+    })
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {

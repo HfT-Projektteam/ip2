@@ -20,9 +20,12 @@ export function Login(): JSX.Element {
       .then(() => {
         const token = window.localStorage.getItem('access_token') ?? ''
         setLoginToken(token)
-        void setCurrentUser()
-        void signIn()
-        if (token !== '') navigate('/feed')
+
+        if (token !== '') {
+          void signIn()
+          void setCurrentUser()
+          navigate('/feed')
+        }
       })
       .catch(() => {
         handleLogout()

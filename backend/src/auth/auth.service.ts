@@ -10,7 +10,7 @@ export class AuthService {
 
   async getURIfromAccessCode(access_token) {
     return this.getSpotifyUserObject(access_token).then((user) => {
-      return user?.uri
+      return user?.id
     })
   }
 

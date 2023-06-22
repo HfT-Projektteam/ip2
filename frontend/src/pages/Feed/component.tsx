@@ -3,7 +3,7 @@
 import { Post } from '@pages/Feed/Post'
 import { type HandleFeedChange, type feedInterface } from './interface'
 import { useEffect, useState } from 'react'
-import { getPosts } from '@services/BackendAPI/component'
+import { getPosts, getUserPosts } from '@services/BackendAPI/component'
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import mockData from '@data/mockdata/feed_extended.json'
@@ -88,9 +88,18 @@ export function Feed({
 }
 
 export function ProfileFeed(feed: feedInterface): JSX.Element {
+  const [profileFeed, setProfileFeed] = useState<feedInterface>({ posts: [] })
+
+  useEffect(() => {
+    void (async () => {
+      const allPosts = await getUserPosts()
+      if (allPosts == null) return
+      setProfileFeed({ posts: allPosts })
+    })()
+  }, [])
   return (
     <>
-      {feed.posts.map((post) => (
+      {profileFeed.posts.map((post) => (
         <Post key={post.uuid} isFeed={false} postObject={post}></Post>
       ))}
     </>

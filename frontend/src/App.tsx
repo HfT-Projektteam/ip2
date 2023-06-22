@@ -1,5 +1,4 @@
 import Feed from '@pages/Feed'
-import mockData from '@data/mockdata/feed.json'
 import { ConfigProvider, Layout } from 'antd'
 import { useEffect, useState } from 'react'
 import Header from '@Components/layout/Header'
@@ -23,7 +22,7 @@ const { Content, Footer } = Layout
 function App(): JSX.Element {
   const { theme } = useTheme()
 
-  const [feed, setFeed] = useState<feedInterface>(mockData)
+  const [feed, setFeed] = useState<feedInterface>({ posts: [] })
 
   const handleFeedChange = (newFeed: feedInterface): void => {
     setFeed(newFeed)

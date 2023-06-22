@@ -1,26 +1,30 @@
 # Internet Programmierung SS23 (Spotify Social-Media)
 
+## Coverage
+- Frontend: ![Frontend](https://github.com/HfT-Projektteam/ip2/blob/frontend/badges/badges/coverage-lines.svg)
+- Backend: ![Backend](https://github.com/HfT-Projektteam/ip2/blob/backend/badges/badges/coverage-lines.svg)
+
 ## User stories
 
 - [x] 01. As a user I want to be able to login with Spotify oauth
 - [x] 02. As a user I want to be able to **log out** from the website 
 - [x] 03. As a user I want to be able to view a global feed of shared songs
 - [ ] 04. As a user I want to be able to view a feed of songs shared by my friends
-- [ ] 05. As a user I want to be able to like/dislike a shared song
-- [ ] 06. As a user I want to be able to remove a previously made like/dislike
+- [x] 05. As a user I want to be able to like/dislike a shared song
+- [x] 06. As a user I want to be able to remove a previously made like/dislike
 - [x] 07. As a user I want to be able to see song metainformation (genre, title, artist)
 - [x] 08. As a user I want to be able to save a shared song to a designated (later: selected playlist) Spotify playlist
 - [ ] 09. As a user I want to be able to post songs to the feed by song link
 - [x] 10. As a user I want to be able to open a posted song (artist/album of song) in Spotify
-- [ ] 11. As a user I want to be able to filter my feed by different criteria (i.e. songs of friends/groups, most hated/liked, ...)
+- [x] 11. As a user I want to be able to filter my feed by different criteria (i.e. songs of friends/groups, most hated/liked, ...)
 - [x] 12. As a user I want to be able to post songs to the feed by searching their name, artist name
-- [ ] 13. As a user I want to be able to view my own and other user profile
+- [x] 13. As a user I want to be able to view my own and other user profile
 - [x] 14. As a user I want to be able to get my 10 last played song (while in search)
 - [x] 15. As a user I want to be able to be able to view the app in light and dark mode
-- [ ] 16. As a user I want to be able to find other users on the platform
+- [x] 16. As a user I want to be able to find other users on the platform
 - [ ] 17. As a user I want to be able to edit and delete my posts
-- [ ] 18. As a user I want to be able to see who follows me and whom I´m following
-- [ ] 19. As a user I want to be able to see my posting history
+- [x] 18. As a user I want to be able to see who follows me and whom I´m following
+- [x] 19. As a user I want to be able to see my posting history
 - [x] 20. As a user I want to be able to paginate queries with commonly more than 30 queries
 
 Extra:
