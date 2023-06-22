@@ -5,8 +5,8 @@ import { type HandleFeedChange, type feedInterface } from './interface'
 import { useEffect, useState } from 'react'
 import {
   getPosts,
+  getPostsById,
   getPrivatePosts,
-  getUserPosts,
 } from '@services/BackendAPI/component'
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -137,16 +137,16 @@ export function Feed({
   )
 }
 
-export function ProfileFeed(feed: feedInterface): JSX.Element {
+export function ProfileFeed(props: { spotifyId: string }): JSX.Element {
   const [profileFeed, setProfileFeed] = useState<feedInterface>({ posts: [] })
 
   useEffect(() => {
     void (async () => {
-      const allPosts = await getUserPosts()
+      const allPosts = await getPostsById(props.spotifyId)
       if (allPosts == null) return
       setProfileFeed({ posts: allPosts })
     })()
-  }, [])
+  }, [props.spotifyId])
   return (
     <>
       {profileFeed.posts.map((post) => (

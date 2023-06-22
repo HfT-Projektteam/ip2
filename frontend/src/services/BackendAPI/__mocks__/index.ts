@@ -9,6 +9,7 @@ import {
   signIn,
   getUserPosts,
   getPrivatePosts,
+  getPostsById,
 } from './component'
 
 export {
@@ -22,4 +23,5 @@ export {
   signIn,
   getUserPosts,
   getPrivatePosts,
+  getPostsById,
 }
