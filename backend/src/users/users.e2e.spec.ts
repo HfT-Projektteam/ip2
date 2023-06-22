@@ -272,18 +272,39 @@ describe('Follower Stuff', () => {
 })
 
 describe('Posts of User', () => {
-  it('should return posts of a user', async () => {
-    //TODO Implement
-    const followedUser = new User('test2')
-    followedUser.following = [new User('test1')]
-    await repository.save(followedUser)
+  let myPostId
 
+  beforeAll(async () => {
+    const localUser = new User('test1')
+    await repository.save(localUser)
+    await repository.save(new User('test2'))
+    await postRepository.save(
+      new Post(
+        { song_id: 'test1', description: 'test1', genre: 'test1' },
+        localUser,
+      ),
+    )
+    myPostId = await postRepository
+      .findOneByOrFail({ songId: 'test1' })
+      .then((post) => post.uuid)
+  })
+  it('should return posts of a user', async () => {
     await request(app.getHttpServer())
-      .get('/users/test1/follower')
+      .get('/users/test1/posts')
       .query({ page: 0, take: 10 })
       .expect((res) => {
-        expect(res.body.data[0].spotify_uri).toMatch('test2')
+        expect(res.body.data[0].songId).toMatch('test1')
       })
+    await request(app.getHttpServer())
+      .get('/users/test2/posts')
+      .query({ page: 0, take: 10 })
+      .expect((res) => {
+        expect(res.body.data).toHaveLength(0)
+      })
+  })
+  afterAll(async () => {
+    await repository.delete(['test1', 'test2'])
+    await postRepository.delete({ uuid: myPostId })
   })
 })
 
