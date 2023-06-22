@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { getPosts, getUserPosts } from '@services/BackendAPI/component'
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import mockData from '@data/mockdata/feed_extended.json'
+import ScrollToTop from '@services/ScrollToTop'
 
 interface FeedProps {
   feed: feedInterface
@@ -22,8 +22,9 @@ export function Feed({
   genre,
 }: FeedProps): JSX.Element {
   const [isPrivateFeed, setIsPrivateFeed] = useState(true)
-  const [pagination, setPagination] = useState(0)
+  const [pagination, setPagination] = useState<number>()
   const [loading, setLoading] = useState(false)
+  const [sortGenreChanged, setSortGenreChanged] = useState<boolean>(false)
 
   const switchFeed = (): void => {
     setPagination(0)
@@ -34,21 +35,29 @@ export function Feed({
   useEffect(() => {
     setPagination(0)
     return (): void => {
-      handleFeedChange(mockData)
+      handleFeedChange({ posts: [] })
     }
-  }, [sort, genre])
+  }, [])
 
   useEffect(() => {
     void (async () => {
       const allPosts = await getPosts(genre, isPrivateFeed, sort, pagination)
-      if (allPosts === null) return
+      if (allPosts === null) {
+        return
+      }
 
       const newFeed = feed.posts.concat(allPosts)
 
       handleFeedChange({ posts: newFeed })
       setLoading(false)
     })()
-  }, [pagination, isPrivateFeed])
+  }, [sortGenreChanged, pagination, isPrivateFeed])
+
+  useEffect(() => {
+    setPagination(0)
+    handleFeedChange({ posts: [] })
+    setSortGenreChanged(!sortGenreChanged)
+  }, [sort, genre])
 
   const loadMoreData = (): void => {
     if (loading) return
@@ -57,6 +66,7 @@ export function Feed({
   }
   return (
     <>
+      <ScrollToTop />
       <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
 
       <InfiniteScroll

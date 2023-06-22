@@ -37,7 +37,7 @@ const FeedHeader = ({
     const newFeed = allPosts?.map((post) => {
       return { id: post.uuid, spotifyId: post.songId }
     }) */
-
+    if (genre === undefined) genre = ''
     handleSortGenreChange(false, genre)
   }
 
@@ -49,6 +49,7 @@ const FeedHeader = ({
     })
 
     handleFeedChange({ posts: allPosts }) */
+    if (sortValue === undefined) sortValue = ''
     handleSortGenreChange(true, sortValue)
   }
 

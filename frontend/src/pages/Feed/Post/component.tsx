@@ -74,7 +74,7 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
           ? setProfileName(userName)
           : setProfileName('Max Muster')
 
-        const userRef = res?.href
+        const userRef = res?.external_urls?.spotify
         userRef != null ? setUserRef(userRef) : setUserRef('')
       })
       .catch((err) => {
