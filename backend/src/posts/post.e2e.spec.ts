@@ -289,6 +289,53 @@ describe('test like/dislike operations', () => {
   })
 })
 
+describe.skip('test getting multiple posts', () => {
+  beforeAll(async () => {
+    const localUser = new User('local-user')
+    const secondUser = new User('second-user')
+
+    await userRepository.save([localUser, secondUser])
+
+    const posts: Post[] = []
+
+    for (let i = 0; i < 23; i++) {
+      posts.push(
+        new Post(
+          { song_id: `test${i}`, description: `test${i}`, genre: `test${i}` },
+          i % 2 === 0 ? localUser : secondUser,
+        ),
+      )
+    }
+
+    await postRepository.save(posts)
+  })
+
+  it.each`
+    page  | take  | expectedLength
+    ${0}  | ${10} | ${10}
+    ${1}  | ${10} | ${10}
+    ${2}  | ${10} | ${10}
+    ${3}  | ${10} | ${10}
+    ${4}  | ${10} | ${10}
+    ${10} | ${10} | ${3}
+  `(
+    'should get expectedLength number of posts',
+    async ({ page, take, expectedLength }) => {
+      await request(app.getHttpServer())
+        .get(`/posts?page=${page}&take=${take}`)
+        .expect(200)
+        .expect((res) => {
+          console.log(res.body.data)
+          expect(res.body.data).toHaveLength(expectedLength)
+        })
+    },
+  )
+
+  afterAll(async () => {
+    await postRepository.clear()
+    await userRepository.clear()
+  })
+})
 afterAll(async () => {
   await app.close()
 })
