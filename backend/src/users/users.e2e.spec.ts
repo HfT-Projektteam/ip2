@@ -10,9 +10,10 @@ import { EntityNotFoundExceptionFilter } from '../filters/entity-not-found-excep
 import { CircularFollowerExceptionFilter } from '../filters/circular-follower-exception/circular-follower-exception.filter'
 import { ConfigModule } from '@nestjs/config'
 import configOptions from '../config/config'
+import { Post } from '../posts/entities/post.entity'
 
 let app: INestApplication
-let repository: Repository<User>
+let repository: Repository<User>, postRepository: Repository<Post>
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -46,6 +47,7 @@ beforeAll(async () => {
   await app.init()
 
   repository = module.get('UserRepository')
+  postRepository = module.get('PostRepository')
 })
 
 describe('Test basic DB connectivity', () => {
@@ -239,9 +241,9 @@ describe('Follower Stuff', () => {
   })
 
   it('should return all users a given user follows', async () => {
-    const follwedUser = new User('test2')
-    follwedUser.following = [new User('test1')]
-    await repository.save(follwedUser)
+    const followedUser = new User('test2')
+    followedUser.following = [new User('test1')]
+    await repository.save(followedUser)
 
     await request(app.getHttpServer())
       .get('/users/test2/followings')
@@ -251,8 +253,37 @@ describe('Follower Stuff', () => {
       })
   })
 
+  it('should return all users a given user is followed by', async () => {
+    const followedUser = new User('test2')
+    followedUser.following = [new User('test1')]
+    await repository.save(followedUser)
+
+    await request(app.getHttpServer())
+      .get('/users/test1/follower')
+      .query({ page: 0, take: 10 })
+      .expect((res) => {
+        expect(res.body.data[0].spotify_uri).toMatch('test2')
+      })
+  })
+
   afterEach(async () => {
     await repository.delete(['test1', 'test2'])
+  })
+})
+
+describe('Posts of User', () => {
+  it('should return posts of a user', async () => {
+    //TODO Implement
+    const followedUser = new User('test2')
+    followedUser.following = [new User('test1')]
+    await repository.save(followedUser)
+
+    await request(app.getHttpServer())
+      .get('/users/test1/follower')
+      .query({ page: 0, take: 10 })
+      .expect((res) => {
+        expect(res.body.data[0].spotify_uri).toMatch('test2')
+      })
   })
 })
 
