@@ -40,7 +40,7 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Yarn test
-        run: yarn test --coverage
+        run: yarn test
 
       - name: Delete remote badges branch
         run: git push origin --delete $BADGE_BRANCH
