@@ -120,3 +120,20 @@ export async function getUserPosts(): Promise<GetPost[] | null> {
     },
   ]
 }
+
+export async function getPostsById(
+  spotifyId: string,
+): Promise<GetPost[] | null> {
+  return [
+    {
+      creator: { spotify_uri: 'spotify.user' },
+      songId: '103jhnLcIT8C4DhXnNecOZv',
+      description: 'Description',
+      dislikes: 0,
+      likes: 1,
+      genre: 'rock',
+      uploaded: '01.01.2023',
+      uuid: '1234567890',
+    },
+  ]
+}
