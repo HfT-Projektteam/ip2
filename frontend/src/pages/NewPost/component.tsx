@@ -156,9 +156,9 @@ export function NewPost(): JSX.Element {
 
             <Select
               placeholder={'Genre'}
-              style={{ width: 120 }}
+              style={{ width: '100%' }}
               onChange={onGenreChange}
-              defaultValue={'singsang'}
+              defaultValue={'rock'}
               options={[
                 { value: 'rock', label: 'Rock' },
                 { value: 'rap', label: 'Rap' },
