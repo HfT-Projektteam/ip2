@@ -19,7 +19,7 @@ export function NewPost(): JSX.Element {
   const [songs, setSongs] = useState<trackObject[]>([])
   const [song, setSong] = useState<trackObject>()
   const [comment, setComment] = useState<string>('')
-  const [genre, setGenre] = useState<string>('singsang')
+  const [genre, setGenre] = useState<string>('rock')
 
   useEffect(() => {
     getRecentPlayedTracks()
