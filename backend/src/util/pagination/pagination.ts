@@ -1,7 +1,6 @@
 import { SelectQueryBuilder } from 'typeorm'
 import { PageOptionsDto } from './page.dto'
 import { Injectable } from '@nestjs/common'
-import { User } from '../../users/entities/user.entity'
 
 @Injectable()
 export class Pagination {
