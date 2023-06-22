@@ -12,7 +12,6 @@ export interface paths {
   }
   '/users': {
     get: operations['UsersController_findAll']
-    post: operations['UsersController_create']
   }
   '/users/{id}/search': {
     get: operations['UsersController_searchMany']
@@ -63,14 +62,14 @@ export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
-    UserDto: {
-      /** @description The URI of a spotify user, which used this service */
-      spotify_uri: string
-    }
     CreatePostDto: {
       song_id: string
       description: string
       genre: string
+    }
+    UserDto: {
+      /** @description The URI of a spotify user, which used this service */
+      spotify_uri: string
     }
     GetPostDto: {
       songId: string
@@ -120,16 +119,6 @@ export interface operations {
     }
     responses: {
       200: never
-    }
-  }
-  UsersController_create: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UserDto']
-      }
-    }
-    responses: {
-      201: never
     }
   }
   UsersController_searchMany: {
@@ -217,6 +206,15 @@ export interface operations {
     }
   }
   UsersController_getPosts: {
+    parameters: {
+      query?: {
+        page?: number
+        take?: number
+      }
+      path: {
+        id: string
+      }
+    }
     responses: {
       200: never
     }
