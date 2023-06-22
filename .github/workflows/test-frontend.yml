@@ -41,3 +41,4 @@ jobs:
         run: yarn lint
       - name: Yarn test
         run: yarn test
+
