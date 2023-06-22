@@ -79,4 +79,27 @@ describe('Render Create NewPost Page', () => {
     const songList = screen.queryAllByRole('listitem')
     expect(songList).toHaveLength(3)
   })
+
+  it('it should search for the song on spotify by url', async () => {
+    act(() => render(<NewPost />))
+
+    await act(async () => {
+      // Wait for the update in NewPost to complete
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    })
+
+    const searchBox = await screen.findByPlaceholderText('Search Song')
+
+    await act(async () => {
+      userEvent.type(
+        searchBox,
+        'open.spotify.com/intl-de/track/7zsbXuBCvVmYMlav9OWdYv',
+      )
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    const songList = screen.queryAllByRole('listitem')
+    expect(songList).toHaveLength(10)
+  })
 })
