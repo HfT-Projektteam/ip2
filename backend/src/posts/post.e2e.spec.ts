@@ -289,51 +289,89 @@ describe('test like/dislike operations', () => {
   })
 })
 
-describe.skip('test getting multiple posts', () => {
+describe('Multiple posts with filter', () => {
+  let posts = []
+  let localUser
+  let secondUser
+
   beforeAll(async () => {
-    const localUser = new User('local-user')
-    const secondUser = new User('second-user')
+    localUser = new User('local-user')
+    secondUser = new User('second-user')
 
     await userRepository.save([localUser, secondUser])
 
-    const posts: Post[] = []
-
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 5; i++) {
       posts.push(
         new Post(
-          { song_id: `test${i}`, description: `test${i}`, genre: `test${i}` },
+          {
+            song_id: `test${i}`,
+            description: `test${i}`,
+            genre: `new wave flick flack hip hop`,
+          },
           i % 2 === 0 ? localUser : secondUser,
         ),
       )
     }
-
     await postRepository.save(posts)
+    await new Promise((r) => setTimeout(r, 500))
+    let olderPost = []
+    for (let i = 5; i < 10; i++) {
+      olderPost.push(
+        new Post(
+          {
+            song_id: `test${i}`,
+            description: `test${i}`,
+            genre: `darkest acid underground techno`,
+          },
+          i % 2 === 0 ? localUser : secondUser,
+        ),
+      )
+    }
+    await postRepository.save(olderPost)
+    posts = posts.concat(olderPost)
   })
 
-  it.each`
-    page  | take  | expectedLength
-    ${0}  | ${10} | ${10}
-    ${1}  | ${10} | ${10}
-    ${2}  | ${10} | ${10}
-    ${3}  | ${10} | ${10}
-    ${4}  | ${10} | ${10}
-    ${10} | ${10} | ${3}
-  `(
-    'should get expectedLength number of posts',
-    async ({ page, take, expectedLength }) => {
-      await request(app.getHttpServer())
-        .get(`/posts?page=${page}&take=${take}`)
-        .expect(200)
-        .expect((res) => {
-          console.log(res.body.data)
-          expect(res.body.data).toHaveLength(expectedLength)
+  it('should sort by oldest', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, sort: 'oldest' })
+      .expect(200)
+      .expect((res) => {
+        expect(
+          new Date(res.body.data[0].uploaded) <
+            new Date(res.body.data[9].uploaded),
+        ).toBeTruthy()
+      })
+  })
+
+  it('should sort by newest', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, sort: 'newest' })
+      .expect(200)
+      .expect((res) => {
+        expect(
+          new Date(res.body.data[0].uploaded) <
+            new Date(res.body.data[9].uploaded),
+        ).toBeFalsy()
+      })
+  })
+
+  it('should filter by genre', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts`)
+      .query({ page: 0, take: 10, genre: 'darkest acid underground techno' })
+      .expect(200)
+      .expect((res) => {
+        res.body.data.forEach((post) => {
+          expect(post.genre).toMatch('darkest acid underground techno')
         })
-    },
-  )
+      })
+  })
 
   afterAll(async () => {
-    await postRepository.clear()
-    await userRepository.clear()
+    await postRepository.delete(posts)
+    await userRepository.delete([localUser, secondUser])
   })
 })
 afterAll(async () => {
