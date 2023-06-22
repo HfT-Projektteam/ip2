@@ -88,6 +88,6 @@
       "main.ts",
       ".dto.ts"
     ],
-    "coverageReporters": ["json-summary"]
+    "coverageReporters": ["clover", "json-summary", "lcov", "text"]
   }
 }
