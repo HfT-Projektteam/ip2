@@ -3,19 +3,33 @@
 import { Post } from '@pages/Feed/Post'
 import { type HandleFeedChange, type feedInterface } from './interface'
 import { useEffect, useState } from 'react'
-import { getPosts, getUserPosts } from '@services/BackendAPI/component'
+import {
+  getPosts,
+  getPrivatePosts,
+  getUserPosts,
+} from '@services/BackendAPI/component'
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import ScrollToTop from '@services/ScrollToTop'
+import { GlobalOutlined, UsergroupAddOutlined } from '@ant-design/icons'
 
 interface FeedProps {
   feed: feedInterface
   handleFeedChange: HandleFeedChange['handleFeedChange']
+  sort: string
+  genre: string
 }
 
-export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
+export function Feed({
+  feed,
+  handleFeedChange,
+  sort,
+  genre,
+}: FeedProps): JSX.Element {
   const [isPrivateFeed, setIsPrivateFeed] = useState(true)
-  const [pagination, setPagination] = useState(0)
+  const [pagination, setPagination] = useState<number>()
   const [loading, setLoading] = useState(false)
+  const [sortGenreChanged, setSortGenreChanged] = useState<boolean>(false)
 
   const switchFeed = (): void => {
     setPagination(0)
@@ -31,16 +45,47 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
   }, [])
 
   useEffect(() => {
+    // ONLY FOR GLOBAL FEED
+    if (isPrivateFeed) return
     void (async () => {
-      const allPosts = await getPosts('', isPrivateFeed, undefined, pagination)
-      if (allPosts === null) return
+      const allPosts = await getPosts(genre, isPrivateFeed, sort, pagination)
+      if (allPosts === null) {
+        return
+      }
 
       const newFeed = feed.posts.concat(allPosts)
 
       handleFeedChange({ posts: newFeed })
       setLoading(false)
     })()
-  }, [pagination, isPrivateFeed])
+  }, [sortGenreChanged, pagination, isPrivateFeed])
+
+  useEffect(() => {
+    // ONLY FOR PRIVATE FEED
+    if (!isPrivateFeed) return
+    void (async () => {
+      const allPosts = await getPrivatePosts(
+        genre,
+        isPrivateFeed,
+        sort,
+        pagination,
+      )
+      if (allPosts === null) {
+        return
+      }
+
+      const newFeed = feed.posts.concat(allPosts)
+
+      handleFeedChange({ posts: newFeed })
+      setLoading(false)
+    })()
+  }, [sortGenreChanged, pagination, isPrivateFeed])
+
+  useEffect(() => {
+    setPagination(0)
+    handleFeedChange({ posts: [] })
+    setSortGenreChanged(!sortGenreChanged)
+  }, [sort, genre])
 
   const loadMoreData = (): void => {
     if (loading) return
@@ -49,8 +94,21 @@ export function Feed({ feed, handleFeedChange }: FeedProps): JSX.Element {
   }
   return (
     <>
-      <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
-
+      {pagination === 0 ? <ScrollToTop /> : <></>}
+      <Button
+        type='default'
+        icon={
+          isPrivateFeed ? (
+            <GlobalOutlined rev={'global'} />
+          ) : (
+            <UsergroupAddOutlined rev={undefined} />
+          )
+        }
+        block
+        onClick={switchFeed}
+      >
+        Switch Feed
+      </Button>
       <InfiniteScroll
         dataLength={feed.posts.length}
         next={() => {

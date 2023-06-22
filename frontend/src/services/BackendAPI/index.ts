@@ -8,6 +8,7 @@ import {
   signIn,
   getUserPosts,
   postUser,
+  getPrivatePosts,
 } from './component'
 
 export {
@@ -20,4 +21,5 @@ export {
   signIn,
   getUserPosts,
   postUser,
+  getPrivatePosts,
 }

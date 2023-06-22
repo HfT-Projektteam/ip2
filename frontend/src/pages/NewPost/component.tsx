@@ -3,7 +3,7 @@ import {
   searchSong,
   searchSongByLink,
 } from '@services/SpotifyAPI'
-import { Input, Space, Avatar, List, Button, Col, theme } from 'antd'
+import { Input, Space, Avatar, List, Button, Col, theme, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { type components } from '@data/spotify-types'
 import TextArea from 'antd/es/input/TextArea'
@@ -19,6 +19,7 @@ export function NewPost(): JSX.Element {
   const [songs, setSongs] = useState<trackObject[]>([])
   const [song, setSong] = useState<trackObject>()
   const [comment, setComment] = useState<string>('')
+  const [genre, setGenre] = useState<string>('singsang')
 
   useEffect(() => {
     getRecentPlayedTracks()
@@ -65,8 +66,12 @@ export function NewPost(): JSX.Element {
     setComment(comment)
   }
 
+  const onGenreChange = (genre: string): void => {
+    setGenre(genre)
+  }
+
   const onPostClick = (): void => {
-    void postPost(song?.id, comment, '')
+    void postPost(song?.id, comment, genre)
   }
 
   const { width } = useWindowDimensions()
@@ -148,6 +153,21 @@ export function NewPost(): JSX.Element {
                 onCommentChange(e.target.value)
               }}
             />
+
+            <Select
+              placeholder={'Genre'}
+              style={{ width: '100%' }}
+              onChange={onGenreChange}
+              defaultValue={'rock'}
+              options={[
+                { value: 'rock', label: 'Rock' },
+                { value: 'rap', label: 'Rap' },
+                { value: 'indie', label: 'Indie' },
+                { value: 'pop', label: 'Pop' },
+                { value: 'singsang', label: 'Singsang' },
+              ]}
+            />
+
             <Button
               type='primary'
               onClick={onPostClick}

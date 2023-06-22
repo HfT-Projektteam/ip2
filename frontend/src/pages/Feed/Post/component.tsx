@@ -74,7 +74,7 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
           ? setProfileName(userName)
           : setProfileName('Max Muster')
 
-        const userRef = res?.href
+        const userRef = res?.external_urls?.spotify
         userRef != null ? setUserRef(userRef) : setUserRef('')
       })
       .catch((err) => {
@@ -152,7 +152,7 @@ export function Post({ postObject, isFeed }: PostProps): JSX.Element {
                       <Col style={colStyle}>
                         <Text>{postObject.likes}</Text>
                       </Col>
-                      <Col style={colStyle}></Col>
+                      <Col style={colStyle}>{postObject.genre}</Col>
                       <Col style={colStyle}>
                         <Text>{postObject.dislikes}</Text>
                       </Col>

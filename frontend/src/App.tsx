@@ -3,7 +3,7 @@ import { ConfigProvider, Layout } from 'antd'
 import { useEffect, useState } from 'react'
 import Header from '@Components/layout/Header'
 import {
-  type HandleFeedChange,
+  type HandleSortGenreChange,
   type feedInterface,
 } from '@pages/Feed/interface'
 import { Outlet, Route, Routes } from 'react-router-dom'
@@ -24,10 +24,14 @@ function App(): JSX.Element {
 
   const [feed, setFeed] = useState<feedInterface>({ posts: [] })
 
-  const handleFeedChange: HandleFeedChange['handleFeedChange'] = (
-    newFeed: feedInterface,
-  ): void => {
+  const handleFeedChange = (newFeed: feedInterface): void => {
     setFeed(newFeed)
+  }
+
+  const [genre, setGenre] = useState('')
+  const [sort, setSort] = useState<string>('newest')
+  const handleSortGenreChange = (isSort: boolean, newValue: string): void => {
+    isSort ? setSort(newValue) : setGenre(newValue)
   }
 
   return (
@@ -35,10 +39,21 @@ function App(): JSX.Element {
       <ScrollToTop />
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route element={<AppLayoutRoute handleFeedChange={handleFeedChange} />}>
+        <Route
+          element={
+            <AppLayoutRoute handleSortGenreChange={handleSortGenreChange} />
+          }
+        >
           <Route
             path='/feed'
-            element={<Feed feed={feed} handleFeedChange={handleFeedChange} />}
+            element={
+              <Feed
+                feed={feed}
+                handleFeedChange={handleFeedChange}
+                genre={genre}
+                sort={sort}
+              />
+            }
           />
           <Route path='/plus' element={<NewPost />} />
           <Route path='/search' element={<SearchPage />} />
@@ -50,9 +65,12 @@ function App(): JSX.Element {
   )
 }
 
+interface AppLayoutRouteProps {
+  handleSortGenreChange: HandleSortGenreChange['handleSortGenreChange']
+}
 export function AppLayoutRoute({
-  handleFeedChange,
-}: HandleFeedChange): JSX.Element {
+  handleSortGenreChange,
+}: AppLayoutRouteProps): JSX.Element {
   /*
   weird concept to implement general Layout to multiple react routes
   https://reactrouter.com/en/main/start/concepts#layout-route
@@ -79,7 +97,7 @@ export function AppLayoutRoute({
             zIndex: 1,
           }}
         >
-          <Header handleFeedChange={handleFeedChange} />
+          <Header handleSortGenreChange={handleSortGenreChange} />
         </Layout.Header>
 
         <Content style={{ paddingBottom: '60px', paddingTop: '60px' }}>
