@@ -16,6 +16,7 @@ import { AuthGuard } from '../auth/auth.guard'
 import { UsersService } from '../users/users.service'
 import { UsersModule } from '../users/users.module'
 import { AuthModule } from '../auth/auth.module'
+import { PostsService } from './posts.service'
 
 let app: INestApplication
 let postRepository: Repository<Post>
@@ -42,6 +43,7 @@ beforeAll(async () => {
     ],
     providers: [
       UsersService,
+      PostsService,
       {
         provide: APP_GUARD,
         useClass: AuthGuard,
@@ -89,6 +91,28 @@ describe('test basic CRUD operations', () => {
     strangePostId = await postRepository
       .findOneByOrFail({ songId: 'test2' })
       .then((post) => post.uuid)
+  })
+
+  it('should get one post by id', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            songId: 'test1',
+            description: 'test1',
+            genre: 'test1',
+            likes: 0,
+            dislikes: 0,
+            uuid: expect.any(String),
+            uploaded: expect.any(String),
+            creator: {
+              spotify_uri: 'local-user',
+            },
+          }),
+        )
+      })
   })
 
   it('should create and save a post', async () => {
@@ -223,6 +247,40 @@ describe('test like/dislike operations', () => {
     await postRepository.findOneByOrFail({ uuid: myPostId }).then((res) => {
       expect(res.dislikes).toEqual(0)
     })
+  })
+
+  it('should get true if a post is liked', async () => {
+    // await postsService.like(myPostId)
+    await request(app.getHttpServer()).put(`/posts/${myPostId}/like`)
+
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/like`)
+      .expect(200)
+      .expect('true')
+  })
+
+  it('should get true if a post is disliked', async () => {
+    // await postsService.dislike(myPostId)
+    await request(app.getHttpServer()).put(`/posts/${myPostId}/dislike`)
+
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/dislike`)
+      .expect(200)
+      .expect('true')
+  })
+
+  it('should get false if a post is not liked', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/like`)
+      .expect(200)
+      .expect('false')
+  })
+
+  it('should get false if a post is not disliked', async () => {
+    await request(app.getHttpServer())
+      .get(`/posts/${myPostId}/dislike`)
+      .expect(200)
+      .expect('false')
   })
 
   afterEach(async () => {
