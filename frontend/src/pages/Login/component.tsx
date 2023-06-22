@@ -23,10 +23,7 @@ export function Login(): JSX.Element {
 
         if (token !== '') {
           void signIn()
-          void setCurrentUser().then((user) => {
-            void postUser(user?.id ?? '')
-          })
-
+          void setCurrentUser()
           navigate('/feed')
         }
       })
