@@ -55,16 +55,18 @@ jobs:
       - name: Yarn test
         run: yarn test:ci_cd --coverage
 
-      - name: validate path
-        run: |
-          ls -alh /
-          ls -alh .
-          ls -alh ./coverage
-          pwd
+      - name: Delete remote badges branch
+        run: git push origin --delete badges
+
+      - name: Create badges branch
+        run: git checkout -b badges
 
       - name: Generating coverage badges
         uses: jpb06/jest-badges-action@latest
         with:
-          branches: main, devops/**
+          branches: '*'
           coverage-summary-path: /home/runner/work/ip2/ip2/backend/coverage/coverage-summary.json
           target-branch: badges
+
+      - name: Push badges branch
+        run: git push origin badges
