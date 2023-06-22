@@ -99,9 +99,9 @@ export function Feed({
         type='default'
         icon={
           isPrivateFeed ? (
-            <GlobalOutlined rev={'global'} />
+            <UsergroupAddOutlined rev={'private'} />
           ) : (
-            <UsergroupAddOutlined rev={undefined} />
+            <GlobalOutlined rev={'global'} />
           )
         }
         block
