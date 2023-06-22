@@ -1,5 +1,9 @@
 # Internet Programmierung SS23 (Spotify Social-Media)
 
+## Coverage
+- Frontend: ![Frontend](https://github.com/HfT-Projektteam/ip2/blob/frontend/badges/badges/coverage-lines.svg)
+- Backend: ![Backend](https://github.com/HfT-Projektteam/ip2/blob/backend/badges/badges/coverage-lines.svg)
+
 ## User stories
 
 - [x] 01. As a user I want to be able to login with Spotify oauth

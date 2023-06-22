@@ -93,6 +93,7 @@ export class PostsService {
     const pageQuery = Pagination.pageQueryBuilder(
       this.postRepo
         .createQueryBuilder('posts')
+        .leftJoinAndSelect('posts.creator', 'creator')
         .where('posts.creator = :user_id', { user_id: user_id }),
       pageOptionsDto,
     )
