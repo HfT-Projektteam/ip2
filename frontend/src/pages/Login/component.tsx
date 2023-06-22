@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Logo_RGB_Black.png'
 import { setCurrentUser } from '@services/Functions'
-import { postUser, signIn } from '@services/BackendAPI'
+import { signIn } from '@services/BackendAPI'
 
 const { Title } = Typography
 
