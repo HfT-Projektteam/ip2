@@ -50,10 +50,7 @@ beforeAll(async () => {
 
 describe('Test basic DB connectivity', () => {
   beforeEach(async () => {
-    await request(app.getHttpServer())
-      .post('/users')
-      .send({ spotify_uri: 'test1' })
-      .expect(201)
+    await repository.save({ spotify_uri: 'test1' })
   })
   it('should create and save a user', async () => {
     expect(

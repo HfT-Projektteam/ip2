@@ -59,7 +59,7 @@ describe('AuthService', () => {
       return Promise.resolve(currentUsersProfileResponseMock)
     })
     expect(await service.getURIfromAccessCode('right token')).toMatch(
-      'spotify:user:jobee0602',
+      'jobee0602',
     )
   })
 })
