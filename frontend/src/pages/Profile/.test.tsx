@@ -13,6 +13,6 @@ describe('Profile', () => {
       await new Promise((resolve) => setTimeout(resolve, 0))
     })
 
-    expect(await screen.findByText('Test Name')).toBeInTheDocument()
+    expect(await screen.getAllByText('Test Name')).toHaveLength(4)
   })
 })
