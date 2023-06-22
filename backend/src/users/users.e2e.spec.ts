@@ -109,7 +109,6 @@ describe('Pagination', () => {
         .send()
         .expect(200)
         .expect((res) => {
-          console.log(res.body)
           expect(res.body.data).toHaveLength(expectedLength)
         })
     },
@@ -157,11 +156,11 @@ describe('Pagination', () => {
 
 describe('Exception stuff', () => {
   beforeAll(async () => {
-    await repository.save({ spotify_uri: 'test1' })
+    await repository.save({ spotify_uri: 'exp_test1' })
   })
   it('should throw a 400 error if users tries to follow himself', async () => {
     await request(app.getHttpServer())
-      .post('/users/test1/followings/test1')
+      .post('/users/exp_test1/followings/exp_test1')
       .send()
       .expect(400)
       .expect((res) => {
@@ -195,7 +194,7 @@ describe('Exception stuff', () => {
   })
 
   afterAll(async () => {
-    await repository.delete(['test1', 'test2'])
+    await repository.delete(['exp_test1', 'exp_test1'])
   })
 })
 
@@ -306,8 +305,8 @@ describe('Posts of User', () => {
       })
   })
   afterAll(async () => {
-    await repository.delete(['test1', 'test2'])
     await postRepository.delete({ uuid: myPostId })
+    await repository.delete(['test1', 'test2'])
   })
 })
 
