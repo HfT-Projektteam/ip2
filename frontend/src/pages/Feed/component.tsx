@@ -11,6 +11,7 @@ import {
 import { Button, List } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ScrollToTop from '@services/ScrollToTop'
+import { GlobalOutlined, UsergroupAddOutlined } from '@ant-design/icons'
 
 interface FeedProps {
   feed: feedInterface
@@ -93,9 +94,21 @@ export function Feed({
   }
   return (
     <>
-      <ScrollToTop />
-      isPrivateFeed: {isPrivateFeed}
-      <Button onClick={switchFeed}>Switch Feed (Global/Private)</Button>
+      {pagination === 0 ? <ScrollToTop /> : <></>}
+      <Button
+        type='default'
+        icon={
+          isPrivateFeed ? (
+            <GlobalOutlined rev={'global'} />
+          ) : (
+            <UsergroupAddOutlined rev={undefined} />
+          )
+        }
+        block
+        onClick={switchFeed}
+      >
+        Switch Feed
+      </Button>
       <InfiniteScroll
         dataLength={feed.posts.length}
         next={() => {

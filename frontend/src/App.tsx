@@ -29,7 +29,7 @@ function App(): JSX.Element {
   }
 
   const [genre, setGenre] = useState('')
-  const [sort, setSort] = useState('')
+  const [sort, setSort] = useState<string>('newest')
   const handleSortGenreChange = (isSort: boolean, newValue: string): void => {
     isSort ? setSort(newValue) : setGenre(newValue)
   }
