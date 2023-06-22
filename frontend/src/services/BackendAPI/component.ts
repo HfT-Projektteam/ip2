@@ -276,6 +276,28 @@ export async function signIn(): Promise<void> {
   })
 }
 
+export async function postUser(spotifyId: string): Promise<void> {
+  const accessToken = localStorage.getItem('access_token') ?? ''
+
+  if (accessToken === '') {
+    return
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+    body: JSON.stringify({
+      spotify_uri: spotifyId,
+    }),
+  }
+
+  await request<any>(`${backendUri}/users`, options).catch((error) => {
+    console.error('Error in postUser:', error)
+  })
+}
+
 /**
  *
  * @param uuid

@@ -7,6 +7,7 @@ import {
   postPost,
   signIn,
   getUserPosts,
+  postUser,
 } from './component'
 
 export {
@@ -18,4 +19,5 @@ export {
   postPost,
   signIn,
   getUserPosts,
+  postUser,
 }

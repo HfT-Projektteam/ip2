@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import spotify_logo from '@assets/Spotify_Logo_RGB_Black.png'
 import { setCurrentUser } from '@services/Functions'
-import { signIn } from '@services/BackendAPI'
+import { postUser, signIn } from '@services/BackendAPI'
 
 const { Title } = Typography
 
@@ -20,9 +20,15 @@ export function Login(): JSX.Element {
       .then(() => {
         const token = window.localStorage.getItem('access_token') ?? ''
         setLoginToken(token)
-        void setCurrentUser()
-        void signIn()
-        if (token !== '') navigate('/feed')
+
+        if (token !== '') {
+          void setCurrentUser().then((user) => {
+            void signIn()
+            void postUser(user?.id ?? '')
+          })
+
+          navigate('/feed')
+        }
       })
       .catch(() => {
         handleLogout()
