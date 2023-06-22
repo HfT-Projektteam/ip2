@@ -8,6 +8,9 @@ on:
     paths:
       - 'backend/**'
 
+env:
+  BADGE_BRANCH: backend/badges
+
 jobs:
   test-backend:
     name: Check backend source code
@@ -56,17 +59,17 @@ jobs:
         run: yarn test:ci_cd --coverage
 
       - name: Delete remote badges branch
-        run: git push origin --delete badges
+        run: git push origin --delete $BADGE_BRANCH
 
       - name: Create badges branch
-        run: git checkout -b badges
+        run: git checkout -b $BADGE_BRANCH
 
       - name: Generating coverage badges
-        uses: jpb06/jest-badges-action@latest
+        uses: jpb06/jest-$BADGE_BRANCH-action@latest
         with:
           branches: '*'
           coverage-summary-path: /home/runner/work/ip2/ip2/backend/coverage/coverage-summary.json
-          target-branch: badges
+          target-branch: $BADGE_BRANCH
 
       - name: Push badges branch
-        run: git push origin badges
+        run: git push origin $BADGE_BRANCH
