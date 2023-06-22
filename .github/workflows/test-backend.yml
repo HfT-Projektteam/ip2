@@ -65,7 +65,7 @@ jobs:
         run: git checkout -b $BADGE_BRANCH
 
       - name: Generating coverage badges
-        uses: jpb06/jest-$BADGE_BRANCH-action@latest
+        uses: jpb06/jest-badge-action@latest
         with:
           branches: '*'
           coverage-summary-path: /home/runner/work/ip2/ip2/backend/coverage/coverage-summary.json
