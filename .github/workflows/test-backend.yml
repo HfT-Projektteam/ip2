@@ -59,4 +59,9 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Yarn test
-        run: yarn test:ci_cd
+        run: yarn test:ci_cd --coverage
+
+      - name: Generating coverage badges
+        uses: jpb06/jest-badges-action@latest
+        with:
+          branches: main, devops/**
