@@ -69,7 +69,7 @@ jobs:
         with:
           branches: '*'
           coverage-summary-path: /home/runner/work/ip2/ip2/backend/coverage/coverage-summary.json
-          target-branch: $BADGE_BRANCH
+          target-branch: backend/badges
 
       - name: Push badges branch
         run: git push origin $BADGE_BRANCH
